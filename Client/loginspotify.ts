@@ -5,12 +5,14 @@ interface usuari {
     edat: number;
 }
 
-
-function autentificacio(u: usuari): boolean {
+function autentificacio(usuari: usuari): boolean {
 
     let correcte: boolean = false;
 
-    if (u.username === "correuOK" && u.password === "passwordOK" && u.edat > 14) {
+    if (usuari.username === "correuOK" && 
+        usuari.password === "passwordOK" && 
+        usuari.edat > 14) {
+        
         correcte = true;
     }
 
@@ -20,12 +22,11 @@ function autentificacio(u: usuari): boolean {
 
 function imprimir(auth: boolean): void {
     if (auth) {
-        console.log("usuari correcte");
+        console.log("correu correcte");
     } else {
-        console.log("usuari incorrecte");
+        console.log("correu incorrecte");
     }
 }
-
 
 const usuariCorrecte: usuari = {
     username: "correuOK",
