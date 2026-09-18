@@ -1,4 +1,4 @@
-interface Usuari {
+interface User {
     name: string;
     playList: PlayList[];
 }
@@ -50,21 +50,22 @@ const llistaRepro: PlayList[] = [
     }
 ]
 
-const usuaris: Usuari[] = [
+const users: User[] = [
     {
         name: "Marc",
-        playList: llistaRepro
+        playList: [llistaRepro[0]]
     },
     {
-        name: "Isac",
-        playList: llistaRepro
+        name: "Anna",
+        playList: [llistaRepro[1], llistaRepro[2]]
     },
-    {
-        name: "Berni",
-        playList: llistaRepro
-    },
-
 
 ]
 
+console.log(users);
+
+let nameArtist: string = "MJ";
+let username: string = "Marc";
+
+const songs: Song[] = songsArtist(nameArtist, username, users);
 export { }
