@@ -1,47 +1,70 @@
 interface Usuari {
-    nom: string;
-    llistes: LlistaReproduccio[];
+    name: string;
+    playList: PlayList[];
 }
 
-interface LlistaReproduccio {
-    nom: string;
-    cancons: Canco[];
+interface PlayList {
+    name: string;
+    songs: Song[];
 }
 
-interface Canco {
+interface Song {
     id: string;
-    titol: string;
-    artista: string;
-    durada: number;
+    title: string;
+    artist: string;
+    duration: number;
 }
 
-const llistaRepro: LlistaReproduccio[] = [
+
+const llistaRepro: PlayList[] = [
     {
-        nom: "LlistaMarc",
-        cancons: 
+        name: "LMarc",
+        songs: [{
+            id: "2B-CA",
+            title: "Rattle and Hum",
+            artist: "U2",
+            duration: 90
+        },
+        {
+            id: "3B-TX",
+            title: "Chicago",
+            artist: "MJ",
+            duration: 190
+        },]
+    },
+    {
+        name: "LIsac",
+        songs: [
+            {
+                id: "3B-TX",
+                title: "Chicago",
+                artist: "MJ",
+                duration: 190
+            },
+
+        ]
+    },
+    {
+        name: "LBerni",
+        songs: []
     }
 ]
 
+const usuaris: Usuari[] = [
+    {
+        name: "Marc",
+        playList: llistaRepro
+    },
+    {
+        name: "Isac",
+        playList: llistaRepro
+    },
+    {
+        name: "Berni",
+        playList: llistaRepro
+    },
 
-const cancons: Canco[] = [
-    {
-        id: "2B-CA",
-        titol: "Rattle and Hum",
-        artista: "U2",
-        durada: 90
-    },
-    {
-        id: "3B-TX",
-        titol: "Chicago",
-        artista: "MJ",
-        durada: 190
-    },
-    {
-        id: "3Z-TX",
-        titol: "NY",
-        artista: "MJ",
-        durada: 170
-    },
+
 ]
 
 export { }
