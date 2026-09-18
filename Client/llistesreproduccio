@@ -1,0 +1,47 @@
+interface Usuari {
+    nom: string;
+    llistes: LlistaReproduccio[];
+}
+
+interface LlistaReproduccio {
+    nom: string;
+    cancons: Canco[];
+}
+
+interface Canco {
+    id: string;
+    titol: string;
+    artista: string;
+    durada: number;
+}
+
+const llistaRepro: LlistaReproduccio[] = [
+    {
+        nom: "LlistaMarc",
+        cancons: 
+    }
+]
+
+
+const cancons: Canco[] = [
+    {
+        id: "2B-CA",
+        titol: "Rattle and Hum",
+        artista: "U2",
+        durada: 90
+    },
+    {
+        id: "3B-TX",
+        titol: "Chicago",
+        artista: "MJ",
+        durada: 190
+    },
+    {
+        id: "3Z-TX",
+        titol: "NY",
+        artista: "MJ",
+        durada: 170
+    },
+]
+
+export { }
