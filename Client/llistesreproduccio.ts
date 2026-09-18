@@ -72,12 +72,12 @@ function songsPlayListArtist(artist: string, playList: PlayList[]): Song[] {
     let songs: Song[] = [];
     for (let i: number = 0; i < playList.length; i++) {
         let songsArtists: Song[] = songsSearchArtista(artist, playList[i].songs)
-        for (let i: number = 0; i < songsArtists.length, i++) {
-            songsArtists = songs.concat(songsArtists)
-        }
-
+        songs = songs.concat(songsArtists)
     }
+    return songs
 }
+
+
 
 
 function songsArtist(artist: string, username: string, users: User[]) {
@@ -89,13 +89,11 @@ function songsArtist(artist: string, username: string, users: User[]) {
 }
 
 
-
-console.log(users);
-
 let nameArtist: string = "MJ";
 let username: string = "Marc";
 
 const songs: Song[] = songsArtist(nameArtist, username, users);
 
+console.log(songs)
 
 export { }
