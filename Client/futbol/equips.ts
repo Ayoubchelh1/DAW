@@ -1,36 +1,78 @@
-interface equip {
+interface Equip {
     nom: string;
-    jugadors: Jugador;
+    jugadors: Jugador[];
 
 }
 
 interface Jugador {
     name: string;
-    titulars: string;
+    titulars: boolean;
+    dorsal: number;
 }
 
-const equip: equip[] = [
+const equips: Equip[] = [
     {
-        nom: "Esp",
+        nom: "RCD Espanyol",
         jugadors: [
             {
-                name: "Berni",
-                titulars: "Si"
+                name: "Pol Lozano",
+                titulars: false,
+                dorsal: 10
             },
             {
-                name: "Isac",
-                titulars; "NO"
+                name: "Roger Hinojo",
+                titulars: true,
+                dorsal: 21
+            },
+            {
+                name: "Urko Gonzalez",
+                titulars: true,
+                dorsal: 4
             }
         ]
     },
     {
-        nom: "BCN",
+        nom: "Real Betis",
         jugadors: [
             {
-                name: "Isac",
-                titulars: "No"
+                name: "Anthony",
+                titulars: false,
+                dorsal: 7
+            },
+            {
+                name: "Isco",
+                titulars: false,
+                dorsal: 21
+            },
+            {
+                name: "Marc Roca",
+                titulars: true,
+                dorsal: 4
             }
         ]
     }
 ]
 
+
+
+
+function equipTitular(equips: Equip[], nom: string): Jugador[] {
+    const equipSel: Equip | undefined = equips.find(
+        (e: Equip) => {
+            return e.nom === nom;
+        }
+    )
+
+    if (equipSel === undefined) {
+        return [];
+    }
+    return equipSel.jugadors.filter(
+        (j: Jugador) => { return j.titulars }
+    )
+
+}
+
+const nomEquip: string = "Real Betis";
+const jugadorTitulars: Jugador[] = equipTitular(equips, nomEquip);
+
+console.log(jugadorTitulars);
