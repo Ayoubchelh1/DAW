@@ -1,7 +1,19 @@
+import { tracks } from "../data/track";
 import type { Track } from "../interface/track";
 
 export function createRowSong(track: Track): HTMLTableRowElement {
-    const tr: HTMLTableRowElement = document.createElement("tr");
-    const td: HTMLTableCellElement = document.createElement("td");
+
+    const songtr: HTMLTableRowElement = document.createElement("tr");
+
+    const titleTd: HTMLTableCellElement = document.createElement("td");
+    titleTd.textContent = track.title;
+
+    const durationTd: HTMLTableCellElement = document.createElement("td");
+    durationTd.textContent = track.duration.toString();
+
+    songtr.appendChild(titleTd);
+    songtr.appendChild(durationTd);
+
+    return songtr;
 
 }
