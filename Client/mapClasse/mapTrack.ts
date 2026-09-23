@@ -16,25 +16,25 @@ const cancons: Canco[] = [
         id: "2B-CA",
         titol: "Rattle and Hum",
         artista: "U2",
-        durada: 90
+        durada: 30
     },
     {
         id: "3B-TX",
         titol: "Chicago",
         artista: "Michael Jackson",
-        durada: 190
+        durada: 65
     },
     {
         id: "2R-CA",
         titol: "Chicago",
         artista: "MJ",
-        durada: 90
+        durada: 190
     },
     {
         id: "3B-TX",
         titol: "Chicago",
         artista: "MJ",
-        durada: 190
+        durada: 180
     },
 ]
 
@@ -44,9 +44,7 @@ const tracks: Track[] = cancons.map(
     }
 )
 
-tracks.forEach(
-    (t: Track) => { console.log(t); }
-);
+
 
 const songsString: string[] = cancons.map(
     (c: Canco) => {
@@ -57,7 +55,13 @@ const songsString: string[] = cancons.map(
 
 const Durada: string[] = cancons.map(
     (c: Canco) => {
-        let durada: string = `titol: ${c.titol}, Math.floor(${c.durada} / 60)`
+        let minuts: number = Math.floor(c.durada / 60);
+        let segons: number = c.durada % 60;
+        let durada: string = `titol: ${c.titol}, - minuts: ${minuts} segons: ${segons}`
         return durada.trim();
     }
 )
+
+tracks.forEach(
+    (t: Track) => { console.log(t); }
+);
