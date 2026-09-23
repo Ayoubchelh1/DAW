@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Spotify</h1>
+    <section>
+        <h1>Llistat de cançons</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Titol</th>
+                    <th>Durada</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Rattle and Hum</td>
+                    <td>90</td>
+                </tr>
+                <tr>
+                    <td>Chicago</td>
+                    <td>190</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <section id="buscar">
+        <h1>Cercador</h1>
+        <form method="post">
+            <label>Buscar: <input type="text" name="buscar" id="buscar" placeholder="Introdueix cançó a buscar">
+            </label>
+            <button type="button" onclick="alert('Buscar'+document.getElementById('buscar').value)">
+                Buscar
+            </button>
+        </form>
+    </section>
+</body>
+
+</html>

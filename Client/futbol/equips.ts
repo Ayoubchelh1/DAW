@@ -54,8 +54,6 @@ const equips: Equip[] = [
 ]
 
 
-
-
 function equipTitular(equips: Equip[], nom: string): Jugador[] {
     const equipSel: Equip | undefined = equips.find(
         (e: Equip) => {
