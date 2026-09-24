@@ -1,4 +1,5 @@
 import './style.css';
+import { crearCerca } from './view/cerca/cerca';
 import { crearTitol } from './view/creartitol';
 import { crearTableSongs } from './view/tableSongs/crearTableSongs';
 
@@ -9,8 +10,8 @@ const table: HTMLTableElement = crearTableSongs();
 const form: HTMLFormElement = crearCerca();
 
 appObj.appendChild(titol);
-
 appObj.appendChild(table);
+appObj.appendChild(form);
 
 
 
