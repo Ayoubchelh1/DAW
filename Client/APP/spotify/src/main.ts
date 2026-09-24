@@ -1,23 +1,20 @@
-import './style.css'
-import { tracks } from './data/track'
-import { createRowSong } from './view/rowView';
-import { createTableHead } from './view/tableSongs/createTableHead';
+import './style.css';
+import { crearTitol } from './view/creartitol';
+import { crearTableSongs } from './view/tableSongs/crearTableSongs';
 
 const appObj: HTMLElement = document.querySelector<HTMLDivElement>('#app')!;
-const titol: HTMLHeadElement = document.createElement("h1");
-const table: HTMLTableElement = document.createElement("table");
-titol.textContent = "Spotify";
 
-table.appendChild(createTableHead());
-
-
-const rowSong: HTMLTableRowElement = createRowSong(tracks[0]);
+const titol: HTMLHeadElement = crearTitol();
+const table: HTMLTableElement = crearTableSongs();
+const form: HTMLFormElement = crearCerca();
 
 appObj.appendChild(titol);
 
-table.appendChild(rowSong);
-
 appObj.appendChild(table);
+
+
+
+
 
 
 
