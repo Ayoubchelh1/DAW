@@ -1,3 +1,4 @@
+import { crearBotoCerca } from "./crearBotoCerca";
 import { crearInputCerca } from "./crearInputCerca";
 
 export function crearCerca(): HTMLFormElement {
@@ -12,4 +13,8 @@ export function crearCerca(): HTMLFormElement {
 
 
     const botoCerca: HTMLButtonElement = crearBotoCerca();
+    form.appendChild(label);
+    form.appendChild(botoCerca);
+
+    return form;
 }
