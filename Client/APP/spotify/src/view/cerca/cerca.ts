@@ -12,7 +12,7 @@ export function crearCerca(): HTMLFormElement {
     label.appendChild(input);
 
 
-    const botoCerca: HTMLButtonElement = crearBotoCerca();
+    const botoCerca: HTMLButtonElement = crearBotoCerca(input);
     form.appendChild(label);
     form.appendChild(botoCerca);
 

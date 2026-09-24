@@ -7,8 +7,11 @@ const appObj: HTMLElement = document.querySelector<HTMLDivElement>('#app')!;
 
 
 appObj.appendChild(crearTitol());
-appObj.appendChild(crearTableSongs());
+
 appObj.appendChild(crearCerca());
+
+appObj.appendChild(crearTableSongs());
+
 
 
 
