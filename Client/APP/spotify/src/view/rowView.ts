@@ -1,4 +1,4 @@
-import { tracks } from "../data/track";
+
 import type { Track } from "../interface/track";
 
 export function createRowSong(track: Track): HTMLTableRowElement {
