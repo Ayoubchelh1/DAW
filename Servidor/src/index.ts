@@ -2,6 +2,8 @@ import express, { Express, Request, Response } from "express";
 import { APICONFIG } from "./config/apiConfig";
 import { tracks } from "./data/track/track";
 import { TrackBD } from "./interfaces/track/tracksBD";
+import { Track } from "./interfaces/track/track";
+import { isValidTrack } from "./validatos/track.validator";
 
 const port: number = 3000;
 
@@ -61,7 +63,11 @@ app.get("/tracks/:id", (req: Request, res: Response) => {
 // /artists/reproductions/popular
 
 app.post("/tracks", (req: Request, res: Response) => {
-    return res.status(201).json(req.body);
+    const track: Track = req.body;
+    if (!isValidTrack(track)) {
+        return res.status(400).json({ message: "Invalid data" });
+    }
+    return res.status(201).json(track);
 });
 
 
