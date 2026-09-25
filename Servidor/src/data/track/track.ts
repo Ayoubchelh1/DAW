@@ -1,6 +1,6 @@
-import { Track } from "../../interfaces/track/track";
+import { TrackBD } from "../../interfaces/track/tracksBD";
 
-export const tracks: Track[] = [{
+export const tracks: TrackBD[] = [{
     id: "3456",
     title: "Rattle and hum",
     artist: "U2",
