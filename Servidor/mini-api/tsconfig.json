@@ -3,7 +3,7 @@
     "target": "ES2022",
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "rootDir": "mini-api/src",
+    "rootDir": "src",
     "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
@@ -12,6 +12,6 @@
     "declaration": false
   },
   "include": [
-    "mini-api/src"
+    "./src"
   ]
 }
