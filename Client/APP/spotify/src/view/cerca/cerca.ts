@@ -11,8 +11,9 @@ export function crearCerca(): HTMLFormElement {
     label.textContent = "Buscar";
     label.appendChild(input);
 
+    const getValueSearch: () => string = () => { return input.value.trim(); }
 
-    const botoCerca: HTMLButtonElement = crearBotoCerca(input);
+    const botoCerca: HTMLButtonElement = crearBotoCerca(getValueSearch);
     form.appendChild(label);
     form.appendChild(botoCerca);
 
