@@ -3,6 +3,7 @@ import type { Track } from './interface/track';
 import './style.css';
 import { crearCerca } from './view/cerca/cerca';
 import { crearTitol } from './view/creartitol';
+import { mostrarIdCanco } from './view/rowView';
 import { crearTableSongs } from './view/tableSongs/crearTableSongs';
 import { llistaCancons } from './view/tableSongs/llistaCancons';
 
@@ -19,14 +20,17 @@ const cercar: (textABuscar: string) => void = (textABuscar: string) => {
     llistaCancons(llistaTrack, tbody);
 }
 
-const cardTrack: (){
 
-}
+
+const mostrarCanco: (id: string) => void = (id: string) => {
+    const canco = tracks.find((track: Track) => track.id === id);
+    llistaCancons(canco, div);
+};
 
 appObj.appendChild(crearTitol());
 appObj.appendChild(crearCerca(cercar));
 appObj.appendChild(crearTableSongs(tbody));
-appObj.appendChild(cardTrack(div))
+appObj.appendChild(div);
 
 
 

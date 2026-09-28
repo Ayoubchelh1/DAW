@@ -1,7 +1,7 @@
 
 import type { Track } from "../interface/track";
 
-function mostrarIdCanco(track: Track): string {
+export function mostrarIdCanco(track: Track): string {
     return track.id;
 }
 
