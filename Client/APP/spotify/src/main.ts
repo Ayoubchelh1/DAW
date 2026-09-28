@@ -12,13 +12,14 @@ const tbody: HTMLTableSectionElement = document.createElement("tbody");
 
 const cercar: (textABuscar: string) => void = (textABuscar: string) => {
     const llistaTrack: Track[] = tracks.filter(
-        (t: Track) => { return t.title.trim() === textABuscar }
+        (t: Track) => { return t.title.toLowerCase().includes(textABuscar.trim().toLowerCase()) }
     )
+    tbody.innerHTML = "";
     llistaCancons(llistaTrack, tbody);
 }
 
 appObj.appendChild(crearTitol());
-appObj.appendChild(crearCerca());
+appObj.appendChild(crearCerca(cercar));
 appObj.appendChild(crearTableSongs(tbody));
 
 
