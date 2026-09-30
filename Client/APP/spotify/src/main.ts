@@ -3,6 +3,7 @@ import type { Track } from './interface/track';
 import './style.css';
 import { crearCerca } from './view/cerca/cerca';
 import { crearTitol } from './view/creartitol';
+import { showCard } from './view/showcard';
 
 import { crearTableSongs } from './view/tableSongs/crearTableSongs';
 import { llistaCancons } from './view/tableSongs/llistaCancons';
@@ -12,15 +13,7 @@ const tbody: HTMLTableSectionElement = document.createElement("tbody");
 const div: HTMLDivElement = document.createElement("div");
 
 const mostrarSeleccio: (track: Track) => void = (track: Track) => {
-    console.log(track.id);
-    const info: HTMLDivElement = document.createElement("div");
-    info.textContent = `${track.title} - ${track.artist}`;
-
-    const tancar: HTMLButtonElement = document.createElement("button");
-    tancar.textContent = "X";
-    tancar.addEventListener("click", () => div.replaceChildren());
-
-    div.replaceChildren(info, tancar);
+    showCard(track, div)
 };
 
 const cercar: (textABuscar: string) => void = (textABuscar: string) => {
