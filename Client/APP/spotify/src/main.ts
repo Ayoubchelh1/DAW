@@ -11,19 +11,22 @@ const appObj: HTMLElement = document.querySelector<HTMLDivElement>('#app')!;
 const tbody: HTMLTableSectionElement = document.createElement("tbody");
 const div: HTMLDivElement = document.createElement("div");
 
+const mostrarSeleccio: (track: Track) => void = (track: Track) => {
+    div.textContent = `${track.title} - ${track.artist}`;
+};
 
 const cercar: (textABuscar: string) => void = (textABuscar: string) => {
     const llistaTrack: Track[] = tracks.filter(
         (t: Track) => { return t.title.toLowerCase().includes(textABuscar.trim().toLowerCase()) }
     )
     tbody.innerHTML = "";
-    llistaCancons(llistaTrack, tbody);
+    llistaCancons(llistaTrack, tbody, mostrarSeleccio);
 }
 
 
 appObj.appendChild(crearTitol());
 appObj.appendChild(crearCerca(cercar));
-appObj.appendChild(crearTableSongs(tbody));
+appObj.appendChild(crearTableSongs(tbody, mostrarSeleccio));
 appObj.appendChild(div);
 
 

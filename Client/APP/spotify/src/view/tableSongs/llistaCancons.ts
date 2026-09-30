@@ -2,9 +2,13 @@
 import type { Track } from "../../interface/track";
 import { createRowSong } from "../rowView";
 
-export function llistaCancons(tracks: Track[], tbody: HTMLTableSectionElement) {
+export function llistaCancons(
+    tracks: Track[],
+    tbody: HTMLTableSectionElement,
+    onSelect: (track: Track) => void
+) {
 
     tracks.forEach(
-        (t: Track) => { tbody.appendChild(createRowSong(t)); }
+        (t: Track) => { tbody.appendChild(createRowSong(t, onSelect)); }
     );
 }
