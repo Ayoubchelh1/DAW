@@ -13,8 +13,12 @@ export function createRowSong(track: Track, onSelect: (track: Track) => void): H
     durationTd.textContent = track.duration.toString();
     durationTd.addEventListener("click", () => onSelect(track));
 
+    const reproduccionsTd: HTMLTableCellElement = document.createElement("td");
+    reproduccionsTd.textContent = track.reproduccions.toString();
+
     songtr.appendChild(titleTd);
     songtr.appendChild(durationTd);
+    songtr.appendChild(reproduccionsTd);
 
     return songtr;
 
