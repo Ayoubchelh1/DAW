@@ -16,7 +16,7 @@ const mostrarSeleccio: (track: Track) => void = (track: Track) => {
     const info: HTMLDivElement = document.createElement("div");
     info.textContent = `${track.title} - ${track.artist}`;
 
-    const tancar: HTMLSpanElement = document.createElement("span");
+    const tancar: HTMLButtonElement = document.createElement("button");
     tancar.textContent = "X";
     tancar.addEventListener("click", () => div.replaceChildren());
 
