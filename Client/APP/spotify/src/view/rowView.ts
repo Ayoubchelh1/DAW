@@ -16,9 +16,17 @@ export function createRowSong(track: Track, onSelect: (track: Track) => void): H
     const reproduccionsTd: HTMLTableCellElement = document.createElement("td");
     reproduccionsTd.textContent = track.reproduccions.toString();
 
+    const playTd: HTMLTableCellElement = document.createElement("td");
+    const playBoto: HTMLButtonElement = document.createElement("button");
+    playBoto.type = "button";
+    playBoto.textContent = "Play";
+
+
+    playTd.appendChild(playBoto);
     songtr.appendChild(titleTd);
     songtr.appendChild(durationTd);
     songtr.appendChild(reproduccionsTd);
+    songtr.appendChild(playTd);
 
     return songtr;
 
