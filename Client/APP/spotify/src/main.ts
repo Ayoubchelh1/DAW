@@ -13,7 +13,14 @@ const div: HTMLDivElement = document.createElement("div");
 
 const mostrarSeleccio: (track: Track) => void = (track: Track) => {
     console.log(track.id);
-    div.textContent = `${track.title} - ${track.artist}`;
+    const info: HTMLDivElement = document.createElement("div");
+    info.textContent = `${track.title} - ${track.artist}`;
+
+    const tancar: HTMLSpanElement = document.createElement("span");
+    tancar.textContent = "X";
+    tancar.addEventListener("click", () => div.replaceChildren());
+
+    div.replaceChildren(info, tancar);
 };
 
 const cercar: (textABuscar: string) => void = (textABuscar: string) => {
