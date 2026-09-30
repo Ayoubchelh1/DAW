@@ -21,6 +21,10 @@ export function createRowSong(track: Track, onSelect: (track: Track) => void): H
     playBoto.type = "button";
     playBoto.textContent = "Play";
     playBoto.addEventListener("click", () => {
+        if (playBoto.textContent === "Playing") {
+            playBoto.textContent = "Play";
+            return;
+        }
         track.reproduccions += 1;
         reproduccionsTd.textContent = track.reproduccions.toString();
         playBoto.textContent = "Playing";
