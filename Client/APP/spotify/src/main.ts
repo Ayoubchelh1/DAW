@@ -12,6 +12,7 @@ const tbody: HTMLTableSectionElement = document.createElement("tbody");
 const div: HTMLDivElement = document.createElement("div");
 
 const mostrarSeleccio: (track: Track) => void = (track: Track) => {
+    console.log(track.id);
     div.textContent = `${track.title} - ${track.artist}`;
 };
 
