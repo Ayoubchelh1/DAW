@@ -20,12 +20,11 @@ export function createRowSong(track: Track, onSelect: (track: Track) => void): H
     const playBoto: HTMLButtonElement = document.createElement("button");
     playBoto.type = "button";
     playBoto.textContent = "Play";
-    const initialPlayText = playBoto.textContent;
     let isPlaying = false;
     playBoto.addEventListener("click", () => {
         if (isPlaying) {
             isPlaying = false;
-            playBoto.textContent = initialPlayText;
+            playBoto.textContent = "Play";
             return;
         }
 

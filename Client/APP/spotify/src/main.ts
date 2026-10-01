@@ -3,7 +3,7 @@ import type { Track } from './interface/track';
 import './style.css';
 import { crearCerca } from './view/cerca/cerca';
 import { crearTitol } from './view/creartitol';
-import { showCard } from './view/showcard';
+import { showCard } from './view/showCard';
 
 import { crearTableSongs } from './view/tableSongs/crearTableSongs';
 import { llistaCancons } from './view/tableSongs/llistaCancons';
