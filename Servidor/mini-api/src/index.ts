@@ -109,8 +109,9 @@ app.post("/artists", (req: Request, res: Response) => {
         return res.status(400).json({ message: "Invalid data or country" });
     }
 
+    const idartista: string = randomUUID()
     const artistRecord: ArtistBD = {
-        id: randomUUID(),
+        id: idartista,
         artistName: artist.artistName.trim().replace(/\s+/g, " "),
         realName: artist.realName.trim().replace(/\s+/g, " "),
         country: getCanonicalCountry(artist.country)
