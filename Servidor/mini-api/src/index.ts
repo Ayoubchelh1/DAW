@@ -103,6 +103,30 @@ app.post("/tracks", (req: Request, res: Response) => {
     return res.status(201).json(trackRecord);
 });
 
+app.put("/tracks/:id", (req: Request, res: Response) => {
+    const idTrack: string = req.params.id as string;
+    const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
+    if (trackIndex === -1) {
+        return res.status(404).json({ message: `Track not found` });
+    }
+
+    const track: Track = req.body;
+    if (!isValidTrack(track)) {
+        return res.status(400).json({ message: "Invalid data" });
+    }
+
+    const updatedTrack: TrackBD = {
+        id: idTrack,
+        title: track.title.trim().replace(/\s+/g, " "),
+        artist: track.artist.trim().replace(/\s+/g, " "),
+        duration: track.duration
+    };
+
+    tracks[trackIndex] = updatedTrack;
+
+    return res.status(200).json(updatedTrack);
+});
+
 app.post("/artists", (req: Request, res: Response) => {
     const artist: Artist = req.body;
     if (!isValidArtist(artist)) {
