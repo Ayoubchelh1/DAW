@@ -1,6 +1,8 @@
 
 import type { Track } from "../interface/track";
 
+let lastPlayButton: HTMLButtonElement | null = null;
+
 export function createRowSong(track: Track, onSelect: (track: Track) => void): HTMLTableRowElement {
 
     const songtr: HTMLTableRowElement = document.createElement("tr");
@@ -16,22 +18,27 @@ export function createRowSong(track: Track, onSelect: (track: Track) => void): H
     const reproduccionsTd: HTMLTableCellElement = document.createElement("td");
     reproduccionsTd.textContent = track.reproduccions.toString();
 
+
     const playTd: HTMLTableCellElement = document.createElement("td");
     const playBoto: HTMLButtonElement = document.createElement("button");
     playBoto.type = "button";
     playBoto.textContent = "Play";
-    let isPlaying = false;
+
     playBoto.addEventListener("click", () => {
-        if (isPlaying) {
-            isPlaying = false;
+        if (lastPlayButton === playBoto) {
             playBoto.textContent = "Play";
+            lastPlayButton = null;
             return;
         }
 
-        isPlaying = true;
+        if (lastPlayButton !== null) {
+            lastPlayButton.textContent = "Play";
+        }
+
         track.reproduccions += 1;
         reproduccionsTd.textContent = track.reproduccions.toString();
         playBoto.textContent = "Playing";
+        lastPlayButton = playBoto;
     });
 
 

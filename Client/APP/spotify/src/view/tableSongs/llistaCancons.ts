@@ -12,3 +12,4 @@ export function llistaCancons(
         (t: Track) => { tbody.appendChild(createRowSong(t, onSelect)); }
     );
 }
+

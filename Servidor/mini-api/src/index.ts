@@ -4,6 +4,10 @@ import { tracks } from "./data/track/track";
 import { TrackBD } from "./interfaces/track/trackBD";
 import { Track } from "./interfaces/track/track";
 import { isValidTrack } from "./validatos/track.validator";
+import { artists } from "./data/artist/artist";
+import { ArtistBD } from "./interfaces/artist/artistBD";
+import { Artist } from "./interfaces/artist/artist";
+import { getCanonicalCountry, isValidArtist } from "./validatos/artist.validator";
 import { randomUUID } from "crypto";
 
 
@@ -31,6 +35,21 @@ app.get("/tracks/:id", (req: Request, res: Response) => {
         return res.status(404).json({ message: `Track ${idTrack} not found` });
     }
     return res.status(200).json(track[0]);
+});
+
+app.get("/artists", (_req: Request, res: Response) => {
+    return res.status(200).json(artists);
+});
+
+app.get("/artists/:id", (req: Request, res: Response) => {
+    const idArtist: string = req.params.id as string;
+    const artist: ArtistBD[] = artists.filter(
+        (a: ArtistBD) => { return a.id === idArtist }
+    );
+    if (artist.length === 0) {
+        return res.status(404).json({ message: `Artist ${idArtist} not found` });
+    }
+    return res.status(200).json(artist[0]);
 });
 
 // Saber totes les llistes de reproducció d'un usuari
@@ -79,7 +98,27 @@ app.post("/tracks", (req: Request, res: Response) => {
         duration: track.duration
     };
 
+    tracks.push(trackRecord);
+
     return res.status(201).json(trackRecord);
+});
+
+app.post("/artists", (req: Request, res: Response) => {
+    const artist: Artist = req.body;
+    if (!isValidArtist(artist)) {
+        return res.status(400).json({ message: "Invalid data or country" });
+    }
+
+    const artistRecord: ArtistBD = {
+        id: randomUUID(),
+        artistName: artist.artistName.trim().replace(/\s+/g, " "),
+        realName: artist.realName.trim().replace(/\s+/g, " "),
+        country: getCanonicalCountry(artist.country)
+    };
+
+    artists.push(artistRecord);
+
+    return res.status(201).json(artistRecord);
 });
 
 
