@@ -124,7 +124,19 @@ app.put("/tracks/:id", (req: Request, res: Response) => {
 
     tracks[trackIndex] = updatedTrack;
 
-    return res.status(200).json(updatedTrack);
+    return res.status(204).json(updatedTrack);
+});
+
+app.delete("/tracks/:id", (req: Request, res: Response) => {
+    const idTrack: string = req.params.id as string;
+    const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
+    if (trackIndex === -1) {
+        return res.status(404).json({ message: "Track not found" });
+    }
+
+    tracks.splice(trackIndex, 1);
+
+    return res.status(204).json({ message: "Track eliminated" });
 });
 
 app.post("/artists", (req: Request, res: Response) => {
