@@ -7,10 +7,6 @@ const countries: string[] = [
     "United States"
 ];
 
-const countryNames: Map<string, string> = new Map(
-    countries.map((country: string) => [country.toLowerCase(), country])
-);
-
 export function isValidArtist(artist: Artist): boolean {
     if (!artist || typeof artist.artistName !== "string" || typeof artist.realName !== "string" || typeof artist.country !== "string") {
         return false;
@@ -18,9 +14,9 @@ export function isValidArtist(artist: Artist): boolean {
 
     return artist.artistName.trim().length > 0
         && artist.realName.trim().length > 0
-        && countryNames.has(artist.country.trim().replace(/\s+/g, " ").toLowerCase());
+        && countries.find((country: string) => country.toLowerCase() === artist.country.trim().replace(/\s+/g, " ").toLowerCase()) !== undefined;
 }
 
 export function getCanonicalCountry(country: string): string {
-    return countryNames.get(country.trim().replace(/\s+/g, " ").toLowerCase()) as string;
+    return countries.find((countryName: string) => countryName.toLowerCase() === country.trim().replace(/\s+/g, " ").toLowerCase()) as string;
 }
