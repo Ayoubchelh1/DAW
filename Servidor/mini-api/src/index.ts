@@ -9,6 +9,7 @@ import { ArtistBD } from "./interfaces/artist/artistBD";
 import { Artist } from "./interfaces/artist/artist";
 import { getCanonicalCountry, isValidArtist } from "./validatos/artist.validator";
 import { randomUUID } from "crypto";
+import { getAllTracks } from "./Services/trackService";
 
 
 const port: number = 3000;
@@ -22,7 +23,7 @@ app.get("/", (_req: Request, res: Response) => {
 
 
 app.get("/tracks", (_req: Request, res: Response) => {
-    return res.status(200).json(tracks);
+    return res.status(200).json(getAllTracks());
 });
 
 
