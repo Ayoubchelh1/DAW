@@ -5,7 +5,8 @@ import { TrackBD } from "../interfaces/track/trackBD";
 import { isValidTrack } from "../validatos/track.validator";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
 import { ErrorService } from "../interfaces/error/trackInvalidData";
-import { emplenarSuccesService } from "../interfaces/error/emplenarSuccessService";
+import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
+import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 
 export function getAllTracks(): TrackBD[] {
     return tracks;
@@ -36,7 +37,7 @@ export function createTrack(track: Track): CreateSuccessService<TrackBD> | Error
 
 }
 
-export function updateTrack(idTrack: string, track: Track): emplenarSuccesService<TrackBD> | ErrorService {
+export function updateTrack(idTrack: string, track: Track): UpdateSuccessService<TrackBD> | ErrorService {
     const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
     if (trackIndex === -1) {
         return { success: false, code: 404, message: "Track not found" };
@@ -55,5 +56,17 @@ export function updateTrack(idTrack: string, track: Track): emplenarSuccesServic
 
 
 
-    return { success: true, code: 200, data: updatedTrack, trackindex: trackIndex };
+    return { success: true, code: 200, data: updatedTrack, index: trackIndex };
+}
+
+export function deleteTrack(idTrack: string): DeleteSuccessService | ErrorService {
+
+    const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack)
+
+    if (trackIndex === -1) {
+        return { success: false, code: 404, message: "Track not found" };
+    }
+
+
+    return { success: true, code: 204, index: trackIndex };
 }

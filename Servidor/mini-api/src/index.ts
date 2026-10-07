@@ -7,10 +7,11 @@ import { ArtistBD } from "./interfaces/artist/artistBD";
 import { Artist } from "./interfaces/artist/artist";
 import { getCanonicalCountry, isValidArtist } from "./validatos/artist.validator";
 import { randomUUID } from "crypto";
-import { createTrack, updateTrack, getAllTracks, getTrackById } from "./Services/trackService";
+import { createTrack, updateTrack, getAllTracks, getTrackById, deleteTrack } from "./Services/trackService";
 import { ErrorService } from "./interfaces/error/trackInvalidData";
 import { CreateSuccessService } from "./interfaces/error/createSuccessService";
-import { emplenarSuccesService } from "./interfaces/error/emplenarSuccessService";
+import { UpdateSuccessService } from "./interfaces/error/updateSuccessService";
+import { DeleteSuccessService } from "./interfaces/error/deleteSuccessService";
 
 
 const port: number = 3000;
@@ -98,27 +99,30 @@ app.post("/tracks", (req: Request, res: Response) => {
 app.put("/tracks/:id", (req: Request, res: Response) => {
     const idTrack: string = req.params.id as string;
 
-    const result: emplenarSuccesService<TrackBD> | ErrorService = updateTrack(idTrack, req.body);
+    const result: UpdateSuccessService<TrackBD> | ErrorService = updateTrack(idTrack, req.body);
     if (!result.success) {
         const errorResult = result as ErrorService;
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const updateResult = result as emplenarSuccesService<TrackBD>;
-    tracks[updateResult.trackindex] = updateResult.data;
+    const updateResult = result as UpdateSuccessService<TrackBD>;
+    tracks[updateResult.index] = updateResult.data;
     return res.status(updateResult.code).json(updateResult.data);
 });
 
 app.delete("/tracks/:id", (req: Request, res: Response) => {
-    const idTrack: string = req.params.id as string;
-    const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
-    if (trackIndex === -1) {
-        return res.status(404).json({ message: "Track not found" });
+
+    const result: DeleteSuccessService | ErrorService = deleteTrack(req.params.id as string);
+
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    tracks.splice(trackIndex, 1);
+    const index: number = (result as DeleteSuccessService).index;
+    tracks.splice(index, 1)
 
-    return res.status(204).json({ message: "Track eliminated" });
+    return res.status(result.code).json({ result });
 });
 
 app.post("/artists", (req: Request, res: Response) => {
