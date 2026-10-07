@@ -9,7 +9,7 @@ import { ArtistBD } from "./interfaces/artist/artistBD";
 import { Artist } from "./interfaces/artist/artist";
 import { getCanonicalCountry, isValidArtist } from "./validatos/artist.validator";
 import { randomUUID } from "crypto";
-import { getAllTracks } from "./Services/trackService";
+import { createTrack, getAllTracks, getTrackById } from "./Services/trackService";
 
 
 const port: number = 3000;
@@ -28,14 +28,11 @@ app.get("/tracks", (_req: Request, res: Response) => {
 
 
 app.get("/tracks/:id", (req: Request, res: Response) => {
-    const idTrack: string = req.params.id as string;
-    const track: TrackBD[] = tracks.filter(
-        (t: TrackBD) => { return t.id === idTrack }
-    );
-    if (track.length === 0) {
-        return res.status(404).json({ message: `Track ${idTrack} not found` });
+    const findTrack = getTrackById(req.params.id as string);
+    if (!findTrack) {
+        return res.status(404).json({ message: `Track not found` });
     }
-    return res.status(200).json(track[0]);
+    return res.status(200).json(findTrack);
 });
 
 app.get("/artists", (_req: Request, res: Response) => {
@@ -85,23 +82,8 @@ app.get("/artists/:id", (req: Request, res: Response) => {
 // /artists/reproductions/popular
 
 app.post("/tracks", (req: Request, res: Response) => {
-    const track: Track = req.body;
-    if (!isValidTrack(track)) {
-        return res.status(400).json({ message: "Invalid data" });
-    }
 
-    const uuid: string = randomUUID()
-
-    const trackRecord: TrackBD = {
-        id: uuid,
-        title: track.title.trim().replace(/\s+/g, " "),
-        artist: track.artist.trim().replace(/\s+/g, " "),
-        duration: track.duration
-    };
-
-    tracks.push(trackRecord);
-
-    return res.status(201).json(trackRecord);
+    return res.status(201).json(createTrack(req.body));
 });
 
 app.put("/tracks/:id", (req: Request, res: Response) => {
