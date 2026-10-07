@@ -92,6 +92,7 @@ app.post("/tracks", (req: Request, res: Response) => {
         return res.status(errorResult.code).json({ message: errorResult.message })
     }
 
+    tracks.push((result as SuccessService<TrackBD>).data);
     return res.status(result.code).json(result);
 });
 

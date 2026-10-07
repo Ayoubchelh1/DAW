@@ -30,8 +30,12 @@ export function createTrack(track: Track): SuccessService<TrackBD> | ErrorServic
         duration: track.duration
     };
 
-    tracks.push(trackRecord);
+
 
     return { success: true, code: 201, data: trackRecord };
+
+}
+
+export function emplenarTrack(): void {
 
 }
