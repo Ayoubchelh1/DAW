@@ -12,6 +12,7 @@ import { ErrorService } from "./interfaces/error/trackInvalidData";
 import { CreateSuccessService } from "./interfaces/error/createSuccessService";
 import { UpdateSuccessService } from "./interfaces/error/updateSuccessService";
 import { DeleteSuccessService } from "./interfaces/error/deleteSuccessService";
+import { getAllArtists, getArtistById } from "./Services/artistService";
 
 
 const port: number = 3000;
@@ -38,18 +39,16 @@ app.get("/tracks/:id", (req: Request, res: Response) => {
 });
 
 app.get("/artists", (_req: Request, res: Response) => {
-    return res.status(200).json(artists);
+    return res.status(200).json(getAllArtists());
 });
 
 app.get("/artists/:id", (req: Request, res: Response) => {
     const idArtist: string = req.params.id as string;
-    const artist: ArtistBD[] = artists.filter(
-        (a: ArtistBD) => { return a.id === idArtist }
-    );
-    if (artist.length === 0) {
+    const artist: ArtistBD | undefined = getArtistById(idArtist);
+    if (!artist) {
         return res.status(404).json({ message: `Artist ${idArtist} not found` });
     }
-    return res.status(200).json(artist[0]);
+    return res.status(200).json(artist);
 });
 
 // Saber totes les llistes de reproducció d'un usuari
