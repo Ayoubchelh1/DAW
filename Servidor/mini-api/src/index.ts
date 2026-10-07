@@ -2,16 +2,15 @@ import express, { Express, Request, Response } from "express";
 import { APICONFIG } from "./config/apiConfig";
 import { tracks } from "./data/track/track";
 import { TrackBD } from "./interfaces/track/trackBD";
-import { Track } from "./interfaces/track/track";
-import { isValidTrack } from "./validatos/track.validator";
 import { artists } from "./data/artist/artist";
 import { ArtistBD } from "./interfaces/artist/artistBD";
 import { Artist } from "./interfaces/artist/artist";
 import { getCanonicalCountry, isValidArtist } from "./validatos/artist.validator";
 import { randomUUID } from "crypto";
-import { createTrack, getAllTracks, getTrackById } from "./Services/trackService";
+import { createTrack, updateTrack, getAllTracks, getTrackById } from "./Services/trackService";
 import { ErrorService } from "./interfaces/error/trackInvalidData";
-import { SuccessService } from "./interfaces/error/successService";
+import { CreateSuccessService } from "./interfaces/error/createSuccessService";
+import { emplenarSuccesService } from "./interfaces/error/emplenarSuccessService";
 
 
 const port: number = 3000;
@@ -85,39 +84,29 @@ app.get("/artists/:id", (req: Request, res: Response) => {
 
 app.post("/tracks", (req: Request, res: Response) => {
 
-    const result: SuccessService<TrackBD> | ErrorService = createTrack(req.body);
+    const result: CreateSuccessService<TrackBD> | ErrorService = createTrack(req.body);
 
     if (!result.success) {
         const errorResult = result as ErrorService
         return res.status(errorResult.code).json({ message: errorResult.message })
     }
 
-    tracks.push((result as SuccessService<TrackBD>).data);
+    tracks.push((result as CreateSuccessService<TrackBD>).data);
     return res.status(result.code).json(result);
 });
 
 app.put("/tracks/:id", (req: Request, res: Response) => {
     const idTrack: string = req.params.id as string;
     const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
-    if (trackIndex === -1) {
-        return res.status(404).json({ message: `Track not found` });
+    const result: emplenarSuccesService<TrackBD> | ErrorService = updateTrack(idTrack, req.body);
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const track: Track = req.body;
-    if (!isValidTrack(track)) {
-        return res.status(400).json({ message: "Invalid data" });
-    }
-
-    const updatedTrack: TrackBD = {
-        id: idTrack,
-        title: track.title.trim().replace(/\s+/g, " "),
-        artist: track.artist.trim().replace(/\s+/g, " "),
-        duration: track.duration
-    };
-
+    const updatedTrack: TrackBD = (result as emplenarSuccesService<TrackBD>).data;
     tracks[trackIndex] = updatedTrack;
-
-    return res.status(204).json(updatedTrack);
+    return res.status(result.code).json(updatedTrack);
 });
 
 app.delete("/tracks/:id", (req: Request, res: Response) => {
@@ -155,4 +144,3 @@ app.post("/artists", (req: Request, res: Response) => {
 app.listen(port, () => {
     console.log(`Servidor escoltant a ${APICONFIG.host}:${APICONFIG.port}`);
 });
-
