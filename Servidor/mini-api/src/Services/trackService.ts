@@ -55,5 +55,5 @@ export function updateTrack(idTrack: string, track: Track): emplenarSuccesServic
 
 
 
-    return { success: true, code: 200, data: updatedTrack };
+    return { success: true, code: 200, data: updatedTrack, trackindex: trackIndex };
 }

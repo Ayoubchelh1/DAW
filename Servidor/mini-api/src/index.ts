@@ -104,9 +104,9 @@ app.put("/tracks/:id", (req: Request, res: Response) => {
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const updatedTrack: TrackBD = (result as emplenarSuccesService<TrackBD>).data;
-    tracks[trackIndex] = updatedTrack;
-    return res.status(result.code).json(updatedTrack);
+    const updateResult = result as emplenarSuccesService<TrackBD>;
+    tracks[updateResult.trackindex] = updateResult.data;
+    return res.status(updateResult.code).json(updateResult.data);
 });
 
 app.delete("/tracks/:id", (req: Request, res: Response) => {
