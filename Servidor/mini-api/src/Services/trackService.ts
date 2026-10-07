@@ -3,7 +3,8 @@ import { tracks } from "../data/track/track";
 import { Track } from "../interfaces/track/track";
 import { TrackBD } from "../interfaces/track/trackBD";
 import { isValidTrack } from "../validatos/track.validator";
-import { TrackInvalidData } from "../interfaces/error/TrackInvalidData";
+import { SuccessService } from "../interfaces/error/successService";
+import { ErrorService } from "../interfaces/error/trackInvalidData";
 
 export function getAllTracks(): TrackBD[] {
     return tracks;
@@ -14,10 +15,10 @@ export function getTrackById(idTrack: string): TrackBD | undefined {
     return tracks.find((t: TrackBD) => { return t.id === idTrack; });
 }
 
-export function createTrack(track: Track): TrackBD | TrackInvalidData {
+export function createTrack(track: Track): SuccessService<TrackBD> | ErrorService {
 
     if (!isValidTrack(track)) {
-        return { error: 400, message: "Invalid data" }
+        return { success: false, code: 400, message: "invalid data" }
     }
 
     const uuid: string = randomUUID()
@@ -31,6 +32,6 @@ export function createTrack(track: Track): TrackBD | TrackInvalidData {
 
     tracks.push(trackRecord);
 
-    return trackRecord;
+    return { success: true, code: 201, data: trackRecord };
 
 }

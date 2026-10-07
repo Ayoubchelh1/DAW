@@ -10,6 +10,8 @@ import { Artist } from "./interfaces/artist/artist";
 import { getCanonicalCountry, isValidArtist } from "./validatos/artist.validator";
 import { randomUUID } from "crypto";
 import { createTrack, getAllTracks, getTrackById } from "./Services/trackService";
+import { ErrorService } from "./interfaces/error/trackInvalidData";
+import { SuccessService } from "./interfaces/error/successService";
 
 
 const port: number = 3000;
@@ -83,7 +85,13 @@ app.get("/artists/:id", (req: Request, res: Response) => {
 
 app.post("/tracks", (req: Request, res: Response) => {
 
-    return res.status(201).json(createTrack(req.body));
+    const result: SuccessService<TrackBD> | ErrorService = createTrack(req.body);
+
+    if (!result.success) {
+        return res.status(result.code).json({ message: result.code })
+    }
+
+    return res.status(result.code).json(result.data);
 });
 
 app.put("/tracks/:id", (req: Request, res: Response) => {

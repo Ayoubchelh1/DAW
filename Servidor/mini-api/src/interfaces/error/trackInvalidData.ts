@@ -1,4 +1,5 @@
-export interface TrackInvalidData {
-    error: number;
+export interface ErrorService {
+    success: boolean;
+    code: number;
     message: string;
 }
