@@ -97,7 +97,7 @@ app.post("/tracks", (req: Request, res: Response) => {
 
 app.put("/tracks/:id", (req: Request, res: Response) => {
     const idTrack: string = req.params.id as string;
-    const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
+
     const result: emplenarSuccesService<TrackBD> | ErrorService = updateTrack(idTrack, req.body);
     if (!result.success) {
         const errorResult = result as ErrorService;
