@@ -88,10 +88,11 @@ app.post("/tracks", (req: Request, res: Response) => {
     const result: SuccessService<TrackBD> | ErrorService = createTrack(req.body);
 
     if (!result.success) {
-        return res.status(result.code).json({ message: result.code })
+        const errorResult = result as ErrorService
+        return res.status(errorResult.code).json({ message: errorResult.message })
     }
 
-    return res.status(result.code).json(result.data);
+    return res.status(result.code).json(result);
 });
 
 app.put("/tracks/:id", (req: Request, res: Response) => {
