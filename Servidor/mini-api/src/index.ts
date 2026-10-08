@@ -4,7 +4,8 @@ import { tracks } from "./data/track/track";
 import { TrackBD } from "./interfaces/track/trackBD";
 import { artists } from "./data/artist/artist";
 import { ArtistBD } from "./interfaces/artist/artistBD";
-import { getAllCountries, getCountryById } from "./Services/countryService";
+import { getAllCountries, getCountryById, updateCountry } from "./Services/countryService";
+import { countries } from "./data/country/country";
 import { CountryBD } from "./interfaces/country/countryBD";
 import { createTrack, updateTrack, getAllTracks, getTrackById, deleteTrack } from "./Services/trackService";
 import { ErrorService } from "./interfaces/error/trackInvalidData";
@@ -63,6 +64,22 @@ app.get("/countries/:id", (req: Request, res: Response) => {
     }
     return res.status(200).json(country);
 });
+
+app.put("/countries/:id", (req: Request, res: Response) => {
+    const idCountry: string = req.params.id as string;
+
+    const result: UpdateSuccessService<CountryBD> | ErrorService = updateCountry(idCountry, req.body);
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(errorResult.code).json({ message: errorResult.message });
+    }
+
+    const updateResult = result as UpdateSuccessService<CountryBD>;
+    countries[updateResult.index] = updateResult.data;
+    return res.status(updateResult.code).json(updateResult.data);
+});
+
+
 
 // Saber totes les llistes de reproducció d'un usuari
 //usuari/:id/playlist

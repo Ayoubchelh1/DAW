@@ -1,5 +1,9 @@
 import { countries } from "../data/country/country";
+import { Country } from "../interfaces/country/country";
 import { CountryBD } from "../interfaces/country/countryBD";
+import { ErrorService } from "../interfaces/error/trackInvalidData";
+import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
+import { isValidCountry } from "../validatos/country.validator";
 
 export function getAllCountries(): CountryBD[] {
     return countries;
@@ -7,4 +11,22 @@ export function getAllCountries(): CountryBD[] {
 
 export function getCountryById(idCountry: string): CountryBD | undefined {
     return countries.find((country: CountryBD) => country.id === idCountry);
+}
+
+export function updateCountry(idCountry: string, country: Country): UpdateSuccessService<CountryBD> | ErrorService {
+    const countryIndex: number = countries.findIndex((country: CountryBD) => country.id === idCountry);
+    if (countryIndex === -1) {
+        return { success: false, code: 404, message: "Country not found" };
+    }
+
+    if (!isValidCountry(country)) {
+        return { success: false, code: 400, message: "invalid data" };
+    }
+
+    const updatedCountry: CountryBD = {
+        id: idCountry,
+        name: country.name.trim().replace(/\s+/g, " ")
+    };
+
+    return { success: true, code: 200, data: updatedCountry, index: countryIndex };
 }
