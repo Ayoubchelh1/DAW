@@ -14,7 +14,7 @@ import { UpdateSuccessService } from "./interfaces/error/updateSuccessService";
 import { DeleteSuccessService } from "./interfaces/error/deleteSuccessService";
 import { createArtist, updateArtist, getAllArtists, getArtistById, deleteArtist } from "./Services/artistService";
 import { ArtistInvalidData } from "./interfaces/error/artistInvalidData";
-import { createUser, getAllUsers, getUserById } from "./Services/userService";
+import { createUser, updateUser, getAllUsers, getUserById } from "./Services/userService";
 import { users } from "./data/user/user";
 import { UserBD } from "./interfaces/user/userBD";
 
@@ -92,6 +92,20 @@ app.put("/countries/:id", (req: Request, res: Response) => {
 
     const updateResult = result as UpdateSuccessService<CountryBD>;
     countries[updateResult.index] = updateResult.data;
+    return res.status(updateResult.code).json(updateResult.data);
+});
+
+app.put("/users/:id", (req: Request, res: Response) => {
+    const idUser: string = req.params.id as string;
+
+    const result: UpdateSuccessService<UserBD> | ErrorService = updateUser(idUser, req.body);
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(errorResult.code).json({ message: errorResult.message });
+    }
+
+    const updateResult = result as UpdateSuccessService<UserBD>;
+    users[updateResult.index] = updateResult.data;
     return res.status(updateResult.code).json(updateResult.data);
 });
 
