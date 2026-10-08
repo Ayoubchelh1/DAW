@@ -4,6 +4,8 @@ import { tracks } from "./data/track/track";
 import { TrackBD } from "./interfaces/track/trackBD";
 import { artists } from "./data/artist/artist";
 import { ArtistBD } from "./interfaces/artist/artistBD";
+import { getAllCountries, getCountryById } from "./Services/countryService";
+import { CountryBD } from "./interfaces/country/countryBD";
 import { createTrack, updateTrack, getAllTracks, getTrackById, deleteTrack } from "./Services/trackService";
 import { ErrorService } from "./interfaces/error/trackInvalidData";
 import { CreateSuccessService } from "./interfaces/error/createSuccessService";
@@ -47,6 +49,19 @@ app.get("/artists/:id", (req: Request, res: Response) => {
         return res.status(404).json({ message: `Artist ${idArtist} not found` });
     }
     return res.status(200).json(artist);
+});
+
+app.get("/countries", (_req: Request, res: Response) => {
+    return res.status(200).json(getAllCountries());
+});
+
+app.get("/countries/:id", (req: Request, res: Response) => {
+    const idCountry: string = req.params.id as string;
+    const country: CountryBD | undefined = getCountryById(idCountry);
+    if (!country) {
+        return res.status(404).json({ message: `Country ${idCountry} not found` });
+    }
+    return res.status(200).json(country);
 });
 
 // Saber totes les llistes de reproducció d'un usuari
