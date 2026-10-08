@@ -4,7 +4,7 @@ import { tracks } from "./data/track/track";
 import { TrackBD } from "./interfaces/track/trackBD";
 import { artists } from "./data/artist/artist";
 import { ArtistBD } from "./interfaces/artist/artistBD";
-import { getAllCountries, getCountryById, updateCountry } from "./Services/countryService";
+import { getAllCountries, getCountryById, createCountry, updateCountry } from "./Services/countryService";
 import { countries } from "./data/country/country";
 import { CountryBD } from "./interfaces/country/countryBD";
 import { createTrack, updateTrack, getAllTracks, getTrackById, deleteTrack } from "./Services/trackService";
@@ -79,7 +79,18 @@ app.put("/countries/:id", (req: Request, res: Response) => {
     return res.status(updateResult.code).json(updateResult.data);
 });
 
+app.post("/countries", (req: Request, res: Response) => {
+    const result: CreateSuccessService<CountryBD> | ErrorService = createCountry(req.body);
 
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(errorResult.code).json({ message: errorResult.message });
+    }
+
+    const createResult = result as CreateSuccessService<CountryBD>;
+    countries.push(createResult.data);
+    return res.status(createResult.code).json(createResult);
+});
 
 // Saber totes les llistes de reproducció d'un usuari
 //usuari/:id/playlist
