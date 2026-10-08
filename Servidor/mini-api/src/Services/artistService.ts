@@ -4,6 +4,7 @@ import { Artist } from "../interfaces/artist/artist";
 import { ArtistBD } from "../interfaces/artist/artistBD";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
 import { ArtistInvalidData } from "../interfaces/error/artistInvalidData";
+import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { getCanonicalCountry, isValidArtist } from "../validatos/artist.validator";
 
 export function getAllArtists(): ArtistBD[] {
@@ -27,4 +28,14 @@ export function createArtist(artist: Artist): CreateSuccessService<ArtistBD> | A
     };
 
     return { success: true, code: 201, data: artistRecord };
+}
+
+export function deleteArtist(idArtist: string): DeleteSuccessService | ArtistInvalidData {
+    const artistIndex: number = artists.findIndex((artist: ArtistBD) => artist.id === idArtist);
+
+    if (artistIndex === -1) {
+        return { success: false, code: 404, message: "Artist not found" };
+    }
+
+    return { success: true, code: 204, index: artistIndex };
 }
