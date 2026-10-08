@@ -9,7 +9,7 @@ import { ErrorService } from "./interfaces/error/trackInvalidData";
 import { CreateSuccessService } from "./interfaces/error/createSuccessService";
 import { UpdateSuccessService } from "./interfaces/error/updateSuccessService";
 import { DeleteSuccessService } from "./interfaces/error/deleteSuccessService";
-import { createArtist, getAllArtists, getArtistById, deleteArtist } from "./Services/artistService";
+import { createArtist, updateArtist, getAllArtists, getArtistById, deleteArtist } from "./Services/artistService";
 import { ArtistInvalidData } from "./interfaces/error/artistInvalidData";
 
 
@@ -132,6 +132,20 @@ app.post("/artists", (req: Request, res: Response) => {
     const createResult = result as CreateSuccessService<ArtistBD>;
     artists.push(createResult.data);
     return res.status(createResult.code).json(createResult);
+});
+
+app.put("/artists/:id", (req: Request, res: Response) => {
+    const idArtist: string = req.params.id as string;
+
+    const result: UpdateSuccessService<ArtistBD> | ArtistInvalidData = updateArtist(idArtist, req.body);
+    if (!result.success) {
+        const errorResult = result as ArtistInvalidData;
+        return res.status(errorResult.code).json({ message: errorResult.message });
+    }
+
+    const updateResult = result as UpdateSuccessService<ArtistBD>;
+    artists[updateResult.index] = updateResult.data;
+    return res.status(updateResult.code).json(updateResult.data);
 });
 
 app.delete("/artists/:id", (req: Request, res: Response) => {
