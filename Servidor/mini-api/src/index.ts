@@ -4,15 +4,13 @@ import { tracks } from "./data/track/track";
 import { TrackBD } from "./interfaces/track/trackBD";
 import { artists } from "./data/artist/artist";
 import { ArtistBD } from "./interfaces/artist/artistBD";
-import { Artist } from "./interfaces/artist/artist";
-import { getCanonicalCountry, isValidArtist } from "./validatos/artist.validator";
-import { randomUUID } from "crypto";
 import { createTrack, updateTrack, getAllTracks, getTrackById, deleteTrack } from "./Services/trackService";
 import { ErrorService } from "./interfaces/error/trackInvalidData";
 import { CreateSuccessService } from "./interfaces/error/createSuccessService";
 import { UpdateSuccessService } from "./interfaces/error/updateSuccessService";
 import { DeleteSuccessService } from "./interfaces/error/deleteSuccessService";
-import { getAllArtists, getArtistById } from "./Services/artistService";
+import { createArtist, getAllArtists, getArtistById } from "./Services/artistService";
+import { ArtistInvalidData } from "./interfaces/error/artistInvalidData";
 
 
 const port: number = 3000;
@@ -125,22 +123,15 @@ app.delete("/tracks/:id", (req: Request, res: Response) => {
 });
 
 app.post("/artists", (req: Request, res: Response) => {
-    const artist: Artist = req.body;
-    if (!isValidArtist(artist)) {
-        return res.status(400).json({ message: "Invalid data or country" });
+    const result: CreateSuccessService<ArtistBD> | ArtistInvalidData = createArtist(req.body);
+    if (!result.success) {
+        const errorResult = result as ArtistInvalidData;
+        return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const idartista: string = randomUUID()
-    const artistRecord: ArtistBD = {
-        id: idartista,
-        artistName: artist.artistName.trim().replace(/\s+/g, " "),
-        realName: artist.realName.trim().replace(/\s+/g, " "),
-        country: getCanonicalCountry(artist.country)
-    };
-
-    artists.push(artistRecord);
-
-    return res.status(201).json(artistRecord);
+    const createResult = result as CreateSuccessService<ArtistBD>;
+    artists.push(createResult.data);
+    return res.status(createResult.code).json(createResult);
 });
 
 
