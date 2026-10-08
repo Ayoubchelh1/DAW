@@ -14,6 +14,8 @@ import { UpdateSuccessService } from "./interfaces/error/updateSuccessService";
 import { DeleteSuccessService } from "./interfaces/error/deleteSuccessService";
 import { createArtist, updateArtist, getAllArtists, getArtistById, deleteArtist } from "./Services/artistService";
 import { ArtistInvalidData } from "./interfaces/error/artistInvalidData";
+import { getAllUsers, getUserById } from "./Services/userService";
+import { UserBD } from "./interfaces/user/userBD";
 
 
 const port: number = 3000;
@@ -63,6 +65,19 @@ app.get("/countries/:id", (req: Request, res: Response) => {
         return res.status(404).json({ message: `Country ${idCountry} not found` });
     }
     return res.status(200).json(country);
+});
+
+app.get("/users", (_req: Request, res: Response) => {
+    return res.status(200).json(getAllUsers());
+});
+
+app.get("/users/:id", (req: Request, res: Response) => {
+    const idUser: string = req.params.id as string;
+    const user: UserBD | undefined = getUserById(idUser);
+    if (!user) {
+        return res.status(404).json({ message: `User ${idUser} not found` });
+    }
+    return res.status(200).json(user);
 });
 
 app.put("/countries/:id", (req: Request, res: Response) => {
