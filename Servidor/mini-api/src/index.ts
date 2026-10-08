@@ -14,7 +14,7 @@ import { UpdateSuccessService } from "./interfaces/error/updateSuccessService";
 import { DeleteSuccessService } from "./interfaces/error/deleteSuccessService";
 import { createArtist, updateArtist, getAllArtists, getArtistById, deleteArtist } from "./Services/artistService";
 import { ArtistInvalidData } from "./interfaces/error/artistInvalidData";
-import { createUser, updateUser, getAllUsers, getUserById } from "./Services/userService";
+import { createUser, updateUser, getAllUsers, getUserById, deleteUser } from "./Services/userService";
 import { users } from "./data/user/user";
 import { UserBD } from "./interfaces/user/userBD";
 
@@ -109,6 +109,20 @@ app.put("/users/:id", (req: Request, res: Response) => {
     return res.status(updateResult.code).json(updateResult.data);
 });
 
+app.delete("/users/:id", (req: Request, res: Response) => {
+    const result: DeleteSuccessService | ErrorService = deleteUser(req.params.id as string);
+
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(errorResult.code).json({ message: errorResult.message });
+    }
+
+    const index: number = (result as DeleteSuccessService).index;
+    users.splice(index, 1);
+
+    return res.status(result.code).json({ result });
+});
+
 app.post("/countries", (req: Request, res: Response) => {
     const result: CreateSuccessService<CountryBD> | ErrorService = createCountry(req.body);
 
@@ -134,6 +148,7 @@ app.post("/users", (req: Request, res: Response) => {
     users.push(createResult.data);
     return res.status(createResult.code).json(createResult);
 });
+
 
 // Saber totes les llistes de reproducció d'un usuari
 //usuari/:id/playlist

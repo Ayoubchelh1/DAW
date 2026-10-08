@@ -5,6 +5,7 @@ import { UserBD } from "../interfaces/user/userBD";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
 import { ErrorService } from "../interfaces/error/trackInvalidData";
 import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
+import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { isValidUser } from "../validatos/user.validator";
 
 export function getAllUsers(): UserBD[] {
@@ -46,4 +47,14 @@ export function updateUser(idUser: string, user: User): UpdateSuccessService<Use
     };
 
     return { success: true, code: 200, data: updatedUser, index: userIndex };
+}
+
+export function deleteUser(idUser: string): DeleteSuccessService | ErrorService {
+    const userIndex: number = users.findIndex((user: UserBD) => user.id === idUser);
+
+    if (userIndex === -1) {
+        return { success: false, code: 404, message: "User not found" };
+    }
+
+    return { success: true, code: 204, index: userIndex };
 }
