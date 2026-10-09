@@ -21,6 +21,8 @@ import { deleteTracksController, getAllTracksController, getTrackByIdController,
 import { trackRouter } from "./routes/trackRoutes";
 import { deleteArtistsController, getAllArtistController, getArtistsByIdController, postArtistsController, putArtistsController } from "./controllers/artistsController";
 import { artistRouter } from "./routes/artistsRoutes";
+import { getAllCountriesController, getCountriesByIdController, postCountriesController, putCountriesController } from "./controllers/countriesController";
+import { countriesRouter } from "./routes/countries";
 
 
 const port: number = 3000;
@@ -32,23 +34,11 @@ app.get("/", (_req: Request, res: Response) => {
     return res.json(JSON.stringify(APICONFIG));
 });
 
-
 app.use("/tracks", trackRouter);
 
 app.use("/artists", artistRouter);
 
-app.get("/countries", (_req: Request, res: Response) => {
-    return res.status(200).json(getAllCountries());
-});
-
-app.get("/countries/:id", (req: Request, res: Response) => {
-    const idCountry: string = req.params.id as string;
-    const country: CountryBD | undefined = getCountryById(idCountry);
-    if (!country) {
-        return res.status(404).json({ message: `Country ${idCountry} not found` });
-    }
-    return res.status(200).json(country);
-});
+app.use("/countries", countriesRouter);
 
 app.get("/users", (_req: Request, res: Response) => {
     return res.status(200).json(getAllUsers());
@@ -63,19 +53,7 @@ app.get("/users/:id", (req: Request, res: Response) => {
     return res.status(200).json(user);
 });
 
-app.put("/countries/:id", (req: Request, res: Response) => {
-    const idCountry: string = req.params.id as string;
 
-    const result: UpdateSuccessService<CountryBD> | ErrorService = updateCountry(idCountry, req.body);
-    if (!result.success) {
-        const errorResult = result as ErrorService;
-        return res.status(errorResult.code).json({ message: errorResult.message });
-    }
-
-    const updateResult = result as UpdateSuccessService<CountryBD>;
-    countries[updateResult.index] = updateResult.data;
-    return res.status(updateResult.code).json(updateResult.data);
-});
 
 app.put("/users/:id", (req: Request, res: Response) => {
     const idUser: string = req.params.id as string;
@@ -105,18 +83,7 @@ app.delete("/users/:id", (req: Request, res: Response) => {
     return res.status(result.code).json({ result });
 });
 
-app.post("/countries", (req: Request, res: Response) => {
-    const result: CreateSuccessService<CountryBD> | ErrorService = createCountry(req.body);
 
-    if (!result.success) {
-        const errorResult = result as ErrorService;
-        return res.status(errorResult.code).json({ message: errorResult.message });
-    }
-
-    const createResult = result as CreateSuccessService<CountryBD>;
-    countries.push(createResult.data);
-    return res.status(createResult.code).json(createResult);
-});
 
 app.post("/users", (req: Request, res: Response) => {
     const result: CreateSuccessService<UserBD> | ErrorService = createUser(req.body);
