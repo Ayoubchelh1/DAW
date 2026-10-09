@@ -74,7 +74,34 @@ app.post("/playlists", (req: Request, res: Response) => {
     return res.status(201).json(playlistRecord);
 });
 
+app.put("/playlists/:id", (req: Request, res: Response) => {
+    const idPlaylist: string = req.params.id as string;
+    const playlistIndex: number = playlists.findIndex((playlist: PlaylistBD) => playlist.id === idPlaylist);
+    if (playlistIndex === -1) {
+        return res.status(404).json({ message: `Playlist ${idPlaylist} not found` });
+    }
 
+    const playlist: Playlist = req.body;
+    if (!playlist || typeof playlist.title !== "string" || playlist.title.trim().length === 0
+        || typeof playlist.userId !== "string" || playlist.userId.trim().length === 0) {
+        return res.status(400).json({ message: "Invalid data" });
+    }
+
+    const userExists: boolean = users.some((user: UserBD) => user.id === playlist.userId);
+    if (!userExists) {
+        return res.status(404).json({ message: `User ${playlist.userId} not found` });
+    }
+
+    const updatedPlaylist: PlaylistBD = {
+        id: idPlaylist,
+        title: playlist.title.trim().replace(/\s+/g, " "),
+        userId: playlist.userId
+    };
+
+    playlists[playlistIndex] = updatedPlaylist;
+
+    return res.status(200).json(updatedPlaylist);
+});
 
 
 // Saber totes les llistes de reproducció d'un usuari
