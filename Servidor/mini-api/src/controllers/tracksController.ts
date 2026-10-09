@@ -7,7 +7,7 @@ import { TrackBD } from "../interfaces/track/trackBD";
 import { createTrack, deleteTrack, getAllTracks, getTrackById, updateTrack } from "../Services/trackService";
 import { Response, Request } from "express";
 
-export function getAllTracksController(res: Response): Response {
+export function getAllTracksController(_req: Request, res: Response): Response {
     return res.status(200).json(getAllTracks());
 }
 
