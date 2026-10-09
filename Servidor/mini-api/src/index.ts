@@ -10,6 +10,7 @@ import { UserBD } from "./interfaces/user/userBD";
 import { trackRouter } from "./routes/trackRoutes";
 import { artistRouter } from "./routes/artistsRoutes";
 import { countriesRouter } from "./routes/countries";
+import { getAllUsersController, putUsersController } from "./controllers/usersController";
 
 
 const port: number = 3000;
@@ -28,7 +29,7 @@ app.use("/artists", artistRouter);
 app.use("/countries", countriesRouter);
 
 app.get("/users", (_req: Request, res: Response) => {
-    return res.status(200).json(getAllUsers());
+    return getAllUsersController(_req, res)
 });
 
 app.get("/users/:id", (req: Request, res: Response) => {
@@ -43,17 +44,7 @@ app.get("/users/:id", (req: Request, res: Response) => {
 
 
 app.put("/users/:id", (req: Request, res: Response) => {
-    const idUser: string = req.params.id as string;
-
-    const result: UpdateSuccessService<UserBD> | ErrorService = updateUser(idUser, req.body);
-    if (!result.success) {
-        const errorResult = result as ErrorService;
-        return res.status(errorResult.code).json({ message: errorResult.message });
-    }
-
-    const updateResult = result as UpdateSuccessService<UserBD>;
-    users[updateResult.index] = updateResult.data;
-    return res.status(updateResult.code).json(updateResult.data);
+    return putUsersController(req, res);
 });
 
 app.delete("/users/:id", (req: Request, res: Response) => {
@@ -116,10 +107,6 @@ app.post("/users", (req: Request, res: Response) => {
 // /artists/followers/popular
 
 // /artists/reproductions/popular
-
-
-
-
 
 
 app.listen(port, () => {
