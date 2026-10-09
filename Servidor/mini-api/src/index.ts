@@ -17,6 +17,7 @@ import { ArtistInvalidData } from "./interfaces/error/artistInvalidData";
 import { createUser, updateUser, getAllUsers, getUserById, deleteUser } from "./Services/userService";
 import { users } from "./data/user/user";
 import { UserBD } from "./interfaces/user/userBD";
+import { deleteTracksController, getAllTracksController, getTrackByIdController, postTrackController, putTrackController } from "./controllers/tracksController";
 
 
 const port: number = 3000;
@@ -30,16 +31,12 @@ app.get("/", (_req: Request, res: Response) => {
 
 
 app.get("/tracks", (_req: Request, res: Response) => {
-    return res.status(200).json(getAllTracks());
+    return getAllTracksController(res);
 });
 
 
 app.get("/tracks/:id", (req: Request, res: Response) => {
-    const findTrack = getTrackById(req.params.id as string);
-    if (!findTrack) {
-        return res.status(404).json({ message: `Track not found` });
-    }
-    return res.status(200).json(findTrack);
+    return getTrackByIdController(req, res);
 });
 
 app.get("/artists", (_req: Request, res: Response) => {
@@ -183,44 +180,16 @@ app.post("/users", (req: Request, res: Response) => {
 
 app.post("/tracks", (req: Request, res: Response) => {
 
-    const result: CreateSuccessService<TrackBD> | ErrorService = createTrack(req.body);
-
-    if (!result.success) {
-        const errorResult = result as ErrorService
-        return res.status(errorResult.code).json({ message: errorResult.message })
-    }
-
-    tracks.push((result as CreateSuccessService<TrackBD>).data);
-    return res.status(result.code).json(result);
+    return postTrackController(req, res);
 });
 
 app.put("/tracks/:id", (req: Request, res: Response) => {
-    const idTrack: string = req.params.id as string;
-
-    const result: UpdateSuccessService<TrackBD> | ErrorService = updateTrack(idTrack, req.body);
-    if (!result.success) {
-        const errorResult = result as ErrorService;
-        return res.status(errorResult.code).json({ message: errorResult.message });
-    }
-
-    const updateResult = result as UpdateSuccessService<TrackBD>;
-    tracks[updateResult.index] = updateResult.data;
-    return res.status(updateResult.code).json(updateResult.data);
+    return putTrackController(req, res);
 });
 
 app.delete("/tracks/:id", (req: Request, res: Response) => {
 
-    const result: DeleteSuccessService | ErrorService = deleteTrack(req.params.id as string);
-
-    if (!result.success) {
-        const errorResult = result as ErrorService;
-        return res.status(errorResult.code).json({ message: errorResult.message });
-    }
-
-    const index: number = (result as DeleteSuccessService).index;
-    tracks.splice(index, 1)
-
-    return res.status(result.code).json({ result });
+    return deleteTracksController(req, res);
 });
 
 app.post("/artists", (req: Request, res: Response) => {
