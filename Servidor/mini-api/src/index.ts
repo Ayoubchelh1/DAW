@@ -1,27 +1,14 @@
 import express, { Express, Request, Response } from "express";
 import { APICONFIG } from "./config/apiConfig";
-import { tracks } from "./data/track/track";
-import { TrackBD } from "./interfaces/track/trackBD";
-import { artists } from "./data/artist/artist";
-import { ArtistBD } from "./interfaces/artist/artistBD";
-import { getAllCountries, getCountryById, createCountry, updateCountry } from "./Services/countryService";
-import { countries } from "./data/country/country";
-import { CountryBD } from "./interfaces/country/countryBD";
-import { createTrack, updateTrack, getAllTracks, getTrackById, deleteTrack } from "./Services/trackService";
 import { ErrorService } from "./interfaces/error/trackInvalidData";
 import { CreateSuccessService } from "./interfaces/error/createSuccessService";
 import { UpdateSuccessService } from "./interfaces/error/updateSuccessService";
 import { DeleteSuccessService } from "./interfaces/error/deleteSuccessService";
-import { createArtist, updateArtist, getAllArtists, getArtistById, deleteArtist } from "./Services/artistService";
-import { ArtistInvalidData } from "./interfaces/error/artistInvalidData";
 import { createUser, updateUser, getAllUsers, getUserById, deleteUser } from "./Services/userService";
 import { users } from "./data/user/user";
 import { UserBD } from "./interfaces/user/userBD";
-import { deleteTracksController, getAllTracksController, getTrackByIdController, postTrackController, putTrackController } from "./controllers/tracksController";
 import { trackRouter } from "./routes/trackRoutes";
-import { deleteArtistsController, getAllArtistController, getArtistsByIdController, postArtistsController, putArtistsController } from "./controllers/artistsController";
 import { artistRouter } from "./routes/artistsRoutes";
-import { getAllCountriesController, getCountriesByIdController, postCountriesController, putCountriesController } from "./controllers/countriesController";
 import { countriesRouter } from "./routes/countries";
 
 
