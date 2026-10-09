@@ -19,7 +19,7 @@ import { users } from "./data/user/user";
 import { UserBD } from "./interfaces/user/userBD";
 import { deleteTracksController, getAllTracksController, getTrackByIdController, postTrackController, putTrackController } from "./controllers/tracksController";
 import { trackRouter } from "./routes/trackRoutes";
-import { getAllArtistController, getArtistsByIdController, postArtistsController, putArtistsController } from "./controllers/artistsController";
+import { deleteArtistsController, getAllArtistController, getArtistsByIdController, postArtistsController, putArtistsController } from "./controllers/artistsController";
 
 
 const port: number = 3000;
@@ -40,6 +40,18 @@ app.get("/artists", (_req: Request, res: Response) => {
 
 app.get("/artists/:id", (req: Request, res: Response) => {
     return getArtistsByIdController(req, res)
+});
+
+app.post("/artists", (req: Request, res: Response) => {
+    return postArtistsController(req, res);
+});
+
+app.put("/artists/:id", (req: Request, res: Response) => {
+    return putArtistsController(req, res)
+});
+
+app.delete("/artists/:id", (req: Request, res: Response) => {
+    return deleteArtistsController(req, res)
 });
 
 app.get("/countries", (_req: Request, res: Response) => {
@@ -170,27 +182,7 @@ app.post("/users", (req: Request, res: Response) => {
 
 
 
-app.post("/artists", (req: Request, res: Response) => {
-    return postArtistsController(req, res);
-});
 
-app.put("/artists/:id", (req: Request, res: Response) => {
-    return putArtistsController(req, res),
-});
-
-app.delete("/artists/:id", (req: Request, res: Response) => {
-    const result: DeleteSuccessService | ArtistInvalidData = deleteArtist(req.params.id as string);
-
-    if (!result.success) {
-        const errorResult = result as ArtistInvalidData;
-        return res.status(errorResult.code).json({ message: errorResult.message });
-    }
-
-    const index: number = (result as DeleteSuccessService).index;
-    artists.splice(index, 1);
-
-    return res.status(result.code).json({ result });
-});
 
 
 app.listen(port, () => {

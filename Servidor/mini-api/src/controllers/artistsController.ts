@@ -1,10 +1,11 @@
 import { Response, Request } from "express";
-import { createArtist, getAllArtists, getArtistById, updateArtist } from "../Services/artistService";
+import { createArtist, deleteArtist, getAllArtists, getArtistById, updateArtist } from "../Services/artistService";
 import { ArtistBD } from "../interfaces/artist/artistBD";
 import { artists } from "../data/artist/artist";
 import { ArtistInvalidData } from "../interfaces/error/artistInvalidData";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
 import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
+import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 
 export function getAllArtistController(_req: Request, res: Response): Response {
     return res.status(200).json(getAllArtists());
@@ -43,4 +44,18 @@ export function putArtistsController(req: Request, res: Response): Response {
     const updateResult = result as UpdateSuccessService<ArtistBD>;
     artists[updateResult.index] = updateResult.data;
     return res.status(updateResult.code).json(updateResult.data);
+}
+
+export function deleteArtistsController(req: Request, res: Response): Response {
+    const result: DeleteSuccessService | ArtistInvalidData = deleteArtist(req.params.id as string);
+
+    if (!result.success) {
+        const errorResult = result as ArtistInvalidData;
+        return res.status(errorResult.code).json({ message: errorResult.message });
+    }
+
+    const index: number = (result as DeleteSuccessService).index;
+    artists.splice(index, 1);
+
+    return res.status(result.code).json({ result });
 }
