@@ -19,6 +19,7 @@ import { users } from "./data/user/user";
 import { UserBD } from "./interfaces/user/userBD";
 import { deleteTracksController, getAllTracksController, getTrackByIdController, postTrackController, putTrackController } from "./controllers/tracksController";
 import { trackRouter } from "./routes/trackRoutes";
+import { getAllArtistController, getArtistsByIdController, postArtistsController, putArtistsController } from "./controllers/artistsController";
 
 
 const port: number = 3000;
@@ -34,16 +35,11 @@ app.get("/", (_req: Request, res: Response) => {
 app.use("/tracks", trackRouter);
 
 app.get("/artists", (_req: Request, res: Response) => {
-    return res.status(200).json(getAllArtists());
+    return getAllArtistController(_req, res)
 });
 
 app.get("/artists/:id", (req: Request, res: Response) => {
-    const idArtist: string = req.params.id as string;
-    const artist: ArtistBD | undefined = getArtistById(idArtist);
-    if (!artist) {
-        return res.status(404).json({ message: `Artist ${idArtist} not found` });
-    }
-    return res.status(200).json(artist);
+    return getArtistsByIdController(req, res)
 });
 
 app.get("/countries", (_req: Request, res: Response) => {
@@ -175,29 +171,11 @@ app.post("/users", (req: Request, res: Response) => {
 
 
 app.post("/artists", (req: Request, res: Response) => {
-    const result: CreateSuccessService<ArtistBD> | ArtistInvalidData = createArtist(req.body);
-    if (!result.success) {
-        const errorResult = result as ArtistInvalidData;
-        return res.status(errorResult.code).json({ message: errorResult.message });
-    }
-
-    const createResult = result as CreateSuccessService<ArtistBD>;
-    artists.push(createResult.data);
-    return res.status(createResult.code).json(createResult);
+    return postArtistsController(req, res);
 });
 
 app.put("/artists/:id", (req: Request, res: Response) => {
-    const idArtist: string = req.params.id as string;
-
-    const result: UpdateSuccessService<ArtistBD> | ArtistInvalidData = updateArtist(idArtist, req.body);
-    if (!result.success) {
-        const errorResult = result as ArtistInvalidData;
-        return res.status(errorResult.code).json({ message: errorResult.message });
-    }
-
-    const updateResult = result as UpdateSuccessService<ArtistBD>;
-    artists[updateResult.index] = updateResult.data;
-    return res.status(updateResult.code).json(updateResult.data);
+    return putArtistsController(req, res),
 });
 
 app.delete("/artists/:id", (req: Request, res: Response) => {

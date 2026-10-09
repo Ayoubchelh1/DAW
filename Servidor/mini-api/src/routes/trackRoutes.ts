@@ -7,5 +7,5 @@ export const trackRouter: Router = Router();
 trackRouter.get("/", getAllTracksController)
 trackRouter.get("/:id", getTrackByIdController)
 trackRouter.post("/", postTrackController)
-trackRouter.put("/", putTrackController)
-trackRouter.delete("/", deleteTracksController)
+trackRouter.put("/:id", putTrackController)
+trackRouter.delete("/:id", deleteTracksController)
