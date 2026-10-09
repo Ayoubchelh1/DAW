@@ -30,25 +30,7 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 
-app.get("/tracks", (_req: Request, res: Response) => {
-    return getAllTracksController(res);
-});
 
-app.get("/tracks/:id", (req: Request, res: Response) => {
-    return getTrackByIdController(req, res);
-});
-
-app.post("/tracks", (req: Request, res: Response) => {
-    return postTrackController(req, res);
-});
-
-app.put("/tracks/:id", (req: Request, res: Response) => {
-    return putTrackController(req, res);
-});
-
-app.delete("/tracks/:id", (req: Request, res: Response) => {
-    return deleteTracksController(req, res);
-});
 
 app.get("/artists", (_req: Request, res: Response) => {
     return res.status(200).json(getAllArtists());
