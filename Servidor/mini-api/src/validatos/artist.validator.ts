@@ -1,7 +1,14 @@
+import { countries } from "../data/country/country";
 import { Artist } from "../interfaces/artist/artist";
 import { COUNTRIES, MAXARTISTNAME, MAXREALNAME } from "../interfaces/artist/artist.constants";
+import { CountryBD } from "../interfaces/country/countryBD";
 
 export function isValidArtist(artist: Artist): boolean | string | undefined {
+
+    if (!artist) {
+        return false;
+    }
+
     if (!artist.artistName || !artist.realName || !artist.country) {
         return false;
     }
@@ -9,11 +16,24 @@ export function isValidArtist(artist: Artist): boolean | string | undefined {
     const artistNameLength: number = artist.artistName.trim().replace(/\s+/g, " ").length;
     const realNameLength: number = artist.realName.trim().replace(/\s+/g, " ").length;
 
-    return artistNameLength > 0
+    const dadesOK: boolean = artistNameLength > 0
         && artistNameLength <= MAXARTISTNAME
         && realNameLength > 0
         && realNameLength <= MAXREALNAME
-        && COUNTRIES.find((p: string) => p.toLowerCase() === artist.country.trim().replace(/\s+/g, " ").toLowerCase()) !== undefined;
+
+    if (!dadesOK) {
+        return false;
+    }
+
+    const countryOK: CountryBD | undefined = countries.find(
+        (c: CountryBD) => { c.id === artist.country }
+    )
+
+    if (countryOK) {
+        return false;
+    }
+    return true
+
 }
 
 export function getCanonicalCountry(country: string): string {
