@@ -7,8 +7,6 @@ import { DeleteSuccessService } from "./interfaces/error/deleteSuccessService";
 import { createUser, updateUser, getAllUsers, getUserById, deleteUser } from "./Services/userService";
 import { users } from "./data/user/user";
 import { UserBD } from "./interfaces/user/userBD";
-import { playlists } from "./data/playlist/playlist";
-import { PlaylistBD } from "./interfaces/playlist/playlistBD";
 import { trackRouter } from "./routes/trackRoutes";
 import { artistRouter } from "./routes/artistsRoutes";
 import { countriesRouter } from "./routes/countries";
@@ -16,6 +14,8 @@ import { deleteUsersController, getAllUsersController, getUsersByIdController, p
 import { usersRoutes } from "./routes/usersRoutes";
 import { Playlist } from "./interfaces/playlist/playlist";
 import { randomUUID } from "crypto";
+import { playlists } from "./data/playlist/playlist";
+import { PlaylistBD } from "./interfaces/playlist/playlistBD";
 
 
 const port: number = 3000;
