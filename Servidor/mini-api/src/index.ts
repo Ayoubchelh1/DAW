@@ -18,6 +18,7 @@ import { createUser, updateUser, getAllUsers, getUserById, deleteUser } from "./
 import { users } from "./data/user/user";
 import { UserBD } from "./interfaces/user/userBD";
 import { deleteTracksController, getAllTracksController, getTrackByIdController, postTrackController, putTrackController } from "./controllers/tracksController";
+import { trackRouter } from "./routes/trackRoutes";
 
 
 const port: number = 3000;
@@ -30,7 +31,7 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 
-
+app.use("/tracks", trackRouter);
 
 app.get("/artists", (_req: Request, res: Response) => {
     return res.status(200).json(getAllArtists());
