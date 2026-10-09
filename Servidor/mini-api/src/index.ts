@@ -20,6 +20,7 @@ import { UserBD } from "./interfaces/user/userBD";
 import { deleteTracksController, getAllTracksController, getTrackByIdController, postTrackController, putTrackController } from "./controllers/tracksController";
 import { trackRouter } from "./routes/trackRoutes";
 import { deleteArtistsController, getAllArtistController, getArtistsByIdController, postArtistsController, putArtistsController } from "./controllers/artistsController";
+import { artistRouter } from "./routes/artistsRoutes";
 
 
 const port: number = 3000;
@@ -34,25 +35,7 @@ app.get("/", (_req: Request, res: Response) => {
 
 app.use("/tracks", trackRouter);
 
-app.get("/artists", (_req: Request, res: Response) => {
-    return getAllArtistController(_req, res)
-});
-
-app.get("/artists/:id", (req: Request, res: Response) => {
-    return getArtistsByIdController(req, res)
-});
-
-app.post("/artists", (req: Request, res: Response) => {
-    return postArtistsController(req, res);
-});
-
-app.put("/artists/:id", (req: Request, res: Response) => {
-    return putArtistsController(req, res)
-});
-
-app.delete("/artists/:id", (req: Request, res: Response) => {
-    return deleteArtistsController(req, res)
-});
+app.use("/artists", artistRouter);
 
 app.get("/countries", (_req: Request, res: Response) => {
     return res.status(200).json(getAllCountries());
