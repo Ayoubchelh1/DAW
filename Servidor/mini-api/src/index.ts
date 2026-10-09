@@ -103,6 +103,18 @@ app.put("/playlists/:id", (req: Request, res: Response) => {
     return res.status(200).json(updatedPlaylist);
 });
 
+app.delete("/playlists/:id", (req: Request, res: Response) => {
+    const idPlaylist: string = req.params.id as string;
+    const playlistIndex: number = playlists.findIndex((playlist: PlaylistBD) => playlist.id === idPlaylist);
+    if (playlistIndex === -1) {
+        return res.status(404).json({ message: `Playlist ${idPlaylist} not found` });
+    }
+
+    const deletedPlaylist: PlaylistBD = playlists.splice(playlistIndex, 1)[0];
+
+    return res.status(200).json(deletedPlaylist);
+});
+
 
 // Saber totes les llistes de reproducció d'un usuari
 //usuari/:id/playlist
