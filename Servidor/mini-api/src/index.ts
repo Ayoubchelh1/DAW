@@ -14,6 +14,8 @@ import { artistRouter } from "./routes/artistsRoutes";
 import { countriesRouter } from "./routes/countries";
 import { deleteUsersController, getAllUsersController, getUsersByIdController, postUsersController, putUsersController } from "./controllers/usersController";
 import { usersRoutes } from "./routes/usersRoutes";
+import { Playlist } from "./interfaces/playlist/playlist";
+import { randomUUID } from "crypto";
 
 
 const port: number = 3000;
@@ -48,6 +50,31 @@ app.get("/playlists/:id", (req: Request, res: Response) => {
     }
     return res.status(200).json(playlist[0]);
 });
+
+app.post("/playlists", (req: Request, res: Response) => {
+    const playlist: Playlist = req.body;
+    if (!playlist || typeof playlist.title !== "string" || playlist.title.trim().length === 0
+        || typeof playlist.userId !== "string" || playlist.userId.trim().length === 0) {
+        return res.status(400).json({ message: "Invalid data" });
+    }
+
+    const userExists: boolean = users.some((user: UserBD) => user.id === playlist.userId);
+    if (!userExists) {
+        return res.status(404).json({ message: `User ${playlist.userId} not found` });
+    }
+
+    const playlistRecord: PlaylistBD = {
+        id: randomUUID(),
+        title: playlist.title.trim().replace(/\s+/g, " "),
+        userId: playlist.userId
+    };
+
+    playlists.push(playlistRecord);
+
+    return res.status(201).json(playlistRecord);
+});
+
+
 
 
 // Saber totes les llistes de reproducció d'un usuari
