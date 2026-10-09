@@ -34,9 +34,20 @@ app.get("/tracks", (_req: Request, res: Response) => {
     return getAllTracksController(res);
 });
 
-
 app.get("/tracks/:id", (req: Request, res: Response) => {
     return getTrackByIdController(req, res);
+});
+
+app.post("/tracks", (req: Request, res: Response) => {
+    return postTrackController(req, res);
+});
+
+app.put("/tracks/:id", (req: Request, res: Response) => {
+    return putTrackController(req, res);
+});
+
+app.delete("/tracks/:id", (req: Request, res: Response) => {
+    return deleteTracksController(req, res);
 });
 
 app.get("/artists", (_req: Request, res: Response) => {
@@ -178,19 +189,7 @@ app.post("/users", (req: Request, res: Response) => {
 
 // /artists/reproductions/popular
 
-app.post("/tracks", (req: Request, res: Response) => {
 
-    return postTrackController(req, res);
-});
-
-app.put("/tracks/:id", (req: Request, res: Response) => {
-    return putTrackController(req, res);
-});
-
-app.delete("/tracks/:id", (req: Request, res: Response) => {
-
-    return deleteTracksController(req, res);
-});
 
 app.post("/artists", (req: Request, res: Response) => {
     const result: CreateSuccessService<ArtistBD> | ArtistInvalidData = createArtist(req.body);
