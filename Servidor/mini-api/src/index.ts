@@ -10,7 +10,7 @@ import { UserBD } from "./interfaces/user/userBD";
 import { trackRouter } from "./routes/trackRoutes";
 import { artistRouter } from "./routes/artistsRoutes";
 import { countriesRouter } from "./routes/countries";
-import { deleteUsersController, getAllUsersController, getUsersByIdController, putUsersController } from "./controllers/usersController";
+import { deleteUsersController, getAllUsersController, getUsersByIdController, postUsersController, putUsersController } from "./controllers/usersController";
 
 
 const port: number = 3000;
@@ -47,16 +47,7 @@ app.delete("/users/:id", (req: Request, res: Response) => {
 
 
 app.post("/users", (req: Request, res: Response) => {
-    const result: CreateSuccessService<UserBD> | ErrorService = createUser(req.body);
-
-    if (!result.success) {
-        const errorResult = result as ErrorService;
-        return res.status(errorResult.code).json({ message: errorResult.message });
-    }
-
-    const createResult = result as CreateSuccessService<UserBD>;
-    users.push(createResult.data);
-    return res.status(createResult.code).json(createResult);
+    return postUsersController(req, res)
 });
 
 

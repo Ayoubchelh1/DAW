@@ -1,9 +1,11 @@
 import { users } from "../data/user/user";
+import { resource } from "../interfaces/config/resource";
+import { CreateSuccessService } from "../interfaces/error/createSuccessService";
 import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { ErrorService } from "../interfaces/error/trackInvalidData";
 import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
 import { UserBD } from "../interfaces/user/userBD";
-import { deleteUser, getAllUsers, getUserById, updateUser } from "../Services/userService";
+import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "../Services/userService";
 import { Response, Request } from "express";
 
 export function getAllUsersController(_req: Request, res: Response): Response {
@@ -17,6 +19,19 @@ export function getUsersByIdController(req: Request, res: Response): Response {
         return res.status(404).json({ message: `User ${idUser} not found` });
     }
     return res.status(200).json(user);
+}
+
+export function postUsersController(req: Request, res: Response): Response {
+    const result: CreateSuccessService<UserBD> | ErrorService = createUser(req.body);
+
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(errorResult.code).json({ message: errorResult.message });
+    }
+
+    const createResult = result as CreateSuccessService<UserBD>;
+    users.push(createResult.data);
+    return res.status(createResult.code).json(createResult);
 }
 
 export function putUsersController(req: Request, res: Response): Response {
