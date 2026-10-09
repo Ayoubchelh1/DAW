@@ -10,7 +10,7 @@ import { UserBD } from "./interfaces/user/userBD";
 import { trackRouter } from "./routes/trackRoutes";
 import { artistRouter } from "./routes/artistsRoutes";
 import { countriesRouter } from "./routes/countries";
-import { getAllUsersController, putUsersController } from "./controllers/usersController";
+import { deleteUsersController, getAllUsersController, getUsersByIdController, putUsersController } from "./controllers/usersController";
 
 
 const port: number = 3000;
@@ -33,32 +33,15 @@ app.get("/users", (_req: Request, res: Response) => {
 });
 
 app.get("/users/:id", (req: Request, res: Response) => {
-    const idUser: string = req.params.id as string;
-    const user: UserBD | undefined = getUserById(idUser);
-    if (!user) {
-        return res.status(404).json({ message: `User ${idUser} not found` });
-    }
-    return res.status(200).json(user);
+    return getUsersByIdController(req, res)
 });
-
-
 
 app.put("/users/:id", (req: Request, res: Response) => {
     return putUsersController(req, res);
 });
 
 app.delete("/users/:id", (req: Request, res: Response) => {
-    const result: DeleteSuccessService | ErrorService = deleteUser(req.params.id as string);
-
-    if (!result.success) {
-        const errorResult = result as ErrorService;
-        return res.status(errorResult.code).json({ message: errorResult.message });
-    }
-
-    const index: number = (result as DeleteSuccessService).index;
-    users.splice(index, 1);
-
-    return res.status(result.code).json({ result });
+    return deleteUsersController(req, res)
 });
 
 

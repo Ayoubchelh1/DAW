@@ -1,8 +1,9 @@
 import { users } from "../data/user/user";
+import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { ErrorService } from "../interfaces/error/trackInvalidData";
 import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
 import { UserBD } from "../interfaces/user/userBD";
-import { getAllUsers, getUserById, updateUser } from "../Services/userService";
+import { deleteUser, getAllUsers, getUserById, updateUser } from "../Services/userService";
 import { Response, Request } from "express";
 
 export function getAllUsersController(_req: Request, res: Response): Response {
@@ -30,4 +31,18 @@ export function putUsersController(req: Request, res: Response): Response {
     const updateResult = result as UpdateSuccessService<UserBD>;
     users[updateResult.index] = updateResult.data;
     return res.status(updateResult.code).json(updateResult.data);
+}
+
+export function deleteUsersController(req: Request, res: Response): Response {
+    const result: DeleteSuccessService | ErrorService = deleteUser(req.params.id as string);
+
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(errorResult.code).json({ message: errorResult.message });
+    }
+
+    const index: number = (result as DeleteSuccessService).index;
+    users.splice(index, 1);
+
+    return res.status(result.code).json({ result });
 }
