@@ -2,9 +2,10 @@ import { Request, Response } from "express";
 import { history } from "../data/history/history";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
 import { ErrorService } from "../interfaces/error/trackInvalidData";
+import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
 import { History } from "../interfaces/history/history";
 import { HistoryBD } from "../interfaces/history/historyBD";
-import { createHistory, getAllHistory, getHistoryById } from "../Services/historyService";
+import { createHistory, getAllHistory, getHistoryById, updateHistory } from "../Services/historyService";
 
 export function getAllHistoryController(_req: Request, res: Response): Response {
     return res.status(200).json(getAllHistory());
@@ -28,4 +29,17 @@ export function postHistoryController(req: Request, res: Response): Response {
     const createResult = result as CreateSuccessService<HistoryBD>;
     history.push(createResult.data);
     return res.status(createResult.code).json(createResult.data);
+}
+
+export function putHistoryController(req: Request, res: Response): Response {
+    const idHistory: string = req.params.id as string;
+    const result: UpdateSuccessService<HistoryBD> | ErrorService = updateHistory(idHistory, req.body as History);
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(errorResult.code).json({ message: errorResult.message });
+    }
+
+    const updateResult = result as UpdateSuccessService<HistoryBD>;
+    history[updateResult.index] = updateResult.data;
+    return res.status(updateResult.code).json(updateResult.data);
 }
