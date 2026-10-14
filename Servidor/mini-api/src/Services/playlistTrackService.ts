@@ -3,6 +3,7 @@ import { playlistTracks } from "../data/playlistTrack/playlistTrack";
 import { playlists } from "../data/playlist/playlist";
 import { tracks } from "../data/track/track";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
+import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { ErrorService } from "../interfaces/error/trackInvalidData";
 import { PlaylistTrack } from "../interfaces/playlistTrack/playlistTrack";
 import { PlaylistTrackBD } from "../interfaces/playlistTrack/playlistTrackBD";
@@ -38,4 +39,15 @@ export function createPlaylistTrack(playlistTrack: PlaylistTrack): CreateSuccess
     };
 
     return { success: true, code: 201, data: playlistTrackRecord };
+}
+
+export function deletePlaylistTrack(idPlaylistTrack: string): DeleteSuccessService | ErrorService {
+    const playlistTrackIndex: number = playlistTracks.findIndex(
+        (playlistTrack: PlaylistTrackBD) => playlistTrack.id === idPlaylistTrack
+    );
+    if (playlistTrackIndex === -1) {
+        return { success: false, code: 404, message: "PlaylistTrack not found" };
+    }
+
+    return { success: true, code: 204, index: playlistTrackIndex };
 }

@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { playlistTracks } from "../data/playlistTrack/playlistTrack";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
+import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { ErrorService } from "../interfaces/error/trackInvalidData";
 import { PlaylistTrackBD } from "../interfaces/playlistTrack/playlistTrackBD";
-import { createPlaylistTrack, getAllPlaylistTracks, getPlaylistTrackById } from "../Services/playlistTrackService";
+import { createPlaylistTrack, deletePlaylistTrack, getAllPlaylistTracks, getPlaylistTrackById } from "../Services/playlistTrackService";
 
 export function getAllPlaylistTracksController(_req: Request, res: Response): Response {
     return res.status(200).json(getAllPlaylistTracks());
@@ -27,4 +28,16 @@ export function postPlaylistTrackController(req: Request, res: Response): Respon
     const createResult = result as CreateSuccessService<PlaylistTrackBD>;
     playlistTracks.push(createResult.data);
     return res.status(createResult.code).json(createResult.data);
+}
+
+export function deletePlaylistTrackController(req: Request, res: Response): Response {
+    const result: DeleteSuccessService | ErrorService = deletePlaylistTrack(req.params.id as string);
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(errorResult.code).json({ message: errorResult.message });
+    }
+
+    const deleteResult = result as DeleteSuccessService;
+    playlistTracks.splice(deleteResult.index, 1);
+    return res.status(deleteResult.code).send();
 }
