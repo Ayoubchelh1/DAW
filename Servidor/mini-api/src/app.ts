@@ -6,6 +6,7 @@ import { countriesRouter } from "./routes/countriesRoutes";
 import { usersRoutes } from "./routes/usersRoutes";
 import { playlistsRouter } from "./routes/playlistRoutes";
 import { playlistTracksRouter } from "./routes/playlistTracksRoutes";
+import { historyRouter } from "./routes/historyRoutes";
 
 
 export const app: Express = express();
@@ -21,3 +22,4 @@ app.use("/countries", countriesRouter);
 app.use("/users", usersRoutes);
 app.use("/playlists", playlistsRouter);
 app.use("/playlisttracks", playlistTracksRouter);
+app.use("/history", historyRouter);
