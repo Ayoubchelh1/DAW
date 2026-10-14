@@ -2,6 +2,7 @@ import { randomUUID } from "crypto";
 import { artists } from "../data/artist/artist";
 import { albums } from "../data/album/album";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
+import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { ErrorService } from "../interfaces/error/trackInvalidData";
 import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
 import { Album } from "../interfaces/album/album";
@@ -57,4 +58,13 @@ export function updateAlbum(idAlbum: string, album: Album): UpdateSuccessService
     };
 
     return { success: true, code: 200, data: updatedAlbum, index: albumIndex };
+}
+
+export function deleteAlbum(idAlbum: string): DeleteSuccessService | ErrorService {
+    const albumIndex: number = albums.findIndex((album: AlbumBD) => album.id === idAlbum);
+    if (albumIndex === -1) {
+        return { success: false, code: 404, message: "Album not found" };
+    }
+
+    return { success: true, code: 204, index: albumIndex };
 }
