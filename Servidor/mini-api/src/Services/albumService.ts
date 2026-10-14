@@ -29,6 +29,7 @@ export function createAlbum(album: Album): CreateSuccessService<AlbumBD> | Error
 
     const albumRecord: AlbumBD = {
         id: randomUUID(),
+        name: album.name.trim().replace(/\s+/g, " "),
         artistId,
         date: album.date.trim()
     };
@@ -53,6 +54,7 @@ export function updateAlbum(idAlbum: string, album: Album): UpdateSuccessService
 
     const updatedAlbum: AlbumBD = {
         id: idAlbum,
+        name: album.name.trim().replace(/\s+/g, " "),
         artistId,
         date: album.date.trim()
     };
