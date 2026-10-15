@@ -8,6 +8,7 @@ import { playlistsRouter } from "./routes/playlistRoutes";
 import { playlistTracksRouter } from "./routes/playlistTracksRoutes";
 import { historyRouter } from "./routes/historyRoutes";
 import { albumsRouter } from "./routes/albumsRoutes";
+import { albumTracksRouter } from "./routes/albumTracksRoutes";
 
 
 export const app: Express = express();
@@ -25,3 +26,4 @@ app.use("/playlists", playlistsRouter);
 app.use("/playlisttracks", playlistTracksRouter);
 app.use("/history", historyRouter);
 app.use("/albums", albumsRouter);
+app.use("/albumtracks", albumTracksRouter);
