@@ -4,3 +4,4 @@ dist/
 .env.*
 !.env.example
 .github/skills/
+Servidor/spotify-api/docker/DB/
