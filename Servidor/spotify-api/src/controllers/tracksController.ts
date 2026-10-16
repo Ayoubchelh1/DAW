@@ -7,8 +7,9 @@ import { TrackBD } from "../interfaces/track/trackBD";
 import { createTrack, deleteTrack, getAllTracks, getTrackById, updateTrack } from "../Services/trackService";
 import { Response, Request } from "express";
 
-export function getAllTracksController(_req: Request, res: Response): Response {
-    return res.status(200).json(getAllTracks());
+export async function getAllTracksController(_req: Request, res: Response): Promise<Response> {
+    const tracks: TrackBD[] = await getAllTracks();
+    return res.status(200).json(tracks);
 }
 
 export function getTrackByIdController(req: Request, res: Response): Response {
