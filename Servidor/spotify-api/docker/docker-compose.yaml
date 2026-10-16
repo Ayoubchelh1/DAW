@@ -5,15 +5,18 @@ services:
     user: root
     container_name: MsSqlServer
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=Passw0rd!
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Passw0rd!"
     ports:
       - "1433:1433"
     volumes:
-      - ./DB:/var/opt/mssql/data
+      - sqlserver_data:/var/opt/mssql/data
     networks:
       - code-network
 
+volumes:
+  sqlserver_data:
+
 networks:
-    code-network:
-        driver: bridge
+  code-network:
+    driver: bridge
