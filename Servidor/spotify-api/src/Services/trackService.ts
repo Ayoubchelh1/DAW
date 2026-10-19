@@ -10,6 +10,7 @@ import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { ConnectionPool, IResult } from "mssql";
 import { getConnection } from "../config/database";
 import sql from "mssql";
+import { SelectSuccessService } from "../interfaces/error/SelectSuccessService";
 
 
 export async function getAllTracks(): Promise<TrackBD[]> {
@@ -22,7 +23,7 @@ export async function getAllTracks(): Promise<TrackBD[]> {
     return result.recordset;
 }
 
-export async function getTrackById(idTrack: string): Promise<TrackBD | undefined> {
+export async function getTrackById(idTrack: string): Promise<SelectSuccessService<TrackBD> | ErrorService> {
 
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
@@ -32,10 +33,19 @@ export async function getTrackById(idTrack: string): Promise<TrackBD | undefined
 
     const result: IResult<TrackBD> = await request.query(queryText);
 
-    console.log(result);
-    return result.recordset;
+    if (result.recordset.length === 0) {
+        return {
+            success: false,
+            code: 404,
+            message: "Track not found"
+        }
+    }
+    return {
+        success: true,
+        code: 200,
+        data: result.recordset[0]
+    }
 
-    return tracks.find((t: TrackBD) => { return t.id === idTrack; });
 }
 
 export function createTrack(track: Track): CreateSuccessService<TrackBD> | ErrorService {
