@@ -22,7 +22,18 @@ export async function getAllTracks(): Promise<TrackBD[]> {
     return result.recordset;
 }
 
-export function getTrackById(idTrack: string): TrackBD | undefined {
+export async function getTrackById(idTrack: string): Promise<TrackBD | undefined> {
+
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+
+    const queryText: string = 'Select * from Track Where Track.id = @id';
+    request.input("id", sql.UniqueIdentifier, idTrack);
+
+    const result: IResult<TrackBD> = await request.query(queryText);
+
+    console.log(result);
+    return result.recordset;
 
     return tracks.find((t: TrackBD) => { return t.id === idTrack; });
 }

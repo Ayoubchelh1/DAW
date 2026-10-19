@@ -18,7 +18,7 @@ const databaseConfig: sql.config = {
     user: getRequiredEnv("DB_USER"),
     password: getRequiredEnv("DB_PASSWORD"),
     server: getRequiredEnv("DB_HOST"),
-    port: getRequiredEnv("DB_PORT") as unknown as number,
+    port: Number(getRequiredEnv("DB_PORT")),
     database: getRequiredEnv("DB_NAME"),
     options: {
         encrypt: getRequiredEnv("DB_ENCRYPT") === "true",
