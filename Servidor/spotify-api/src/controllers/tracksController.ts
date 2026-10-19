@@ -1,7 +1,7 @@
 import { tracks } from "../data/track/track";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
 import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
-import { SelectSuccessService } from "../interfaces/error/SelectSuccessService";
+import { SelectSuccessService } from "../interfaces/error/SelectSuccessService copy";
 import { ErrorService } from "../interfaces/error/trackInvalidData";
 import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
 import { TrackBD } from "../interfaces/track/trackBD";
@@ -25,15 +25,15 @@ export async function getTrackByIdController(req: Request, res: Response): Promi
 
 }
 
-export function postTrackController(req: Request, res: Response): Response {
-    const result: CreateSuccessService<TrackBD> | ErrorService = createTrack(req.body);
+export async function postTrackController(req: Request, res: Response): Promise<Response> {
+    const result: CreateSuccessService<TrackBD> | ErrorService = await createTrack(req.body);
 
     if (!result.success) {
         const errorResult = result as ErrorService
         return res.status(errorResult.code).json({ message: errorResult.message })
     }
 
-    tracks.push((result as CreateSuccessService<TrackBD>).data);
+
     return res.status(result.code).json(result);
 }
 
