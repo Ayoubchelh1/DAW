@@ -37,30 +37,26 @@ export async function postTrackController(req: Request, res: Response): Promise<
     return res.status(result.code).json(result);
 }
 
-export function putTrackController(req: Request, res: Response): Response {
-    const idTrack: string = req.params.id as string;
+export async function updateTrackController(req: Request, res: Response): Promise<Response> {
+    const result: UpdateSuccessService<number> | ErrorService = await updateTrack(req.params.id as string, req.body);;
 
-    const result: UpdateSuccessService<TrackBD> | ErrorService = updateTrack(idTrack, req.body);
     if (!result.success) {
-        const errorResult = result as ErrorService;
-        return res.status(errorResult.code).json({ message: errorResult.message });
+        const errorResult = result as ErrorService
+        return res.status(errorResult.code).json({ message: errorResult.message })
     }
 
-    const updateResult = result as UpdateSuccessService<TrackBD>;
-    tracks[updateResult.index] = updateResult.data;
-    return res.status(updateResult.code).json(updateResult.data);
+
+    return res.status(result.code).json(result);
 }
 
-export function deleteTracksController(req: Request, res: Response): Response {
-    const result: DeleteSuccessService | ErrorService = deleteTrack(req.params.id as string);
+export async function deleteTracksController(req: Request, res: Response): Promise<Response> {
+    const result: DeleteSuccessService | ErrorService = await deleteTrack(req.params.id as string,);;
 
     if (!result.success) {
-        const errorResult = result as ErrorService;
-        return res.status(errorResult.code).json({ message: errorResult.message });
+        const errorResult = result as ErrorService
+        return res.status(errorResult.code).json({ message: errorResult.message })
     }
 
-    const index: number = (result as DeleteSuccessService).index;
-    tracks.splice(index, 1)
 
-    return res.status(result.code).json({ result });
+    return res.status(result.code).send();
 }

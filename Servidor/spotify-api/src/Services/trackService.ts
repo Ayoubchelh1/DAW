@@ -72,36 +72,66 @@ export async function createTrack(track: Track): Promise<CreateSuccessService<nu
 
 }
 
-export function updateTrack(idTrack: string, track: Track): UpdateSuccessService<TrackBD> | ErrorService {
-    const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack);
-    if (trackIndex === -1) {
-        return { success: false, code: 404, message: "Track not found" };
-    }
+export async function updateTrack(idTrack: string, track: Track): Promise<UpdateSuccessService<number> | ErrorService> {
+
 
     if (!isValidTrack(track)) {
-        return { success: false, code: 400, message: "invalid data" };
+        return { success: false, code: 400, message: "invalid data" }
     }
 
-    const updatedTrack: TrackBD = {
-        id: idTrack,
-        title: track.title.trim().replace(/\s+/g, " "),
-        artist: track.artist.trim().replace(/\s+/g, " "),
-        duration: track.duration
-    };
+    const title: string = track.title.trim().replace(/\s+/g, " ");
 
 
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
 
-    return { success: true, code: 200, data: updatedTrack, index: trackIndex };
+    const queryText: string = 'UPDATE TRACK SET title=@title,artist_id= @artist_id,duration= @duration where track.id=@id';
+
+    request.input("title", sql.NVarChar, title);
+    request.input("artist_id", sql.UniqueIdentifier, track.artist);
+    request.input("duration", sql.Numeric, track.duration);
+    request.input("id", sql.UniqueIdentifier, idTrack);
+
+
+    const result: IResult<number> = await request.query(queryText);
+
+    if (result.rowsAffected[0] === 0) {
+        return {
+            success: false,
+            code: 404,
+            message: "Track not found"
+        }
+    }
+
+    return { success: true, code: 200, data: result.rowsAffected[0] };
+
+
 }
 
-export function deleteTrack(idTrack: string): DeleteSuccessService | ErrorService {
+export async function deleteTrack(idTrack: string): Promise<DeleteSuccessService | ErrorService> {
 
-    const trackIndex: number = tracks.findIndex((track: TrackBD) => track.id === idTrack)
 
-    if (trackIndex === -1) {
-        return { success: false, code: 404, message: "Track not found" };
+
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+
+    const queryText: string = 'Delete from Track Where Track.id = @id';
+    request.input("id", sql.UniqueIdentifier, idTrack);
+
+    const result: IResult<TrackBD> = await request.query(queryText);
+
+    if (result.rowsAffected[0] === 0) {
+        return {
+            success: false,
+            code: 404,
+            message: "Track not found"
+        }
+    }
+    return {
+        success: true,
+        code: 204,
+
     }
 
 
-    return { success: true, code: 204, index: trackIndex };
 }
