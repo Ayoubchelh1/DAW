@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import { users } from "../data/user/user";
 import { User } from "../interfaces/user/user";
 import { UserBD } from "../interfaces/user/userBD";
@@ -44,18 +43,23 @@ export async function getUserById(idUser: string): Promise<SelectSuccessService<
     };
 }
 
-export function createUser(user: User): CreateSuccessService<UserBD> | ErrorService {
+export async function createUser(user: User): Promise<CreateSuccessService<number> | ErrorService> {
     if (!isValidUser(user)) {
         return { success: false, code: 400, message: "invalid data" };
     }
 
-    const userRecord: UserBD = {
-        id: randomUUID(),
-        email: user.email.trim(),
-        countryId: user.countryId
-    };
+    const email: string = user.email.trim();
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
 
-    return { success: true, code: 201, data: userRecord };
+    const queryText: string = "INSERT INTO [User](email, country_id) VALUES(@email, @countryId)";
+
+    request.input("email", sql.NVarChar, email);
+    request.input("countryId", sql.UniqueIdentifier, user.countryId);
+
+    const result: IResult<number> = await request.query(queryText);
+
+    return { success: true, code: 201, data: result.rowsAffected[0] };
 }
 
 export function updateUser(idUser: string, user: User): UpdateSuccessService<UserBD> | ErrorService {

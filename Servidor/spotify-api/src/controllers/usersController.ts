@@ -22,17 +22,15 @@ export async function getUsersByIdController(req: Request, res: Response): Promi
     return res.status(result.code).json(result);
 }
 
-export function postUsersController(req: Request, res: Response): Response {
-    const result: CreateSuccessService<UserBD> | ErrorService = createUser(req.body);
+export async function postUsersController(req: Request, res: Response): Promise<Response> {
+    const result: CreateSuccessService<number> | ErrorService = await createUser(req.body);
 
     if (!result.success) {
         const errorResult = result as ErrorService;
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const createResult = result as CreateSuccessService<UserBD>;
-
-    return res.status(createResult.code).json(createResult);
+    return res.status(result.code).json(result);
 }
 
 export function putUsersController(req: Request, res: Response): Response {
