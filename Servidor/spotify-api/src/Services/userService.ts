@@ -7,13 +7,33 @@ import { ErrorService } from "../interfaces/error/trackInvalidData";
 import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
 import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { isValidUser } from "../validatos/user.validator";
+import { ConnectionPool, IResult } from "mssql";
+import { getConnection } from "../config/database";
+import sql from "mssql";
+import { SelectSuccessService } from "../interfaces/error/SelectSuccessService copy";
 
-export function getAllUsers(): UserBD[] {
-    return users;
+export async function getAllUsers(): Promise<UserBD[]> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = "SELECT id, email, country_id AS countryId FROM [User]";
+
+    const result: IResult<UserBD> = await request.query(queryText);
+    return result.recordset;
 }
 
-export function getUserById(idUser: string): UserBD | undefined {
-    return users.find((user: UserBD) => user.id === idUser);
+export async function getUserById(idUser: string): Promise<SelectSuccessService<UserBD> | ErrorService> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = "SELECT id, email, country_id AS countryId FROM [User] WHERE id = @id";
+    request.input("id", sql.UniqueIdentifier, idUser);
+
+    const result: IResult<UserBD> = await request.query(queryText);
+
+    if (result.recordset.length === 0) {
+        return { success: false, code: 404, message: "User not found" };
+    }
+
+    return { success: true, code: 200, data: result.recordset[0] };
 }
 
 export function createUser(user: User): CreateSuccessService<UserBD> | ErrorService {

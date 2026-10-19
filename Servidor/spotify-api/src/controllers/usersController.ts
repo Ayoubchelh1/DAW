@@ -1,24 +1,25 @@
-import { users } from "../data/user/user";
-import { resource } from "../interfaces/config/resource";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
 import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { ErrorService } from "../interfaces/error/trackInvalidData";
+import { SelectSuccessService } from "../interfaces/error/SelectSuccessService copy";
 import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
 import { UserBD } from "../interfaces/user/userBD";
 import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "../Services/userService";
 import { Response, Request } from "express";
 
-export function getAllUsersController(_req: Request, res: Response): Response {
-    return res.status(200).json(getAllUsers());
+export async function getAllUsersController(_req: Request, res: Response): Promise<Response> {
+    const users: UserBD[] = await getAllUsers();
+    return res.status(200).json(users);
 }
 
-export function getUsersByIdController(req: Request, res: Response): Response {
-    const idUser: string = req.params.id as string;
-    const user: UserBD | undefined = getUserById(idUser);
-    if (!user) {
-        return res.status(404).json({ message: `User ${idUser} not found` });
+export async function getUsersByIdController(req: Request, res: Response): Promise<Response> {
+    const result: SelectSuccessService<UserBD> | ErrorService = await getUserById(req.params.id as string);
+
+    if (!result.success) {
+        return res.status(result.code).json({ message: (result as ErrorService).message });
     }
-    return res.status(200).json(user);
+
+    return res.status(result.code).json(result);
 }
 
 export function postUsersController(req: Request, res: Response): Response {
@@ -30,7 +31,7 @@ export function postUsersController(req: Request, res: Response): Response {
     }
 
     const createResult = result as CreateSuccessService<UserBD>;
-    users.push(createResult.data);
+
     return res.status(createResult.code).json(createResult);
 }
 
@@ -44,7 +45,7 @@ export function putUsersController(req: Request, res: Response): Response {
     }
 
     const updateResult = result as UpdateSuccessService<UserBD>;
-    users[updateResult.index] = updateResult.data;
+
     return res.status(updateResult.code).json(updateResult.data);
 }
 
@@ -56,8 +57,6 @@ export function deleteUsersController(req: Request, res: Response): Response {
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const index: number = (result as DeleteSuccessService).index;
-    users.splice(index, 1);
 
     return res.status(result.code).json({ result });
 }
