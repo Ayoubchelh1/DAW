@@ -15,7 +15,7 @@ import { SelectSuccessService } from "../interfaces/error/SelectSuccessService c
 export async function getAllUsers(): Promise<UserBD[]> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
-    const queryText: string = "SELECT id, email, country_id AS countryId FROM [User]";
+    const queryText: string = 'Select * from Track';
 
     const result: IResult<UserBD> = await request.query(queryText);
     return result.recordset;
@@ -24,16 +24,24 @@ export async function getAllUsers(): Promise<UserBD[]> {
 export async function getUserById(idUser: string): Promise<SelectSuccessService<UserBD> | ErrorService> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
-    const queryText: string = "SELECT id, email, country_id AS countryId FROM [User] WHERE id = @id";
+    const queryText: string = 'Select * User Track Where User.id = @id';
     request.input("id", sql.UniqueIdentifier, idUser);
 
     const result: IResult<UserBD> = await request.query(queryText);
 
     if (result.recordset.length === 0) {
-        return { success: false, code: 404, message: "User not found" };
+        return {
+            success: false,
+            code: 404,
+            message: "User not found"
+        };
     }
 
-    return { success: true, code: 200, data: result.recordset[0] };
+    return {
+        success: true,
+        code: 200,
+        data: result.recordset[0]
+    };
 }
 
 export function createUser(user: User): CreateSuccessService<UserBD> | ErrorService {
