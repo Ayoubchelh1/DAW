@@ -11,9 +11,10 @@ function App() {
   const random: number = Math.floor(Math.random() * totalTracks);
   const track: Track = tracks[random]
 
+
   return (
     <>
-      <SongCard title={track.title} artist={track.artist} duration={track.duration} />
+      <SongCard trackInfo={track} />
     </>
   )
 }
