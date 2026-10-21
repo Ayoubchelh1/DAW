@@ -14,7 +14,7 @@ import { SelectSuccessService } from "../interfaces/error/SelectSuccessService c
 export async function getAllUsers(): Promise<UserBD[]> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
-    const queryText: string = 'Select * from Track';
+    const queryText: string = 'SELECT * FROM [User]';
 
     const result: IResult<UserBD> = await request.query(queryText);
     return result.recordset;
@@ -23,7 +23,7 @@ export async function getAllUsers(): Promise<UserBD[]> {
 export async function getUserById(idUser: string): Promise<SelectSuccessService<UserBD> | ErrorService> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
-    const queryText: string = 'Select * User Track Where User.id = @id';
+    const queryText: string = 'Select * from [User] as U Where U.id = @id';
     request.input("id", sql.UniqueIdentifier, idUser);
 
     const result: IResult<UserBD> = await request.query(queryText);
