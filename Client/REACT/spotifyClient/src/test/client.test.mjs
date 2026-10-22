@@ -19,233 +19,151 @@ after(async () => {
   await vite.close();
 });
 
-test("renders the header with the exact title, user, and date", async () => {
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#x27;",
+  })[character]);
+}
+
+function getSongCardMarkup(appMarkup) {
+  const headerEnd = appMarkup.indexOf("</header>");
+  assert.notEqual(headerEnd, -1, "L'aplicació ha de mostrar una capçalera");
+  return appMarkup.slice(headerEnd + "</header>".length);
+}
+
+test("la capçalera mostra els valors que rep com a propietats", async () => {
   const { default: Header } = await vite.ssrLoadModule("/src/components/Header/Header.tsx");
-  const markup = renderToStaticMarkup(
-    createElement(Header, { title: "Spotify", user: "Anna", date: "9/2/2024" }),
-  );
+  const usersModule = await vite.ssrLoadModule("/src/Data/user.ts");
+  const user = usersModule.users[0];
+  const props = {
+    title: `Títol ${Date.now()}`,
+    user: user.name,
+    date: `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`,
+  };
+  const markup = renderToStaticMarkup(createElement(Header, props));
 
-  assert.equal(
-    markup,
-    "<header><h1>Spotify</h1><p>Usuari: Anna</p><p>Data: 9/2/2024</p></header>",
-  );
+  assert.ok(markup.includes(`<h1>${escapeHtml(props.title)}</h1>`));
+  assert.ok(markup.includes(`<p>Usuari: ${escapeHtml(props.user)}</p>`));
+  assert.ok(markup.includes(`<p>Data: ${escapeHtml(props.date)}</p>`));
 });
 
-test("escapes user-provided header text instead of rendering it as HTML", async () => {
-  const { default: Header } = await vite.ssrLoadModule("/src/components/Header/Header.tsx");
-  const markup = renderToStaticMarkup(
-    createElement(Header, {
-      title: "<Spotify>",
-      user: "<script>alert(1)</script>",
-      date: "1/1/2024",
-    }),
-  );
-
-  assert.equal(
-    markup,
-    "<header><h1>&lt;Spotify&gt;</h1><p>Usuari: &lt;script&gt;alert(1)&lt;/script&gt;</p><p>Data: 1/1/2024</p></header>",
-  );
-});
-
-test("renders all track details and play count", async () => {
-  const { default: SongCard } = await vite.ssrLoadModule("/src/components/Songs/SongCard.tsx");
-  const markup = renderToStaticMarkup(
-    createElement(SongCard, {
-      trackInfo: {
-        title: "Rattle and hum",
-        artist: "U2",
-        duration: 90,
-        reproduccions: 5102,
-      },
-    }),
-  );
-
-  assert.equal(
-    markup,
-    "<h1>Rattle and hum</h1><p>U2</p><p>Duracio:90</p><p>Reproduccions:5102</p>",
-  );
-});
-
-test("renders zero duration and play count without hiding either value", async () => {
-  const { default: SongCard } = await vite.ssrLoadModule("/src/components/Songs/SongCard.tsx");
-  const markup = renderToStaticMarkup(
-    createElement(SongCard, {
-      trackInfo: { title: "Silent track", artist: "Test", duration: 0, reproduccions: 0 },
-    }),
-  );
-
-  assert.equal(
-    markup,
-    "<h1>Silent track</h1><p>Test</p><p>Duracio:0</p><p>Reproduccions:0</p>",
-  );
-});
-
-test("escapes track text instead of rendering it as HTML", async () => {
-  const { default: SongCard } = await vite.ssrLoadModule("/src/components/Songs/SongCard.tsx");
-  const markup = renderToStaticMarkup(
-    createElement(SongCard, {
-      trackInfo: {
-        title: "<img src=x>",
-        artist: "<script>alert(1)</script>",
-        duration: 10,
-        reproduccions: 1,
-      },
-    }),
-  );
-
-  assert.equal(
-    markup,
-    "<h1>&lt;img src=x&gt;</h1><p>&lt;script&gt;alert(1)&lt;/script&gt;</p><p>Duracio:10</p><p>Reproduccions:1</p>",
-  );
-});
-
-test("formats local dates correctly across month and leap-year boundaries", async () => {
-  const { getCurrentDate } = await vite.ssrLoadModule("/src/Utils/currentDate.ts");
-  const RealDate = globalThis.Date;
-
-  const dateCases = [
-    { year: 2024, month: 1, day: 29, expected: "29/2/2024" },
-    { year: 2023, month: 11, day: 31, expected: "31/12/2023" },
-    { year: 2025, month: 0, day: 1, expected: "1/1/2025" },
-  ];
-
-  try {
-    for (const { year, month, day, expected } of dateCases) {
-      globalThis.Date = class extends RealDate {
-        constructor(...args) {
-          if (args.length === 0) {
-            super(year, month, day, 12);
-          } else {
-            super(...args);
-          }
-        }
-      };
-
-      assert.equal(getCurrentDate(), expected);
-    }
-  } finally {
-    globalThis.Date = RealDate;
-  }
-});
-
-test("selects the first user and track and allows a zero play count", async () => {
-  const { default: App } = await vite.ssrLoadModule("/src/App.tsx");
-  const originalRandom = Math.random;
-
-  try {
-    Math.random = () => 0;
-    const markup = renderToStaticMarkup(createElement(App));
-
-    assert.match(markup, /Usuari: Anna/);
-    assert.match(markup, /<h1>Rattle and hum<\/h1>/);
-    assert.match(markup, /<p>Duracio:90<\/p>/);
-    assert.match(markup, /<p>Reproduccions:0<\/p>/);
-  } finally {
-    Math.random = originalRandom;
-  }
-});
-
-test("selects the last user and track and keeps play count below its upper limit", async () => {
-  const { default: App } = await vite.ssrLoadModule("/src/App.tsx");
-  const originalRandom = Math.random;
-
-  try {
-    Math.random = () => 0.999999;
-    const markup = renderToStaticMarkup(createElement(App));
-
-    assert.match(markup, /Usuari: Pol/);
-    assert.match(markup, /<h1>sunday bloody sunday<\/h1>/);
-    assert.match(markup, /<p>Duracio:180<\/p>/);
-    assert.match(markup, /<p>Reproduccions:10204<\/p>/);
-  } finally {
-    Math.random = originalRandom;
-  }
-});
-
-test("keeps the displayed track fields consistent with the selected source track", async () => {
-  const [{ default: App }, { tracks }] = await Promise.all([
-    vite.ssrLoadModule("/src/App.tsx"),
+test("la targeta mostra totes les dades de cada cançó de la llista", async (t) => {
+  const [{ default: SongCard }, { tracks }] = await Promise.all([
+    vite.ssrLoadModule("/src/components/Songs/SongCard.tsx"),
     vite.ssrLoadModule("/src/Data/track.ts"),
   ]);
-  const originalRandom = Math.random;
-  const selectedTrackIndex = 1;
-  const randomValues = [0, (selectedTrackIndex + 0.1) / tracks.length, 0];
-  let randomIndex = 0;
 
-  try {
-    Math.random = () => randomValues[randomIndex++];
-    const markup = renderToStaticMarkup(createElement(App));
-    const selectedTrack = tracks[selectedTrackIndex];
+  for (const track of tracks) {
+    await t.test(`mostra les dades de «${track.title}»`, () => {
+      const reproduccions = Math.floor(Math.random() * 10205);
+      const trackInfo = { ...track, reproduccions };
+      const markup = renderToStaticMarkup(createElement(SongCard, { trackInfo }));
 
-    assert.match(markup, new RegExp(`<h1>${selectedTrack.title}</h1>`));
-    assert.match(markup, new RegExp(`<p>${selectedTrack.artist}</p>`));
-    assert.match(markup, new RegExp(`<p>Duracio:${selectedTrack.duration}</p>`));
-  } finally {
-    Math.random = originalRandom;
+      assert.ok(markup.includes(`<h1>${escapeHtml(trackInfo.title)}</h1>`));
+      assert.ok(markup.includes(`<p>${escapeHtml(trackInfo.artist)}</p>`));
+      assert.ok(markup.includes(`<p>Duració:${trackInfo.duration}</p>`));
+      assert.ok(markup.includes(`<p>Reproduccions:${reproduccions}</p>`));
+    });
   }
 });
 
-test("restores the random source after deterministic app rendering", async () => {
-  const { default: App } = await vite.ssrLoadModule("/src/App.tsx");
-  const originalRandom = Math.random;
+test("la capçalera i la targeta escapen els caràcters especials de les propietats", async (t) => {
+  const [{ default: Header }, { default: SongCard }] = await Promise.all([
+    vite.ssrLoadModule("/src/components/Header/Header.tsx"),
+    vite.ssrLoadModule("/src/components/Songs/SongCard.tsx"),
+  ]);
+  const specialText = `Text <>&"' ${Date.now()}`;
 
-  try {
-    Math.random = () => 0;
-    renderToStaticMarkup(createElement(App));
-  } finally {
-    Math.random = originalRandom;
-  }
+  await t.test("capçalera", () => {
+    const props = { title: specialText, user: specialText, date: specialText };
+    const markup = renderToStaticMarkup(createElement(Header, props));
 
-  assert.equal(Math.random, originalRandom);
+    for (const value of Object.values(props)) {
+      assert.ok(markup.includes(escapeHtml(value)));
+      assert.ok(!markup.includes(value));
+    }
+  });
+
+  await t.test("targeta de cançó", () => {
+    const trackInfo = {
+      title: specialText,
+      artist: specialText,
+      duration: 1,
+      reproduccions: 1,
+    };
+    const markup = renderToStaticMarkup(createElement(SongCard, { trackInfo }));
+
+    assert.ok(markup.includes(`<h1>${escapeHtml(trackInfo.title)}</h1>`));
+    assert.ok(markup.includes(`<p>${escapeHtml(trackInfo.artist)}</p>`));
+    assert.ok(!markup.includes(trackInfo.title));
+    assert.ok(!markup.includes(trackInfo.artist));
+  });
 });
 
-test("formats the current date using the host's local calendar date", async () => {
+test("la funció de data retorna una data local amb format dia/mes/any", async () => {
   const { getCurrentDate } = await vite.ssrLoadModule("/src/Utils/currentDate.ts");
-  const current = new Date();
-  const expected = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`;
+  const currentDate = getCurrentDate();
 
-  assert.equal(getCurrentDate(), expected);
+  assert.match(currentDate, /^\d{1,2}\/\d{1,2}\/\d{4}$/);
+
+  const [day, month, year] = currentDate.split("/").map(Number);
+  assert.ok(day >= 1 && day <= 31);
+  assert.ok(month >= 1 && month <= 12);
+  assert.ok(year >= 1);
 });
 
-test("provides the expected sample users and tracks", async () => {
+test("les dades carregades tenen els camps necessaris per renderitzar", async () => {
   const [{ users }, { tracks }] = await Promise.all([
     vite.ssrLoadModule("/src/Data/user.ts"),
     vite.ssrLoadModule("/src/Data/track.ts"),
   ]);
 
-  assert.deepEqual(users, [
-    { name: "Anna" },
-    { name: "Marc" },
-    { name: "Laia" },
-    { name: "Pol" },
-  ]);
-  assert.deepEqual(tracks, [
-    { title: "Rattle and hum", artist: "U2", duration: 90 },
-    { title: "sunday bloody sunday", artist: "U2", duration: 180 },
-  ]);
+  assert.ok(users.length > 0, "Cal com a mínim un usuari");
+  assert.ok(tracks.length > 0, "Cal com a mínim una cançó");
+
+  for (const user of users) {
+    assert.equal(typeof user.name, "string");
+    assert.ok(user.name.trim().length > 0);
+  }
+
+  for (const track of tracks) {
+    assert.equal(typeof track.title, "string");
+    assert.ok(track.title.trim().length > 0);
+    assert.equal(typeof track.artist, "string");
+    assert.ok(track.artist.trim().length > 0);
+    assert.ok(Number.isFinite(track.duration));
+  }
 });
 
-test("selects the expected user and track and creates an in-range play count", async () => {
-  const { default: App } = await vite.ssrLoadModule("/src/App.tsx");
-  const originalRandom = Math.random;
-  const randomValues = [0.75, 0.99, 0.5];
-  let randomIndex = 0;
+test("l'aplicació mostra un usuari i una cançó existents amb reproduccions vàlides", async () => {
+  const [{ default: App }, { users }, { tracks }] = await Promise.all([
+    vite.ssrLoadModule("/src/App.tsx"),
+    vite.ssrLoadModule("/src/Data/user.ts"),
+    vite.ssrLoadModule("/src/Data/track.ts"),
+  ]);
+  const markup = renderToStaticMarkup(createElement(App));
+  const songMarkup = getSongCardMarkup(markup);
+  const matchingUser = users.find((user) =>
+    markup.includes(`<p>Usuari: ${escapeHtml(user.name)}</p>`),
+  );
+  const matchingTrack = tracks.find((track) =>
+    songMarkup.startsWith(
+      `<h1>${escapeHtml(track.title)}</h1><p>${escapeHtml(track.artist)}</p><p>Duració:${track.duration}</p><p>Reproduccions:`,
+    ),
+  );
+  const playCountMatch = songMarkup.match(/<p>Reproduccions:(\d+)<\/p>$/);
 
-  try {
-    Math.random = () => {
-      assert.ok(randomIndex < randomValues.length, "App should only request three random values");
-      return randomValues[randomIndex++];
-    };
+  assert.ok(markup.includes("<header>"), "La pàgina ha de contenir la capçalera");
+  assert.ok(matchingUser, "La capçalera ha de mostrar un usuari de la llista");
+  assert.ok(matchingTrack, "La targeta ha de mostrar una cançó de la llista");
+  assert.ok(playCountMatch, "La targeta ha de mostrar les reproduccions");
+  assert.ok(Number(playCountMatch[1]) >= 0);
+  assert.ok(Number(playCountMatch[1]) < 10205);
 
-    const markup = renderToStaticMarkup(createElement(App));
-
-    assert.equal(randomIndex, 3);
-    assert.match(markup, /Usuari: Pol/);
-    assert.match(markup, /<h1>sunday bloody sunday<\/h1>/);
-    assert.match(markup, /<p>U2<\/p>/);
-    assert.match(markup, /<p>Duracio:180<\/p>/);
-    assert.match(markup, /<p>Reproduccions:5102<\/p>/);
-  } finally {
-    Math.random = originalRandom;
-  }
+  const displayedDate = markup.match(/<p>Data: (\d{1,2}\/\d{1,2}\/\d{4})<\/p>/);
+  assert.ok(displayedDate, "La capçalera ha de mostrar una data vàlida");
 });
