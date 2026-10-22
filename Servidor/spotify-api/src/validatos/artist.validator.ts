@@ -1,6 +1,6 @@
 import { countries } from "../data/country/country";
 import { Artist } from "../interfaces/artist/artist";
-import { COUNTRIES, MAXARTISTNAME, MAXREALNAME } from "../interfaces/artist/artist.constants";
+import { MAXARTISTNAME, MAXREALNAME } from "../interfaces/artist/artist.constants";
 import { CountryBD } from "../interfaces/country/countryBD";
 
 export function isValidArtist(artist: Artist): boolean | string | undefined {
@@ -43,5 +43,5 @@ export function isValidArtist(artist: Artist): boolean | string | undefined {
 }
 
 export function getCanonicalCountry(country: string): string {
-    return COUNTRIES.find((p: string) => p.toLowerCase() === country.trim().replace(/\s+/g, " ").toLowerCase()) as string;
+    return countries.find((entry: CountryBD) => entry.id === country.trim())?.id ?? "";
 }

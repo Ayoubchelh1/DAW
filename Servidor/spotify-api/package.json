@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "node --import tsx --test tests/server.test.ts",
+    "test": "node --import tsx --test --test-reporter=spec src/tests/server.test.ts",
     "dev": "tsx src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js"
