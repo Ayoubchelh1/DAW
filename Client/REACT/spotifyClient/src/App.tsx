@@ -1,25 +1,32 @@
 
+import { useState } from 'react';
 import './App.css'
+import Header from './components/Header/Header'
 import SongCard from './components/Songs/SongCard'
 import type { TrackView } from './components/Songs/Types/TrackView';
 import { tracks } from './Data/track';
+import { users } from './Data/user';
 import type { Track } from './Model/Track';
+import { getCurrentDate } from './Utils/currentDate';
 
 function App() {
 
+  const [randomUser] = useState(() => users[Math.floor(Math.random() * users.length)]);
+  const [today] = useState(getCurrentDate);
 
   const totalTracks: number = tracks.length;
   const random: number = Math.floor(Math.random() * totalTracks);
   const track: Track = tracks[random]
 
-  const trackInfo: TrackView = {
+  const trackWr: TrackView = {
     ...track,
     reproduccions: Math.floor(Math.random() * 10205)
   };
 
   return (
     <>
-      <SongCard trackInfo={trackInfo} />
+      <Header title="Spotify" user={randomUser.name} date={today} />
+      <SongCard trackInfo={trackWr} />
     </>
   )
 }
