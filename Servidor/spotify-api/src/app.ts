@@ -15,7 +15,7 @@ export const app: Express = express();
 app.use(express.json());
 
 app.get("/", (_req: Request, res: Response) => {
-    return res.json(JSON.stringify(APICONFIG));
+    return res.json(APICONFIG);
 });
 
 app.use("/tracks", trackRouter);
