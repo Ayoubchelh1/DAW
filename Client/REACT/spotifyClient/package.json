@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "node --test --test-reporter=spec src/test/client.test.mjs",
+    "test": "node --test --test-concurrency=1 --test-reporter=spec src/test/App.test.mjs src/test/Header.test.mjs src/test/SongCard.test.mjs",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"
