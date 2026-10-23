@@ -1,14 +1,23 @@
 import { useState } from "react";
 import type { SongCardProps } from "./Types/SongCardProps";
+import likeGreen from "../../assets/like-green.png";
+import likeWhite from "../../assets/like-white.png";
 
 
 const SongCard = ({ trackInfo }: SongCardProps) => {
 
     let [totalReporduccions, setTotalReproduccions] = useState<number>(trackInfo.reproduccions);
+    const [viewicon, setViewicon] = useState<boolean>(true);
+    const [likes, setLikes] = useState<number>(0);
 
     function handeClickPlay() {
         const tr = (prev: number): number => { return prev + 1 }
         setTotalReproduccions(tr);
+    }
+
+    function handleLikeClick() {
+        setLikes((prev) => prev + (viewicon ? 1 : -1));
+        setViewicon((prev) => !prev);
     }
 
 
@@ -19,6 +28,12 @@ const SongCard = ({ trackInfo }: SongCardProps) => {
             <p>Duració:{trackInfo.duration}</p>
             <p>Reproduccions:{totalReporduccions}</p>
             <p><button onClick={handeClickPlay}>Play</button></p>
+            <p>
+                <button onClick={handleLikeClick} >
+                    <img src={viewicon ? likeWhite : likeGreen} />
+                </button>
+                <span> Likes: {likes}</span>
+            </p>
         </>
     )
 }

@@ -7,7 +7,17 @@ import type { TrackView } from './components/Songs/Types/TrackView';
 import { tracks } from './Data/track';
 import { users } from './Data/user';
 import type { Track } from './Model/Track';
-import { getCurrentDate } from './Utils/currentDate';
+
+
+export function getCurrentDate(): string {
+  const currentDate = new Date();
+  const year: string = currentDate.getFullYear().toString();
+  const month: string = (currentDate.getMonth() + 1).toString();
+  const day: string = currentDate.getDate().toString();
+
+  return `${day}/${month}/${year}`;
+}
+
 
 function App() {
 

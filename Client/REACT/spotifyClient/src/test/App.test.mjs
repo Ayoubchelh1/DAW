@@ -54,7 +54,7 @@ test("l'aplicació mostra un usuari i una cançó existents amb reproduccions v�
       `<h1>${escapeHtml(track.title)}</h1><p>${escapeHtml(track.artist)}</p><p>Duració:${track.duration}</p><p>Reproduccions:`,
     ),
   );
-  const playCountMatch = songMarkup.match(/<p>Reproduccions:(\d+)<\/p>$/);
+  const playCountMatch = songMarkup.match(/<p>Reproduccions:(\d+)<\/p>/);
   const displayedDate = markup.match(/<p>Data: (\d{1,2}\/\d{1,2}\/\d{4})<\/p>/);
 
   assert.ok(markup.includes("<header>"), "La pàgina ha de contenir la capçalera");

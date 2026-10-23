@@ -35,3 +35,13 @@ test("la targeta escapa el títol i l'artista abans de mostrar-los", async () =>
   assert.ok(!markup.includes(trackInfo.title));
   assert.ok(!markup.includes(trackInfo.artist));
 });
+
+test("la targeta mostra el botó de like i comença amb zero likes", async () => {
+  const { default: SongCard } = await vite.ssrLoadModule("/src/components/Songs/SongCard.tsx");
+  const trackInfo = { title: "Cançó", artist: "Artista", duration: 1, reproduccions: 0 };
+  const markup = renderToStaticMarkup(createElement(SongCard, { trackInfo }));
+
+  assert.match(markup, /aria-label="M&#x27;agrada"/);
+  assert.match(markup, /Likes: 0/);
+  assert.match(markup, /like-white\.png/);
+});
