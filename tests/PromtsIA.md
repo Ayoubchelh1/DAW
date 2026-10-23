@@ -17,3 +17,21 @@
 
 6. **Prompt:** «Hazme más pruebas para el de React necesito hacer más test.»  
    **Explicació:** augmentar els tests del client per cobrir més casos de renderitzat, dates i selecció de dades.
+
+7. **Prompt:** «Pots fer més comprovacions?»
+   **Explicació:** afegir més validacions del renderitzat, les dades i el comportament del client.
+
+8. **Prompt:** «Tradueix els textos del test del client al català.»
+   **Explicació:** mostrar en català els noms i missatges de les proves.
+
+9. **Prompt:** «Em podries fer una validació més variable? No vull una validació literal perquè ara mateix no em funciona.»
+   **Explicació:** basar les comprovacions en les dades i propietats actuals, en lloc de valors fixos.
+
+10. **Prompt:** «Vull que em treguis els tests que no són dinàmics, que siguin fixes perquè no funcionen bé.»
+    **Explicació:** retirar les proves fràgils amb valors fixats i mantenir comprovacions dinàmiques.
+
+11. **Prompt:** «Realment, per fer els tests en React, hauria de fer més carpetes?»
+    **Explicació:** consultar com organitzar els fitxers de proves del client.
+
+12. **Prompt:** «Separa'ls, ja em sembla bé així.»
+    **Explicació:** separar les proves de React per responsabilitat en fitxers diferents.
