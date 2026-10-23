@@ -44,4 +44,5 @@ test("la targeta mostra el botó de like i comença amb zero likes", async () =>
   assert.match(markup, /aria-label="M&#x27;agrada"/);
   assert.match(markup, /Likes: 0/);
   assert.match(markup, /like-white\.png/);
+  assert.match(markup, /Reiniciar/);
 });

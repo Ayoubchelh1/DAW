@@ -15,6 +15,12 @@ const SongCard = ({ trackInfo }: SongCardProps) => {
         setTotalReproduccions(tr);
     }
 
+    function handleClickReset() {
+        setTotalReproduccions(0);
+        setLikes(0);
+        setViewicon(true);
+    }
+
     function handleLikeClick() {
         setLikes((prev) => prev + (viewicon ? 1 : -1));
         setViewicon((prev) => !prev);
@@ -27,12 +33,17 @@ const SongCard = ({ trackInfo }: SongCardProps) => {
             <p>{trackInfo.artist}</p>
             <p>Duració:{trackInfo.duration}</p>
             <p>Reproduccions:{totalReporduccions}</p>
-            <p><button onClick={handeClickPlay}>Play</button></p>
             <p>
-                <button onClick={handleLikeClick} >
+                <button onClick={handeClickPlay}>Play 1</button><br></br><p></p>
+                <button onClick={handeClickPlay}>Play 5</button><br></br><p></p>
+                <button onClick={handeClickPlay}>Play 10 </button><br></br><p></p>
+                <button onClick={handleClickReset}>Reiniciar</button>
+            </p>
+            <p>
+                <button onClick={handleLikeClick}>
                     <img src={viewicon ? likeWhite : likeGreen} alt="" width="24" height="24" />
                 </button>
-                <span>{likes}</span>
+                <span> {likes}</span>
             </p>
         </>
     )
