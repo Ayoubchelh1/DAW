@@ -10,9 +10,8 @@ const SongCard = ({ trackInfo }: SongCardProps) => {
     const [viewicon, setViewicon] = useState<boolean>(true);
     const [likes, setLikes] = useState<number>(0);
 
-    function handeClickPlay() {
-        const tr = (prev: number): number => { return prev + 1 }
-        setTotalReproduccions(tr);
+    function handlePlayClick(amount: number) {
+        setTotalReproduccions((prev: number) => prev + amount);
     }
 
     function handleClickReset() {
@@ -34,9 +33,9 @@ const SongCard = ({ trackInfo }: SongCardProps) => {
             <p>Duració:{trackInfo.duration}</p>
             <p>Reproduccions:{totalReporduccions}</p>
             <p>
-                <button onClick={handeClickPlay}>Play 1</button><br></br><p></p>
-                <button onClick={handeClickPlay}>Play 5</button><br></br><p></p>
-                <button onClick={handeClickPlay}>Play 10 </button><br></br><p></p>
+                <button onClick={() => handlePlayClick(1)}>Play 1</button><br /><p></p>
+                <button onClick={() => handlePlayClick(5)}>Play 5</button><br /><p></p>
+                <button onClick={() => handlePlayClick(10)}>Play 10</button><br /><p></p>
                 <button onClick={handleClickReset}>Reiniciar</button>
             </p>
             <p>

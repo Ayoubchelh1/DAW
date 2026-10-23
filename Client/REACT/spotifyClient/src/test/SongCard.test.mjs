@@ -41,8 +41,10 @@ test("la targeta mostra el botó de like i comença amb zero likes", async () =>
   const trackInfo = { title: "Cançó", artist: "Artista", duration: 1, reproduccions: 0 };
   const markup = renderToStaticMarkup(createElement(SongCard, { trackInfo }));
 
-  assert.match(markup, /aria-label="M&#x27;agrada"/);
-  assert.match(markup, /Likes: 0/);
+  assert.match(markup, /<span> 0<\/span>/);
   assert.match(markup, /like-white\.png/);
   assert.match(markup, /Reiniciar/);
+  assert.match(markup, /Play 1/);
+  assert.match(markup, /Play 5/);
+  assert.match(markup, /Play 10/);
 });
