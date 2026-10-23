@@ -30,9 +30,9 @@ const SongCard = ({ trackInfo }: SongCardProps) => {
             <p><button onClick={handeClickPlay}>Play</button></p>
             <p>
                 <button onClick={handleLikeClick} >
-                    <img src={viewicon ? likeWhite : likeGreen} />
+                    <img src={viewicon ? likeWhite : likeGreen} alt="" width="24" height="24" />
                 </button>
-                <span> Likes: {likes}</span>
+                <span>{likes}</span>
             </p>
         </>
     )
