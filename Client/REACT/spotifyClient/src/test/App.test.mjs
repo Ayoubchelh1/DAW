@@ -5,14 +5,17 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { escapeHtml, getSongCardMarkup, vite } from "./testSetup.mjs";
 
 test("la data actual té un format vàlid de dia/mes/any", async () => {
-  const { getCurrentDate } = await vite.ssrLoadModule("/src/Utils/currentDate.ts");
-  const currentDate = getCurrentDate();
+  const { default: Header } = await vite.ssrLoadModule("/src/components/Header/Header.tsx");
+  const markup = renderToStaticMarkup(createElement(Header, { title: "Spotify", user: "Usuari" }));
+  const displayedDate = markup.match(/<p>Data: (\d{1,2})\/(\d{1,2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})<\/p>/);
 
-  assert.match(currentDate, /^\d{1,2}\/\d{1,2}\/\d{4}$/);
-  const [day, month, year] = currentDate.split("/").map(Number);
-  assert.ok(day >= 1 && day <= 31);
-  assert.ok(month >= 1 && month <= 12);
-  assert.ok(year >= 1);
+  assert.ok(displayedDate, "La capçalera ha de mostrar una data i hora vàlides");
+  assert.ok(Number(displayedDate[1]) >= 1 && Number(displayedDate[1]) <= 31);
+  assert.ok(Number(displayedDate[2]) >= 1 && Number(displayedDate[2]) <= 12);
+  assert.ok(Number(displayedDate[3]) >= 1);
+  assert.ok(Number(displayedDate[4]) <= 23);
+  assert.ok(Number(displayedDate[5]) <= 59);
+  assert.ok(Number(displayedDate[6]) <= 59);
 });
 
 test("les dades contenen els camps necessaris per renderitzar", async () => {
@@ -55,7 +58,7 @@ test("l'aplicació mostra un usuari i una cançó existents amb reproduccions v�
     ),
   );
   const playCountMatch = songMarkup.match(/<p>Reproduccions:(\d+)<\/p>/);
-  const displayedDate = markup.match(/<p>Data: (\d{1,2}\/\d{1,2}\/\d{4})<\/p>/);
+  const displayedDate = markup.match(/<p>Data: \d{1,2}\/\d{1,2}\/\d{4} \d{2}:\d{2}:\d{2}<\/p>/);
 
   assert.ok(markup.includes("<header>"), "La pàgina ha de contenir la capçalera");
   assert.ok(matchingUser, "La capçalera ha de mostrar un usuari de la llista");
