@@ -25,9 +25,7 @@ const SongCard = ({ trackInfo }: SongCardProps) => {
         setViewicon((prev) => !prev);
     }
 
-    function handleClickRandom() {
 
-    }
 
 
     return (
@@ -42,7 +40,7 @@ const SongCard = ({ trackInfo }: SongCardProps) => {
                 <p><button onClick={() => handlePlayClick(5)}>Play 5</button></p>
                 <p><button onClick={() => handlePlayClick(10)}>Play 10</button></p>
                 <p><button onClick={handleClickReset}>Reiniciar</button></p>
-                <p><button onClick={handleClickRandom}>Random</button></p>
+
             </p>
             <p>
                 <button onClick={handleLikeClick}>

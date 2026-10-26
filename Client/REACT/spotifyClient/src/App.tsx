@@ -33,10 +33,15 @@ function App() {
     reproduccions: Math.floor(Math.random() * 10205)
   };
 
+  function handleClickRandom() {
+
+  }
+
   return (
     <>
       <Header title="Spotify" user={randomUser.name} date={today} />
       <SongCard trackInfo={trackWr} />
+      <p><button onClick={handleClickRandom}>Random</button></p>
     </>
   )
 }
