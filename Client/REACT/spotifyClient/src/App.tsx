@@ -44,7 +44,7 @@ function App() {
   return (
     <>
       <Header title="Spotify" user={randomUser.name} />
-      <SongCard trackInfo={trackWr} />
+      <SongCard trackInfo={trackWr} play={() => incrementarReproduccions()} like={ } />
       <p><button onClick={handleClickRandom}>Random</button></p>
     </>
   )
