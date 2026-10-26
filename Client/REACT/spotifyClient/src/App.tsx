@@ -20,10 +20,22 @@ function getRandomTrack(): TrackView {
 function App() {
 
   const [randomUser] = useState(() => users[Math.floor(Math.random() * users.length)]);
-  const [trackWr, setTrackWr] = useState<TrackView>(getRandomTrack);
+  const [trackWr, setTrack] = useState<TrackView>(getRandomTrack);
+
+  function incrementarReproduccions() {
+    const tr = (prev: TrackView): TrackView => {
+      return {
+        ...prev,
+        reproduccions: prev.reproduccions + 1
+      }
+    }
+
+    setTrack(tr);
+
+  }
 
   function handleClickRandom() {
-    setTrackWr((currentTrack) => ({
+    setTrack((currentTrack) => ({
       ...getRandomTrack(),
       reproduccions: currentTrack.reproduccions
     }));
