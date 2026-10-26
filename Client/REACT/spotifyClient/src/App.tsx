@@ -13,7 +13,8 @@ function getRandomTrack(): TrackView {
 
   return {
     ...randomTrack,
-    reproduccions: Math.floor(Math.random() * 10205)
+    reproduccions: Math.floor(Math.random() * 10205),
+    likes: Math.random() * 10205
   };
 }
 
@@ -37,7 +38,6 @@ function App() {
   function handleClickRandom() {
     setTrack((currentTrack) => ({
       ...getRandomTrack(),
-      reproduccions: currentTrack.reproduccions
     }));
   }
 
