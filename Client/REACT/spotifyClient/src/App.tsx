@@ -6,7 +6,6 @@ import SongCard from './components/Songs/SongCard'
 import type { TrackView } from './components/Songs/Types/TrackView';
 import { tracks } from './Data/track';
 import { users } from './Data/user';
-import type { Track } from './Model/Track';
 
 
 export function getCurrentDate(): string {
@@ -15,26 +14,32 @@ export function getCurrentDate(): string {
   const month: string = (currentDate.getMonth() + 1).toString();
   const day: string = currentDate.getDate().toString();
 
+
   return `${day}/${month}/${year}`;
 }
 
+function getRandomTrack(): TrackView {
+  const totalTracks: number = tracks.length;
+  const randomIndex: number = Math.floor(Math.random() * totalTracks);
+  const randomTrack = tracks[randomIndex];
+
+  return {
+    ...randomTrack,
+    reproduccions: Math.floor(Math.random() * 10205)
+  };
+}
 
 function App() {
 
   const [randomUser] = useState(() => users[Math.floor(Math.random() * users.length)]);
   const [today] = useState(getCurrentDate);
-
-  const totalTracks: number = tracks.length;
-  const random: number = Math.floor(Math.random() * totalTracks);
-  const track: Track = tracks[random]
-
-  const trackWr: TrackView = {
-    ...track,
-    reproduccions: Math.floor(Math.random() * 10205)
-  };
+  const [trackWr, setTrackWr] = useState<TrackView>(getRandomTrack);
 
   function handleClickRandom() {
-
+    setTrackWr((currentTrack) => ({
+      ...getRandomTrack(),
+      reproduccions: currentTrack.reproduccions
+    }));
   }
 
   return (
