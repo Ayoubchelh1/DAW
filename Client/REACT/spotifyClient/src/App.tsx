@@ -39,6 +39,17 @@ function App() {
 
   }
 
+  function reset() {
+    setTrack((prev) => ({
+      ...prev,
+      reproduccions: 0,
+      likes: {
+        like: false,
+        totalLikes: 0
+      }
+    }));
+  }
+
   function gestionarLikes() {
     const tr = (prev: TrackView): TrackView => {
 
@@ -74,7 +85,8 @@ function App() {
   return (
     <>
       <Header title="Spotify" user={randomUser.name} />
-      <SongCard trackInfo={track} play={() => incrementarReproduccions()} like={() => gestionarLikes()} />
+      <SongCard trackInfo={track} play={() => incrementarReproduccions()} reset={() => reset()} like={() => gestionarLikes()}
+      />
       <p><button onClick={handleClickRandom}>Random</button></p>
     </>
   )
