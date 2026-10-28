@@ -27,6 +27,15 @@ function App() {
 
   const [randomUser] = useState(() => users[Math.floor(Math.random() * users.length)]);
   const [track, setTrack] = useState<TrackView>(getRandomTrack);
+  const [volum, setVolum] = useState(10);
+
+  function pujarVolum() {
+    setVolum((volumActual) => Math.min(volumActual + 1, 100));
+  }
+
+  function baixarVolum() {
+    setVolum((volumActual) => Math.max(volumActual - 1, 0));
+  }
 
   function incrementarReproduccions() {
     const tr = (prev: TrackView): TrackView => {
@@ -88,7 +97,7 @@ function App() {
       <Header title="Spotify" user={randomUser.name} />
       <SongCard trackInfo={track} play={() => incrementarReproduccions()} reset={() => reset()} like={() => gestionarLikes()}
       />
-      <Reproduint />
+      <Reproduint volum={volum} pujarVolum={pujarVolum} baixarVolum={baixarVolum} />
       <p><button onClick={handleClickRandom}>Random</button></p>
     </>
   )

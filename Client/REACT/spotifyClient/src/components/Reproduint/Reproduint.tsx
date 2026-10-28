@@ -1,25 +1,12 @@
-import { useState } from 'react';
+import type { ReproduintProps } from './Types/ReproduintProps';
 
-const MIN_VOLUME = 0;
-const MAX_VOLUME = 100;
-
-const Reproduint = () => {
-    const [volume, setVolume] = useState(10);
-
-    function pujarVolum() {
-        setVolume((currentVolume) => Math.min(currentVolume + 1, MAX_VOLUME));
-    }
-
-    function baixarVolum() {
-        setVolume((currentVolume) => Math.max(currentVolume - 1, MIN_VOLUME));
-    }
-
+const Reproduint = (props: ReproduintProps) => {
     return (
         <section>
             <h2>Reproduint</h2>
-            <span>Volum: {volume}</span>
-            <button onClick={baixarVolum}>-</button>
-            <button onClick={pujarVolum}>+</button>
+            <span>Volum: {props.volum}</span>
+            <button onClick={props.baixarVolum}>-</button>
+            <button onClick={props.pujarVolum}>+</button>
         </section>
     );
 };
