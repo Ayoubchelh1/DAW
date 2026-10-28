@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './App.css'
 import Header from './components/Header/Header'
+import Reproduint from './components/Reproduint/Reproduint'
 import SongCard from './components/Songs/SongCard'
 import type { TrackView } from './components/Songs/Types/TrackView';
 import { tracks } from './Data/track';
@@ -76,7 +77,7 @@ function App() {
   }
 
   function handleClickRandom() {
-    setTrack((currentTrack) => ({
+    setTrack(() => ({
       ...getRandomTrack(),
 
     }));
@@ -87,6 +88,7 @@ function App() {
       <Header title="Spotify" user={randomUser.name} />
       <SongCard trackInfo={track} play={() => incrementarReproduccions()} reset={() => reset()} like={() => gestionarLikes()}
       />
+      <Reproduint />
       <p><button onClick={handleClickRandom}>Random</button></p>
     </>
   )
