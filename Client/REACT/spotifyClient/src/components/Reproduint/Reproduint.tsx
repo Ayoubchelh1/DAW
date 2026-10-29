@@ -10,6 +10,7 @@ const Reproduint = (props: ReproduintProps) => {
             <p>
                 {props.playingSongTitle ? `Playing song: ${props.playingSongTitle}` : "No song is playing"}
             </p>
+            <button onClick={props.stopPlaying}>Stop</button>
         </section>
     );
 };

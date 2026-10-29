@@ -60,6 +60,10 @@ function App() {
     incrementarReproduccions();
   }
 
+  function stopPlaying() {
+    setPlayingSongTitle(null);
+  }
+
   function reset() {
     setTrack((prev) => ({
       ...prev,
@@ -109,11 +113,13 @@ function App() {
       <Header title="Spotify" user={randomUser.name} />
       <SongCard trackInfo={track} play={togglePlaying} reset={() => reset()} like={() => gestionarLikes()}
       />
+      <hr></hr>
       <Reproduint
         volum={volum}
         pujarVolum={pujarVolum}
         baixarVolum={baixarVolum}
         playingSongTitle={playingSongTitle}
+        stopPlaying={stopPlaying}
       />
       <p><button onClick={handleClickRandom}>Random</button></p>
     </>

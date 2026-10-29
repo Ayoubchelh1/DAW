@@ -3,4 +3,5 @@ export interface ReproduintProps {
     pujarVolum: () => void;
     baixarVolum: () => void;
     playingSongTitle: string | null;
+    stopPlaying: () => void;
 }
