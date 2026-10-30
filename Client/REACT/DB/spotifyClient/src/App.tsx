@@ -4,35 +4,28 @@ import Header from './components/Header/Header'
 import Reproduint from './components/Reproduint/Reproduint'
 import SongCard from './components/Songs/SongCard'
 import type { TrackView } from './components/Songs/Types/TrackView';
-import { tracks } from './Data/track';
 import { users } from './Data/user';
 import type { Like } from './components/Songs/Types/Like';
-import SongRow from './components/Songs/SongRow';
-import type { Track } from './Model/Track';
 import ListSongs from './components/Songs/ListSongs';
+import type { Track } from './Model/Track';
 
-function getRandomTrack(): TrackView {
-  const totalTracks: number = tracks.length;
-  const randomIndex: number = Math.floor(Math.random() * totalTracks);
-  const randomTrack = tracks[randomIndex];
 
-  return {
-    ...randomTrack,
-    reproduccions: Math.floor(Math.random() * 10205),
-    likes: {
-      like: false,
-      totalLikes: 0
-    }
-  };
-}
 
 function App() {
 
+  const [tracks, setTracks] = useState<Track[]>([]);
   const [randomUser] = useState(() => users[Math.floor(Math.random() * users.length)]);
   const [track, setTrack] = useState<TrackView>(getRandomTrack);
   const [volum, setVolum] = useState(10);
   const [playingSongTitle, setPlayingSongTitle] = useState<string | null>(null);
 
+
+
+  function carregarDadesTrack() {
+    const listTrack: Track[] = [];
+
+    setTracks(listTrack)
+  }
   function pujarVolum() {
     setVolum((volumActual) => Math.min(volumActual + 1, 100));
   }
@@ -78,6 +71,22 @@ function App() {
     }));
   }
 
+  function getRandomTrack(): TrackView {
+    const totalTracks: number = tracks.length;
+    const randomIndex: number = Math.floor(Math.random() * totalTracks);
+    const randomTrack = tracks[randomIndex];
+
+    return {
+      ...randomTrack,
+      reproduccions: Math.floor(Math.random() * 10205),
+      likes: {
+        like: false,
+        totalLikes: 0
+      }
+    };
+  }
+
+
   function gestionarLikes() {
     const tr = (prev: TrackView): TrackView => {
 
@@ -115,15 +124,20 @@ function App() {
     <>
       <Header title="Spotify" user={randomUser.name} />
       <main>
-        <table>
-          <thead>
-            <title>List Songs</title>
-          </thead>
-          <tbody>
-            <ListSongs tracks={tracks} />
+        {
+          !tracks.length ?
+            <table>
+              <thead>
+                <title>List Songs</title>
+              </thead>
+              <tbody>
+                <ListSongs tracks={tracks} />
 
-          </tbody>
-        </table>
+              </tbody>
+            </table>
+            : <>
+            </>
+        }
         <SongCard trackInfo={track} play={togglePlaying} reset={() => reset()} like={() => gestionarLikes()} />
         <hr></hr>
         <Reproduint
