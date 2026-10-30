@@ -30,12 +30,9 @@ const SongCard = (props: SongCardProps) => {
             <p>{props.trackInfo.artist}</p>
             <p>Duració:{props.trackInfo.duration}</p>
             <p>Reproduccions:{props.trackInfo.reproduccions}</p>
-            <p>
-                <p><button onClick={() => handlePlayClick()}>Play 1</button></p>
+            <p><button onClick={() => handlePlayClick()}>Play 1</button></p>
+            <p><button onClick={handleClickReset}>Reiniciar</button></p>
 
-                <p><button onClick={handleClickReset}>Reiniciar</button></p>
-
-            </p>
             <p>
                 <button onClick={handleLikeClick}>
                     <img src={props.trackInfo.likes.like ? likeSong : likeSongPending} alt="" width="24" height="24" />
