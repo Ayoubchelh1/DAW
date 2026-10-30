@@ -9,10 +9,13 @@ import { playlistTracksRouter } from "./routes/playlistTracksRoutes";
 import { historyRouter } from "./routes/historyRoutes";
 import { albumsRouter } from "./routes/albumsRoutes";
 import { albumTracksRouter } from "./routes/albumTracksRoutes";
+import cors from "cors";
+import { corsOptions } from "./config/cors";
 
 
 export const app: Express = express();
 app.use(express.json());
+app.use(cors(corsOptions));
 
 app.get("/", (_req: Request, res: Response) => {
     return res.json(APICONFIG);
