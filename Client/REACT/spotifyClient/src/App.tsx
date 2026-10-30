@@ -7,6 +7,8 @@ import type { TrackView } from './components/Songs/Types/TrackView';
 import { tracks } from './Data/track';
 import { users } from './Data/user';
 import type { Like } from './components/Songs/Types/Like';
+import SongRow from './components/Songs/SongRow';
+import type { Track } from './Model/Track';
 
 function getRandomTrack(): TrackView {
   const totalTracks: number = tracks.length;
@@ -110,18 +112,38 @@ function App() {
 
   return (
     <>
-      <Header title="Spotify" user={randomUser.name} />
-      <SongCard trackInfo={track} play={togglePlaying} reset={() => reset()} like={() => gestionarLikes()}
-      />
-      <hr></hr>
-      <Reproduint
-        volum={volum}
-        pujarVolum={pujarVolum}
-        baixarVolum={baixarVolum}
-        playingSongTitle={playingSongTitle}
-        stopPlaying={stopPlaying}
-      />
-      <p><button onClick={handleClickRandom}>Random</button></p>
+      <main>
+        <table>
+          <head>
+            <title>List Songs</title>
+          </head>
+          <tbody>
+            {
+              tracks.map(
+                (t: Track) => {
+                  return <SongRow
+                    key={t.id}
+                    title={t.title}
+                    artist={t.artist}
+                    duration={t.duration} />
+                }
+              )
+            }
+          </tbody>
+        </table>
+        <Header title="Spotify" user={randomUser.name} />
+        <SongCard trackInfo={track} play={togglePlaying} reset={() => reset()} like={() => gestionarLikes()}
+        />
+        <hr></hr>
+        <Reproduint
+          volum={volum}
+          pujarVolum={pujarVolum}
+          baixarVolum={baixarVolum}
+          playingSongTitle={playingSongTitle}
+          stopPlaying={stopPlaying}
+        />
+        <p><button onClick={handleClickRandom}>Random</button></p>
+      </main>
     </>
   )
 }
