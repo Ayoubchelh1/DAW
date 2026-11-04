@@ -7,8 +7,6 @@ import type { TrackView } from './components/Songs/Types/TrackView';
 import { tracks } from './Data/track';
 import { users } from './Data/user';
 import type { Like } from './components/Songs/Types/Like';
-import SongRow from './components/Songs/SongRow';
-import type { Track } from './Model/Track';
 import ListSongs from './components/Songs/ListSongs';
 
 function getRandomTrack(): TrackView {
@@ -115,15 +113,16 @@ function App() {
     <>
       <Header title="Spotify" user={randomUser.name} />
       <main>
-        <table>
-          <thead>
-            <title>List Songs</title>
-          </thead>
-          <tbody>
-            <ListSongs tracks={tracks} />
-
-          </tbody>
-        </table>
+        <div className="song-list">
+          <table>
+            <thead>
+              <title>List Songs</title>
+            </thead>
+            <tbody>
+              <ListSongs tracks={tracks} />
+            </tbody>
+          </table>
+        </div>
         <SongCard trackInfo={track} play={togglePlaying} reset={() => reset()} like={() => gestionarLikes()} />
         <hr></hr>
         <Reproduint
