@@ -9,6 +9,10 @@
     border-spacing: 0;
 }
 
+.song-list + .song-list {
+    margin-top: 16px;
+}
+
 .history-entry {
     display: flex;
     justify-content: space-between;
