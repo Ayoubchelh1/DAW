@@ -4,3 +4,16 @@
     right: 1rem;
     text-align: right;
 }
+
+main > table {
+    width: max-content;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+@media (max-width: 640px) {
+    .context-layout {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}

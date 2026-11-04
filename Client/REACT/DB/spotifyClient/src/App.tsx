@@ -25,9 +25,9 @@ function App() {
 
     const resposta: Response = await fetch("http://localhost:3000/tracks");
     const listTrack: Track[] = await resposta.json() as Track[];
-
     setTracks(listTrack)
   }
+
   function pujarVolum() {
     setVolum((volumActual) => Math.min(volumActual + 1, 100));
   }
@@ -122,6 +122,9 @@ function App() {
     setPlayingSongTitle(null);
   }
 
+
+
+  carregarDadesTrack();
   return (
     <>
       <Header title="Spotify" user={randomUser.name} />
@@ -137,9 +140,7 @@ function App() {
 
               </tbody>
             </table>
-            : <p>
-              <button onClick={carregarDadesTrack}>Carregar Tracks</button>
-            </p>
+            : <p>No tracks avaiable</p>
         }
         <SongCard trackInfo={track} play={togglePlaying} reset={() => reset()} like={() => gestionarLikes()} />
         <hr></hr>
