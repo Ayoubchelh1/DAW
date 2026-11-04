@@ -8,9 +8,9 @@ const SongCard = (props: SongRowProps) => {
 
     return (
         <tr>
-            <td>{props.title}</td>
-            <td>{props.artist}</td>
-            <td>Duració:{props.duration}</td>
+            <td>Titol: {props.title}</td>
+            <td>Artista: {props.artist}</td>
+            <td>Duració: {props.duration}</td>
         </tr>
     )
 }

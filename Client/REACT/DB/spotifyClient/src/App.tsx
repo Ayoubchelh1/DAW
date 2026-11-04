@@ -7,7 +7,6 @@ import type { TrackView } from './components/Songs/Types/TrackView';
 import { users } from './Data/user';
 import type { Like } from './components/Songs/Types/Like';
 import ListSongs from './components/Songs/ListSongs';
-import type { Track } from './Model/Track';
 import { ENV } from './Config/env';
 import type { GETTrack } from './APIManagement/Tracks/Interfaces/Track';
 
