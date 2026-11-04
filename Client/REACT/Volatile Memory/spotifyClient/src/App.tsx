@@ -8,6 +8,8 @@ import { tracks } from './Data/track';
 import { users } from './Data/user';
 import type { Like } from './components/Songs/Types/Like';
 import ListSongs from './components/Songs/ListSongs';
+import Historial from './components/Historial/Historial';
+import type { PlaybackHistoryEntry } from './components/Historial/Historial';
 
 function getRandomTrack(): TrackView {
   const totalTracks: number = tracks.length;
@@ -30,6 +32,7 @@ function App() {
   const [track, setTrack] = useState<TrackView>(getRandomTrack);
   const [volum, setVolum] = useState(10);
   const [playingSongTitle, setPlayingSongTitle] = useState<string | null>(null);
+  const [historial, setHistorial] = useState<PlaybackHistoryEntry[]>([]);
 
   function pujarVolum() {
     setVolum((volumActual) => Math.min(volumActual + 1, 100));
@@ -58,6 +61,7 @@ function App() {
     }
 
     setPlayingSongTitle(track.title);
+    setHistorial((prev) => [...prev, { canco: track, data: new Date().toLocaleString().replace(", ", " ") }]);
     incrementarReproduccions();
   }
 
@@ -123,6 +127,7 @@ function App() {
             </tbody>
           </table>
         </div>
+        <Historial songs={historial} />
         <SongCard trackInfo={track} play={togglePlaying} isPlaying={playingSongTitle === track.title} reset={() => reset()} like={() => gestionarLikes()} />
         <hr></hr>
         <Reproduint

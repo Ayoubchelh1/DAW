@@ -8,3 +8,9 @@
 .song-list table {
     border-spacing: 0;
 }
+
+.history-entry {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
