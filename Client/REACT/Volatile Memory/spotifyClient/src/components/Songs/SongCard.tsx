@@ -30,7 +30,7 @@ const SongCard = (props: SongCardProps) => {
             <p>{props.trackInfo.artist}</p>
             <p>Duració:{props.trackInfo.duration}</p>
             <p>Reproduccions:{props.trackInfo.reproduccions}</p>
-            <p><button onClick={() => handlePlayClick()}>Play 1</button></p>
+            {!props.isPlaying && <p><button onClick={() => handlePlayClick()}>Play 1</button></p>}
             <p><button onClick={handleClickReset}>Reiniciar</button></p>
 
             <p>

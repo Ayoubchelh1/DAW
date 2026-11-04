@@ -123,7 +123,7 @@ function App() {
             </tbody>
           </table>
         </div>
-        <SongCard trackInfo={track} play={togglePlaying} reset={() => reset()} like={() => gestionarLikes()} />
+        <SongCard trackInfo={track} play={togglePlaying} isPlaying={playingSongTitle === track.title} reset={() => reset()} like={() => gestionarLikes()} />
         <hr></hr>
         <Reproduint
           volum={volum}
