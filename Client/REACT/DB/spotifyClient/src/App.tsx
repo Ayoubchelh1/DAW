@@ -9,12 +9,13 @@ import type { Like } from './components/Songs/Types/Like';
 import ListSongs from './components/Songs/ListSongs';
 import type { Track } from './Model/Track';
 import { ENV } from './Config/env';
+import type { GETTrack } from './APIManagement/Tracks/Interfaces/Track';
 
 
 
 function App() {
 
-  const [tracks, setTracks] = useState<Track[]>([]);
+  const [tracks, setTracks] = useState<GETTrack[]>([]);
   const [randomUser] = useState(() => users[Math.floor(Math.random() * users.length)]);
   const [track, setTrack] = useState<TrackView>(getRandomTrack);
   const [volum, setVolum] = useState(10);
@@ -25,7 +26,7 @@ function App() {
   async function carregarDadesTrack() {
 
     const resposta: Response = await fetch(`${ENV.API_BASE_URL}/tracks`);
-    const listTrack: Track[] = await resposta.json() as Track[];
+    const listTrack: GETTrack[] = await resposta.json() as GETTrack[];
     setTracks(listTrack)
   }
 
