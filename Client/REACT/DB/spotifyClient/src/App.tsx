@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css'
 import Header from './components/Header/Header'
 import Reproduint from './components/Reproduint/Reproduint'
@@ -8,6 +8,7 @@ import { users } from './Data/user';
 import type { Like } from './components/Songs/Types/Like';
 import ListSongs from './components/Songs/ListSongs';
 import type { Track } from './Model/Track';
+import { ENV } from './Config/env';
 
 
 
@@ -23,10 +24,16 @@ function App() {
 
   async function carregarDadesTrack() {
 
-    const resposta: Response = await fetch("http://localhost:3000/tracks");
+    const resposta: Response = await fetch(`${ENV.API_BASE_URL}/tracks`);
     const listTrack: Track[] = await resposta.json() as Track[];
     setTracks(listTrack)
   }
+
+  useEffect(
+    () => {
+      carregarDadesTrack();
+    }, []);
+
 
   function pujarVolum() {
     setVolum((volumActual) => Math.min(volumActual + 1, 100));
@@ -124,7 +131,7 @@ function App() {
 
 
 
-  carregarDadesTrack();
+
   return (
     <>
       <Header title="Spotify" user={randomUser.name} />
