@@ -5,15 +5,28 @@
     text-align: right;
 }
 
-.song-list {
+.library-panels {
     width: fit-content;
     margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 16px;
+}
+
+.song-list {
     border: 1px solid black;
     padding: 8px;
 }
 
 .song-list table {
     border-spacing: 0;
+}
+
+.playlist-list {
+    width: fit-content;
+    border: 1px solid black;
+    padding: 8px;
 }
 
 @media (max-width: 640px) {

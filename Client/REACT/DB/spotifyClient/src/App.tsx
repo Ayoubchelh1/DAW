@@ -9,12 +9,16 @@ import type { Like } from './components/Songs/Types/Like';
 import ListSongs from './components/Songs/ListSongs';
 import { ENV } from './Config/env';
 import type { GETTrack } from './APIManagement/Tracks/Interfaces/Track';
+import type { GETPlaylist } from './APIManagement/Playlists/Interfaces/Playlist';
+import PlaylistList from './components/Playlists/PlaylistList';
 
 
 
 function App() {
 
   const [tracks, setTracks] = useState<GETTrack[]>([]);
+  const [playlists, setPlaylists] = useState<GETPlaylist[]>([]);
+  const [playlistsError, setPlaylistsError] = useState<string | null>(null);
   const [randomUser] = useState(() => users[Math.floor(Math.random() * users.length)]);
   const [track, setTrack] = useState<TrackView>(getRandomTrack);
   const [volum, setVolum] = useState(10);
@@ -29,9 +33,28 @@ function App() {
     setTracks(listTrack)
   }
 
+  async function carregarPlaylists() {
+    try {
+      const resposta: Response = await fetch(`${ENV.API_BASE_URL}/playlists`);
+      if (!resposta.ok) {
+        throw new Error(`Error carregant les llistes (${resposta.status}).`);
+      }
+
+      const dades: GETPlaylist[] = await resposta.json() as GETPlaylist[];
+      setPlaylists(dades);
+    } catch (error) {
+      setPlaylistsError(
+        error instanceof Error
+          ? error.message
+          : "No s'han pogut carregar les llistes de reproducció."
+      );
+    }
+  }
+
   useEffect(
     () => {
       carregarDadesTrack();
+      carregarPlaylists();
     }, []);
 
 
@@ -150,19 +173,22 @@ function App() {
     <>
       <Header title="Spotify" user={randomUser.name} />
       <main>
-        <div className="song-list">
-          {
-            tracks.length ?
-              <table>
-                <thead>
-                  <title>ListSongs</title>
-                </thead>
-                <tbody>
-                  <ListSongs tracks={tracks} playTrack={playTrack} />
-                </tbody>
-              </table>
-              : <p>No tracks avaiable</p>
-          }
+        <div className="library-panels">
+          <div className="song-list">
+            {
+              tracks.length ?
+                <table>
+                  <thead>
+                    <title>ListSongs</title>
+                  </thead>
+                  <tbody>
+                    <ListSongs tracks={tracks} playTrack={playTrack} />
+                  </tbody>
+                </table>
+                : <p>No tracks avaiable</p>
+            }
+          </div>
+          <PlaylistList playlists={playlists} error={playlistsError} />
         </div>
         <SongCard trackInfo={track} play={togglePlaying} reset={() => reset()} like={() => gestionarLikes()} />
         <hr></hr>
