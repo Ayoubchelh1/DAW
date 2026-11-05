@@ -65,6 +65,20 @@ function App() {
     incrementarReproduccions();
   }
 
+  function playTrack(selectedTrack: GETTrack) {
+    setTrack((previousTrack) => {
+      const isSameTrack = previousTrack.title === selectedTrack.title &&
+        previousTrack.artist === selectedTrack.artist;
+
+      return {
+        ...selectedTrack,
+        reproduccions: isSameTrack ? previousTrack.reproduccions + 1 : 1,
+        likes: isSameTrack ? previousTrack.likes : { like: false, totalLikes: 0 }
+      };
+    });
+    setPlayingSongTitle(selectedTrack.title);
+  }
+
   function stopPlaying() {
     setPlayingSongTitle(null);
   }
@@ -144,7 +158,7 @@ function App() {
                   <title>ListSongs</title>
                 </thead>
                 <tbody>
-                  <ListSongs tracks={tracks} />
+                  <ListSongs tracks={tracks} playTrack={playTrack} />
                 </tbody>
               </table>
               : <p>No tracks avaiable</p>
