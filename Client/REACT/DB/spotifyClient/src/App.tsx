@@ -136,19 +136,20 @@ function App() {
     <>
       <Header title="Spotify" user={randomUser.name} />
       <main>
-        {
-          tracks.length ?
-            <table>
-              <thead>
-                <title>ListSongs</title>
-              </thead>
-              <tbody>
-                <ListSongs tracks={tracks} />
-
-              </tbody>
-            </table>
-            : <p>No tracks avaiable</p>
-        }
+        <div className="song-list">
+          {
+            tracks.length ?
+              <table>
+                <thead>
+                  <title>ListSongs</title>
+                </thead>
+                <tbody>
+                  <ListSongs tracks={tracks} />
+                </tbody>
+              </table>
+              : <p>No tracks avaiable</p>
+          }
+        </div>
         <SongCard trackInfo={track} play={togglePlaying} reset={() => reset()} like={() => gestionarLikes()} />
         <hr></hr>
         <Reproduint

@@ -5,10 +5,15 @@
     text-align: right;
 }
 
-main > table {
-    width: max-content;
+.song-list {
+    width: fit-content;
     margin-left: auto;
-    margin-right: 0;
+    border: 1px solid black;
+    padding: 8px;
+}
+
+.song-list table {
+    border-spacing: 0;
 }
 
 @media (max-width: 640px) {
