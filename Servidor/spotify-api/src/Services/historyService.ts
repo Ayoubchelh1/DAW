@@ -17,7 +17,7 @@ export function getHistoryById(idHistory: string): HistoryBD | undefined {
     return history.find((historyRecord: HistoryBD) => historyRecord.id === idHistory);
 }
 
-export function createHistory(historyRecord: History): CreateSuccessService<HistoryBD> | ErrorService {
+export function createHistory(historyRecord: History): CreateSuccessService | ErrorService {
     if (!isValidHistory(historyRecord)) {
         return { success: false, code: 400, message: "invalid data" };
     }
@@ -39,7 +39,7 @@ export function createHistory(historyRecord: History): CreateSuccessService<Hist
         date: historyRecord.date.trim()
     };
 
-    return { success: true, code: 201, data: createdHistory };
+    return { success: true, code: 201, data: 1 };
 }
 
 export function updateHistory(idHistory: string, historyRecord: History): UpdateSuccessService<HistoryBD> | ErrorService {
@@ -69,5 +69,5 @@ export function updateHistory(idHistory: string, historyRecord: History): Update
         date: historyRecord.date.trim()
     };
 
-    return { success: true, code: 200, data: updatedHistory, index: historyIndex };
+    return { success: true, code: 200, data: 1 };
 }

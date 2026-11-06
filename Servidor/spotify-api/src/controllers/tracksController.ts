@@ -26,7 +26,7 @@ export async function getTrackByIdController(req: Request, res: Response): Promi
 }
 
 export async function postTrackController(req: Request, res: Response): Promise<Response> {
-    const result: CreateSuccessService<TrackBD> | ErrorService = await createTrack(req.body);
+    const result: CreateSuccessService | ErrorService = await createTrack(req.body);
 
     if (!result.success) {
         const errorResult = result as ErrorService
@@ -60,3 +60,18 @@ export async function deleteTracksController(req: Request, res: Response): Promi
 
     return res.status(result.code).send();
 }
+
+
+export async function postTrackUserHistoryController(req: Request, res: Response): Promise<Response> {
+    const result: CreateSuccessService | ErrorService = await addTrackUserHistory(req.body);
+
+    if (!result.success) {
+        const errorResult = result as ErrorService
+        return res.status(errorResult.code).json({ message: errorResult.message })
+    }
+
+
+    return res.status(result.code).json(result);
+}
+
+

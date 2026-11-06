@@ -21,14 +21,14 @@ export function getPlaylistByIdController(req: Request, res: Response): Response
 }
 
 export function postPlaylistController(req: Request, res: Response): Response {
-    const result: CreateSuccessService<PlaylistBD> | ErrorService = createPlaylist(req.body);
+    const result: CreateSuccessService | ErrorService = createPlaylist(req.body);
     if (!result.success) {
         const errorResult = result as ErrorService;
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const createResult = result as CreateSuccessService<PlaylistBD>;
-    playlists.push(createResult.data);
+    const createResult = result as CreateSuccessService;
+    //playlists.push(createResult.data);
     return res.status(createResult.code).json(createResult.data);
 }
 
@@ -41,7 +41,7 @@ export function putPlaylistController(req: Request, res: Response): Response {
     }
 
     const updateResult = result as UpdateSuccessService<PlaylistBD>;
-    playlists[updateResult.index] = updateResult.data;
+    //playlists[updateResult.index] = updateResult.data;
     return res.status(updateResult.code).json(updateResult.data);
 }
 
@@ -55,7 +55,7 @@ export function deletePlaylistController(req: Request, res: Response): Response 
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const index: number = (result as DeleteSuccessService).index;
-    playlists.splice(index, 1);
+    //const index: number = (result as DeleteSuccessService).index;
+    //playlists.splice(index, 1);
     return res.status(result.code).send();
 }

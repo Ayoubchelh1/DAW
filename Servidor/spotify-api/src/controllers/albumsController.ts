@@ -21,14 +21,14 @@ export function getAlbumByIdController(req: Request, res: Response): Response {
 }
 
 export function postAlbumController(req: Request, res: Response): Response {
-    const result: CreateSuccessService<AlbumBD> | ErrorService = createAlbum(req.body as Album);
+    const result: CreateSuccessService | ErrorService = createAlbum(req.body as Album);
     if (!result.success) {
         const errorResult = result as ErrorService;
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const createResult = result as CreateSuccessService<AlbumBD>;
-    albums.push(createResult.data);
+    const createResult = result as CreateSuccessService;
+    //albums.push(createResult.data);
     return res.status(createResult.code).json(createResult.data);
 }
 
@@ -41,7 +41,7 @@ export function putAlbumController(req: Request, res: Response): Response {
     }
 
     const updateResult = result as UpdateSuccessService<AlbumBD>;
-    albums[updateResult.index] = updateResult.data;
+    //albums[updateResult.index] = updateResult.data;
     return res.status(updateResult.code).json(updateResult.data);
 }
 
@@ -54,6 +54,6 @@ export function deleteAlbumController(req: Request, res: Response): Response {
     }
 
     const deleteResult = result as DeleteSuccessService;
-    albums.splice(deleteResult.index, 1);
+    //albums.splice(deleteResult.index, 1);
     return res.status(deleteResult.code).send();
 }

@@ -29,20 +29,20 @@ export function putCountriesController(req: Request, res: Response): Response {
     }
 
     const updateResult = result as UpdateSuccessService<CountryBD>;
-    countries[updateResult.index] = updateResult.data;
+    //countries[updateResult.index] = updateResult.data;
     return res.status(updateResult.code).json(updateResult.data);
 }
 
 export function postCountriesController(req: Request, res: Response): Response {
-    const result: CreateSuccessService<CountryBD> | ErrorService = createCountry(req.body);
+    const result: CreateSuccessService | ErrorService = createCountry(req.body);
 
     if (!result.success) {
         const errorResult = result as ErrorService;
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const createResult = result as CreateSuccessService<CountryBD>;
-    countries.push(createResult.data);
+    const createResult = result as CreateSuccessService;
+    //countries.push(createResult.data);
     return res.status(createResult.code).json(createResult);
 }
 

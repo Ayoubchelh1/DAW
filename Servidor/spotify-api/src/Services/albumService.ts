@@ -17,7 +17,7 @@ export function getAlbumById(idAlbum: string): AlbumBD | undefined {
     return albums.find((album: AlbumBD) => album.id === idAlbum);
 }
 
-export function createAlbum(album: Album): CreateSuccessService<AlbumBD> | ErrorService {
+export function createAlbum(album: Album): CreateSuccessService | ErrorService {
     if (!isValidAlbum(album)) {
         return { success: false, code: 400, message: "invalid data" };
     }
@@ -34,7 +34,7 @@ export function createAlbum(album: Album): CreateSuccessService<AlbumBD> | Error
         date: album.date.trim()
     };
 
-    return { success: true, code: 201, data: albumRecord };
+    return { success: true, code: 201, data: 1 };
 }
 
 export function updateAlbum(idAlbum: string, album: Album): UpdateSuccessService<AlbumBD> | ErrorService {
@@ -59,7 +59,7 @@ export function updateAlbum(idAlbum: string, album: Album): UpdateSuccessService
         date: album.date.trim()
     };
 
-    return { success: true, code: 200, data: updatedAlbum, index: albumIndex };
+    return { success: true, code: 200, data: 1 };
 }
 
 export function deleteAlbum(idAlbum: string): DeleteSuccessService | ErrorService {
@@ -68,5 +68,5 @@ export function deleteAlbum(idAlbum: string): DeleteSuccessService | ErrorServic
         return { success: false, code: 404, message: "Album not found" };
     }
 
-    return { success: true, code: 204, index: albumIndex };
+    return { success: true, code: 204 };
 }

@@ -20,14 +20,14 @@ export function getHistoryByIdController(req: Request, res: Response): Response 
 }
 
 export function postHistoryController(req: Request, res: Response): Response {
-    const result: CreateSuccessService<HistoryBD> | ErrorService = createHistory(req.body as History);
+    const result: CreateSuccessService | ErrorService = createHistory(req.body as History);
     if (!result.success) {
         const errorResult = result as ErrorService;
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const createResult = result as CreateSuccessService<HistoryBD>;
-    history.push(createResult.data);
+    const createResult = result as CreateSuccessService;
+    //history.push(createResult.data);
     return res.status(createResult.code).json(createResult.data);
 }
 
@@ -40,6 +40,6 @@ export function putHistoryController(req: Request, res: Response): Response {
     }
 
     const updateResult = result as UpdateSuccessService<HistoryBD>;
-    history[updateResult.index] = updateResult.data;
+    //history[updateResult.index] = updateResult.data;
     return res.status(updateResult.code).json(updateResult.data);
 }

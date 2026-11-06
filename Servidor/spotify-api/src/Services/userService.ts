@@ -43,7 +43,7 @@ export async function getUserById(idUser: string): Promise<SelectSuccessService<
     };
 }
 
-export async function createUser(user: User): Promise<CreateSuccessService<number> | ErrorService> {
+export async function createUser(user: User): Promise<CreateSuccessService | ErrorService> {
     if (!isValidUser(user)) {
         return { success: false, code: 400, message: "invalid data" };
     }
@@ -78,7 +78,7 @@ export function updateUser(idUser: string, user: User): UpdateSuccessService<Use
         countryId: user.countryId
     };
 
-    return { success: true, code: 200, data: updatedUser, index: userIndex };
+    return { success: true, code: 200, data: 1 };
 }
 
 export function deleteUser(idUser: string): DeleteSuccessService | ErrorService {
@@ -88,5 +88,5 @@ export function deleteUser(idUser: string): DeleteSuccessService | ErrorService 
         return { success: false, code: 404, message: "User not found" };
     }
 
-    return { success: true, code: 204, index: userIndex };
+    return { success: true, code: 204 };
 }

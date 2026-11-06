@@ -21,14 +21,14 @@ export function getArtistsByIdController(req: Request, res: Response): Response 
 }
 
 export function postArtistsController(req: Request, res: Response): Response {
-    const result: CreateSuccessService<ArtistBD> | ArtistInvalidData = createArtist(req.body);
+    const result: CreateSuccessService | ArtistInvalidData = createArtist(req.body);
     if (!result.success) {
         const errorResult = result as ArtistInvalidData;
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const createResult = result as CreateSuccessService<ArtistBD>;
-    artists.push(createResult.data);
+    const createResult = result as CreateSuccessService;
+    //artists.push(createResult.data);
     return res.status(createResult.code).json(createResult);
 }
 
@@ -42,7 +42,7 @@ export function putArtistsController(req: Request, res: Response): Response {
     }
 
     const updateResult = result as UpdateSuccessService<ArtistBD>;
-    artists[updateResult.index] = updateResult.data;
+    //artists[updateResult.index] = updateResult.data;
     return res.status(updateResult.code).json(updateResult.data);
 }
 
@@ -54,8 +54,8 @@ export function deleteArtistsController(req: Request, res: Response): Response {
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const index: number = (result as DeleteSuccessService).index;
-    artists.splice(index, 1);
+    //const index: number = (result as DeleteSuccessService).index;
+    //artists.splice(index, 1);
 
     return res.status(result.code).json({ result });
 }

@@ -1,5 +1,3 @@
-import { randomUUID } from "crypto";
-import { tracks } from "../data/track/track";
 import { Track } from "../interfaces/track/track";
 import { TrackBD } from "../interfaces/track/trackBD";
 import { isValidTrack } from "../validatos/track.validator";
@@ -49,7 +47,7 @@ export async function getTrackById(idTrack: string): Promise<SelectSuccessServic
 
 }
 
-export async function createTrack(track: Track): Promise<CreateSuccessService<number> | ErrorService> {
+export async function createTrack(track: Track): Promise<CreateSuccessService | ErrorService> {
 
     if (!isValidTrack(track)) {
         return { success: false, code: 400, message: "invalid data" }

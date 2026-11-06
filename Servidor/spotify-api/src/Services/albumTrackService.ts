@@ -9,7 +9,7 @@ import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { ErrorService } from "../interfaces/error/trackInvalidData";
 import { isValidAlbumTrack } from "../validatos/albumTrack.validator";
 
-export function createAlbumTrack(albumTrack: AlbumTrack): CreateSuccessService<AlbumTrackBD> | ErrorService {
+export function createAlbumTrack(albumTrack: AlbumTrack): CreateSuccessService | ErrorService {
     if (!isValidAlbumTrack(albumTrack)) {
         return { success: false, code: 400, message: "invalid data" };
     }
@@ -30,7 +30,7 @@ export function createAlbumTrack(albumTrack: AlbumTrack): CreateSuccessService<A
         trackId
     };
 
-    return { success: true, code: 201, data: albumTrackRecord };
+    return { success: true, code: 201, data: 1 };
 }
 
 export function deleteAlbumTrack(idAlbumTrack: string): DeleteSuccessService | ErrorService {
@@ -41,5 +41,5 @@ export function deleteAlbumTrack(idAlbumTrack: string): DeleteSuccessService | E
         return { success: false, code: 404, message: "AlbumTrack not found" };
     }
 
-    return { success: true, code: 204, index: albumTrackIndex };
+    return { success: true, code: 204 };
 }

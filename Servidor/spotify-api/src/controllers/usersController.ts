@@ -23,7 +23,7 @@ export async function getUsersByIdController(req: Request, res: Response): Promi
 }
 
 export async function postUsersController(req: Request, res: Response): Promise<Response> {
-    const result: CreateSuccessService<number> | ErrorService = await createUser(req.body);
+    const result: CreateSuccessService | ErrorService = await createUser(req.body);
 
     if (!result.success) {
         const errorResult = result as ErrorService;

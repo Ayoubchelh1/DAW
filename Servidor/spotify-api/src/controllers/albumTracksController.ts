@@ -8,15 +8,15 @@ import { ErrorService } from "../interfaces/error/trackInvalidData";
 import { createAlbumTrack, deleteAlbumTrack } from "../Services/albumTrackService";
 
 export function postAlbumTrackController(req: Request, res: Response): Response {
-    const result: CreateSuccessService<AlbumTrackBD> | ErrorService =
+    const result: CreateSuccessService | ErrorService =
         createAlbumTrack(req.body as AlbumTrack);
     if (!result.success) {
         const errorResult = result as ErrorService;
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const createResult = result as CreateSuccessService<AlbumTrackBD>;
-    albumTracks.push(createResult.data);
+    const createResult = result as CreateSuccessService;
+    //albumTracks.push(createResult.data);
     return res.status(createResult.code).json(createResult.data);
 }
 
@@ -28,6 +28,6 @@ export function deleteAlbumTrackController(req: Request, res: Response): Respons
     }
 
     const deleteResult = result as DeleteSuccessService;
-    albumTracks.splice(deleteResult.index, 1);
+    //albumTracks.splice(deleteResult.index, 1);
     return res.status(deleteResult.code).send();
 }

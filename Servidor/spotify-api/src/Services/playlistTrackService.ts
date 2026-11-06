@@ -17,7 +17,7 @@ export function getPlaylistTrackById(idPlaylistTrack: string): PlaylistTrackBD |
     return playlistTracks.find((playlistTrack: PlaylistTrackBD) => playlistTrack.id === idPlaylistTrack);
 }
 
-export function createPlaylistTrack(playlistTrack: PlaylistTrack): CreateSuccessService<PlaylistTrackBD> | ErrorService {
+export function createPlaylistTrack(playlistTrack: PlaylistTrack): CreateSuccessService | ErrorService {
     if (!isValidPlaylistTrack(playlistTrack)) {
         return { success: false, code: 400, message: "invalid data" };
     }
@@ -38,7 +38,7 @@ export function createPlaylistTrack(playlistTrack: PlaylistTrack): CreateSuccess
         trackId
     };
 
-    return { success: true, code: 201, data: playlistTrackRecord };
+    return { success: true, code: 201, data: 1 };
 }
 
 export function deletePlaylistTrack(idPlaylistTrack: string): DeleteSuccessService | ErrorService {
@@ -49,5 +49,5 @@ export function deletePlaylistTrack(idPlaylistTrack: string): DeleteSuccessServi
         return { success: false, code: 404, message: "PlaylistTrack not found" };
     }
 
-    return { success: true, code: 204, index: playlistTrackIndex };
+    return { success: true, code: 204 };
 }

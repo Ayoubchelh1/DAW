@@ -19,14 +19,14 @@ export function getPlaylistTrackByIdController(req: Request, res: Response): Res
 }
 
 export function postPlaylistTrackController(req: Request, res: Response): Response {
-    const result: CreateSuccessService<PlaylistTrackBD> | ErrorService = createPlaylistTrack(req.body);
+    const result: CreateSuccessService | ErrorService = createPlaylistTrack(req.body);
     if (!result.success) {
         const errorResult = result as ErrorService;
         return res.status(errorResult.code).json({ message: errorResult.message });
     }
 
-    const createResult = result as CreateSuccessService<PlaylistTrackBD>;
-    playlistTracks.push(createResult.data);
+    const createResult = result as CreateSuccessService;
+    //playlistTracks.push(createResult.data);
     return res.status(createResult.code).json(createResult.data);
 }
 
@@ -38,6 +38,6 @@ export function deletePlaylistTrackController(req: Request, res: Response): Resp
     }
 
     const deleteResult = result as DeleteSuccessService;
-    playlistTracks.splice(deleteResult.index, 1);
+    //playlistTracks.splice(deleteResult.index, 1);
     return res.status(deleteResult.code).send();
 }

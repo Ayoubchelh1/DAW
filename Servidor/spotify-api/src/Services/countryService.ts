@@ -15,7 +15,7 @@ export function getCountryById(idCountry: string): CountryBD | undefined {
     return countries.find((country: CountryBD) => country.id === idCountry);
 }
 
-export function createCountry(country: Country): CreateSuccessService<CountryBD> | ErrorService {
+export function createCountry(country: Country): CreateSuccessService | ErrorService {
     if (!isValidCountry(country)) {
         return { success: false, code: 400, message: "invalid data" };
     }
@@ -25,7 +25,7 @@ export function createCountry(country: Country): CreateSuccessService<CountryBD>
         name: country.name.trim().replace(/\s+/g, " ")
     };
 
-    return { success: true, code: 201, data: countryRecord };
+    return { success: true, code: 201, data: 1 };
 }
 
 export function updateCountry(idCountry: string, country: Country): UpdateSuccessService<CountryBD> | ErrorService {
@@ -43,5 +43,5 @@ export function updateCountry(idCountry: string, country: Country): UpdateSucces
         name: country.name.trim().replace(/\s+/g, " ")
     };
 
-    return { success: true, code: 200, data: updatedCountry, index: countryIndex };
+    return { success: true, code: 200, data: 1 };
 }

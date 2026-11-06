@@ -16,7 +16,7 @@ export function getArtistById(idArtist: string): ArtistBD | undefined {
     return artists.find((artist: ArtistBD) => artist.id === idArtist);
 }
 
-export function createArtist(artist: Artist): CreateSuccessService<ArtistBD> | ArtistInvalidData {
+export function createArtist(artist: Artist): CreateSuccessService | ArtistInvalidData {
     if (!isValidArtist(artist)) {
         return { success: false, code: 400, message: "invalid data or country" };
     }
@@ -28,7 +28,7 @@ export function createArtist(artist: Artist): CreateSuccessService<ArtistBD> | A
         country: getCanonicalCountry(artist.country)
     };
 
-    return { success: true, code: 201, data: artistRecord };
+    return { success: true, code: 201, data: 1 };
 }
 
 export function updateArtist(idArtist: string, artist: Artist): UpdateSuccessService<ArtistBD> | ArtistInvalidData {
@@ -48,7 +48,7 @@ export function updateArtist(idArtist: string, artist: Artist): UpdateSuccessSer
         country: getCanonicalCountry(artist.country)
     };
 
-    return { success: true, code: 200, data: updatedArtist, index: artistIndex };
+    return { success: true, code: 200, data: 1 };
 }
 
 export function deleteArtist(idArtist: string): DeleteSuccessService | ArtistInvalidData {
@@ -58,5 +58,5 @@ export function deleteArtist(idArtist: string): DeleteSuccessService | ArtistInv
         return { success: false, code: 404, message: "Artist not found" };
     }
 
-    return { success: true, code: 204, index: artistIndex };
+    return { success: true, code: 204 };
 }

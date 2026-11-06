@@ -1,4 +1,4 @@
-export interface CreateSuccessService<T> {
+export interface CreateSuccessService {
     success: Boolean;
     code: number;
     data: number;

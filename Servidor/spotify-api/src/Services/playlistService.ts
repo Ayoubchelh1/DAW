@@ -18,7 +18,7 @@ export function getPlaylistById(idPlaylist: string): PlaylistBD | undefined {
     return playlists.find((playlist: PlaylistBD) => playlist.id === idPlaylist);
 }
 
-export function createPlaylist(playlist: Playlist): CreateSuccessService<PlaylistBD> | ErrorService {
+export function createPlaylist(playlist: Playlist): CreateSuccessService | ErrorService {
     if (!isValidPlaylist(playlist)) {
         return { success: false, code: 400, message: "invalid data" };
     }
@@ -35,7 +35,7 @@ export function createPlaylist(playlist: Playlist): CreateSuccessService<Playlis
         userId
     };
 
-    return { success: true, code: 201, data: playlistRecord };
+    return { success: true, code: 201, data: 1 };
 }
 
 export function updatePlaylist(idPlaylist: string, playlist: Playlist): UpdateSuccessService<PlaylistBD> | ErrorService {
@@ -60,7 +60,7 @@ export function updatePlaylist(idPlaylist: string, playlist: Playlist): UpdateSu
         userId
     };
 
-    return { success: true, code: 200, data: updatedPlaylist, index: playlistIndex };
+    return { success: true, code: 200, data: 1 };
 }
 
 export function deletePlaylist(idPlaylist: string): DeleteSuccessService | ErrorService {
@@ -69,5 +69,5 @@ export function deletePlaylist(idPlaylist: string): DeleteSuccessService | Error
         return { success: false, code: 404, message: "Playlist not found" };
     }
 
-    return { success: true, code: 204, index: playlistIndex };
+    return { success: true, code: 204 };
 }
