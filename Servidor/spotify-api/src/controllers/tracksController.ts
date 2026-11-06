@@ -5,6 +5,7 @@ import { SelectSuccessService } from "../interfaces/error/SelectSuccessService c
 import { ErrorService } from "../interfaces/error/trackInvalidData";
 import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
 import { TrackBD } from "../interfaces/track/trackBD";
+import { addTrackUserHistory } from "../Services/historyService";
 import { createTrack, deleteTrack, getAllTracks, getTrackById, updateTrack } from "../Services/trackService";
 import { Response, Request } from "express";
 

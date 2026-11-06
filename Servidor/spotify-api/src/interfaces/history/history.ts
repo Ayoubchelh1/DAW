@@ -1,5 +1,4 @@
 export interface History {
-    userId: string;
-    trackId: string;
-    date: string;
+    user: string;
+    track: string;
 }

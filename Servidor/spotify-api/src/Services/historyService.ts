@@ -1,3 +1,5 @@
+import sql, { ConnectionPool, IResult, UniqueIdentifier } from "mssql";
+import { getConnection } from "../config/database";
 import { randomUUID } from "crypto";
 import { history } from "../data/history/history";
 import { CreateSuccessService } from "../interfaces/error/createSuccessService";
@@ -22,8 +24,8 @@ export function createHistory(historyRecord: History): CreateSuccessService | Er
         return { success: false, code: 400, message: "invalid data" };
     }
 
-    const userId: string = historyRecord.userId.trim();
-    const trackId: string = historyRecord.trackId.trim();
+    const userId: string = historyRecord.user.trim();
+    const trackId: string = historyRecord.track.trim();
 
     if (!users.some((user) => user.id === userId)) {
         return { success: false, code: 404, message: `User ${userId} not found` };
@@ -32,12 +34,6 @@ export function createHistory(historyRecord: History): CreateSuccessService | Er
         return { success: false, code: 404, message: `Track ${trackId} not found` };
     }
 
-    const createdHistory: HistoryBD = {
-        id: randomUUID(),
-        userId,
-        trackId,
-        date: historyRecord.date.trim()
-    };
 
     return { success: true, code: 201, data: 1 };
 }
@@ -52,8 +48,8 @@ export function updateHistory(idHistory: string, historyRecord: History): Update
         return { success: false, code: 400, message: "invalid data" };
     }
 
-    const userId: string = historyRecord.userId.trim();
-    const trackId: string = historyRecord.trackId.trim();
+    const userId: string = historyRecord.user.trim();
+    const trackId: string = historyRecord.track.trim();
 
     if (!users.some((user) => user.id === userId)) {
         return { success: false, code: 404, message: `User ${userId} not found` };
@@ -62,12 +58,27 @@ export function updateHistory(idHistory: string, historyRecord: History): Update
         return { success: false, code: 404, message: `Track ${trackId} not found` };
     }
 
-    const updatedHistory: HistoryBD = {
-        id: idHistory,
-        userId,
-        trackId,
-        date: historyRecord.date.trim()
-    };
 
     return { success: true, code: 200, data: 1 };
+}
+
+
+export async function addTrackUserHistory(historyTrack: History): Promise<CreateSuccessService | ErrorService> {
+
+    if (!isValidHistory(historyTrack)) {
+        return { success: false, code: 400, message: "invalid data" }
+    }
+
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = 'INSERT INTO TRACK(user_id,track_id)VALUES(@user_id,@track_id)';
+
+    request.input("user_id", sql.UniqueIdentifier, historyTrack.user);
+    request.input("track_id", sql.UniqueIdentifier, historyTrack.track);
+
+
+    const result: IResult<number> = await request.query(queryText);
+
+    return { success: true, code: 201, data: result.rowsAffected[0] };
+
 }
