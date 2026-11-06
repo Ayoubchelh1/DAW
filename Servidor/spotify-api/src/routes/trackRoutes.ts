@@ -9,4 +9,4 @@ trackRouter.post("/", postTrackController)
 trackRouter.put("/:id", updateTrackController)
 trackRouter.delete("/:id", deleteTracksController)
 
-trackRouter.post("/user:id/history", postTrackUserHistoryController)
+trackRouter.post("/user/history", postTrackUserHistoryController)

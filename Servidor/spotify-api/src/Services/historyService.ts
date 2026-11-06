@@ -71,7 +71,7 @@ export async function addTrackUserHistory(historyTrack: History): Promise<Create
 
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
-    const queryText: string = 'INSERT INTO TRACK(user_id,track_id)VALUES(@user_id,@track_id)';
+    const queryText: string = 'INSERT INTO HISTORY(user_id,track_id)VALUES(@user_id,@track_id)';
 
     request.input("user_id", sql.UniqueIdentifier, historyTrack.user);
     request.input("track_id", sql.UniqueIdentifier, historyTrack.track);
