@@ -9,9 +9,17 @@ import { Playlist } from "../interfaces/playlist/playlist";
 import { PlaylistBD } from "../interfaces/playlist/playlistBD";
 import { UserBD } from "../interfaces/user/userBD";
 import { isValidPlaylist } from "../validatos/playlist.validator";
+import { ConnectionPool, IResult } from "mssql";
+import { getConnection } from "../config/database";
+import sql from "mssql";
 
-export function getAllPlaylists(): PlaylistBD[] {
-    return playlists;
+export async function getAllPlaylists(): Promise<PlaylistBD[]> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+    const queryText: string = "SELECT id, title, user_id AS userId FROM Playlist";
+
+    const result: IResult<PlaylistBD> = await request.query(queryText);
+    return result.recordset;
 }
 
 export function getPlaylistById(idPlaylist: string): PlaylistBD | undefined {

@@ -4,10 +4,16 @@ import { CreateSuccessService } from "../interfaces/error/createSuccessService";
 import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { ErrorService } from "../interfaces/error/trackInvalidData";
 import { PlaylistTrackBD } from "../interfaces/playlistTrack/playlistTrackBD";
-import { createPlaylistTrack, deletePlaylistTrack, getAllPlaylistTracks, getPlaylistTrackById } from "../Services/playlistTrackService";
+import { TrackBD } from "../interfaces/track/trackBD";
+import { createPlaylistTrack, deletePlaylistTrack, getAllPlaylistTracks, getPlaylistTrackById, getTracksInPlaylist } from "../Services/playlistTrackService";
 
 export function getAllPlaylistTracksController(_req: Request, res: Response): Response {
     return res.status(200).json(getAllPlaylistTracks());
+}
+
+export async function getTracksInPlaylistController(req: Request, res: Response): Promise<Response> {
+    const tracks: TrackBD[] = await getTracksInPlaylist(req.params.id as string);
+    return res.status(200).json(tracks);
 }
 
 export function getPlaylistTrackByIdController(req: Request, res: Response): Response {

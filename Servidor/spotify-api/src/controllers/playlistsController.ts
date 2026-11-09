@@ -7,8 +7,8 @@ import { PlaylistBD } from "../interfaces/playlist/playlistBD";
 import { createPlaylist, deletePlaylist, getAllPlaylists, getPlaylistById, updatePlaylist } from "../Services/playlistService";
 import { Response, Request } from "express";
 
-export function getAllPlaylistsController(_req: Request, res: Response): Response {
-    return res.status(200).json(getAllPlaylists());
+export async function getAllPlaylistsController(_req: Request, res: Response): Promise<Response> {
+    return res.status(200).json(await getAllPlaylists());
 }
 
 export function getPlaylistByIdController(req: Request, res: Response): Response {
