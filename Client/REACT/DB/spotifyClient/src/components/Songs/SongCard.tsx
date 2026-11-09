@@ -2,6 +2,7 @@
 import type { SongCardProps } from "./Types/SongCardProps";
 import likeSong from "../../assets/like-green.png";
 import likeSongPending from "../../assets/like-white.png";
+import { formatDuration } from "./formatDuration";
 
 
 const SongCard = (props: SongCardProps) => {
@@ -28,7 +29,7 @@ const SongCard = (props: SongCardProps) => {
 
             <h1>{props.trackInfo.title}</h1>
             <p>{props.trackInfo.artist}</p>
-            <p>Duració:{props.trackInfo.duration}</p>
+            <p>Duració: {formatDuration(props.trackInfo.duration)}</p>
             <p>Reproduccions:{props.trackInfo.reproduccions}</p>
             <p><button onClick={() => handlePlayClick()}>Play 1</button></p>
             <p><button onClick={handleClickReset}>Reiniciar</button></p>

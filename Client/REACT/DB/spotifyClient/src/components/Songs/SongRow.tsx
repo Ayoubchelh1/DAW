@@ -1,5 +1,6 @@
 
 import type { SongRowProps } from "./Types/SongRowProps";
+import { formatDuration } from "./formatDuration";
 
 
 const SongCard = (props: SongRowProps) => {
@@ -12,7 +13,7 @@ const SongCard = (props: SongRowProps) => {
         <tr>
             <td>Titol: {props.title}</td>
             <td>Artista: {props.artist}</td>
-            <td>Duració: {props.duration}</td>
+            <td>Duració: {formatDuration(props.duration)}</td>
             <td><button type="button" onClick={handlePlay}>Play</button></td>
         </tr>
     )

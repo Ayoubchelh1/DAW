@@ -78,7 +78,7 @@ function App() {
     setTrack(tr);
 
     const newHistory: AddHistory = {
-      user: "1C1DA739- 8ABA-461B - B38B - 701C25A3AB59",
+      user: "1C1DA739-8ABA-461B-B38B-701C25A3AB59",
       track: tracks[0].id
     }
 
@@ -97,7 +97,7 @@ function App() {
 
 
     const result = await response.json();
-    //console.log(result)
+    console.log(result)
 
 
 
