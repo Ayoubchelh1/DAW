@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import type { AddHistory } from "../../APIManagement/History/Interfaces/HistoryCreate";
 import type { GETPlaylist } from "../../APIManagement/Playlists/Interfaces/Playlist";
 import type { GETTrack } from "../../APIManagement/Tracks/Interfaces/Track";
-import Header from "../../components/Header/Header";
 import PlaylistList from "../../components/Playlists/PlaylistList";
 import Reproduint from "../../components/Reproduint/Reproduint";
 import ListSongs from "../../components/Songs/ListSongs";
@@ -194,7 +193,7 @@ const Play = () => {
 
     return (
         <>
-            <Header title="Spotify" user={randomUser.name} />
+
             <main>
                 <div className="library-panels">
                     <div className="song-list">
