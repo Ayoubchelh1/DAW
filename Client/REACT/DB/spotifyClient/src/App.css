@@ -23,10 +23,17 @@
     border-spacing: 0;
 }
 
-.playlist-list {
+.playlist-list,
+.playlist-tracks {
     width: fit-content;
     border: 1px solid black;
     padding: 8px;
+}
+
+.playlist-list ul,
+.playlist-tracks ul {
+    list-style: none;
+    padding-left: 0;
 }
 
 @media (max-width: 640px) {
