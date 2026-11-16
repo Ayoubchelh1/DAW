@@ -4,6 +4,7 @@ const Menu = () => {
     return (
         <nav>
             <Link to="/Play">Reproductor</Link>
+            <Link to="/SongManagment">Gestío cançons</Link>
         </nav>
     )
 }

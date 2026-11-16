@@ -7,9 +7,21 @@ import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
 import { ArtistInvalidData } from "../interfaces/error/artistInvalidData";
 import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 import { getCanonicalCountry, isValidArtist } from "../validatos/artist.validator";
+import { ConnectionPool, IResult } from "mssql";
+import sql from "mssql";
+import { getConnection } from "../config/database";
+import { TrackBD } from "../interfaces/track/trackBD";
 
-export function getAllArtists(): ArtistBD[] {
-    return artists;
+export async function getAllArtists(): Promise<ArtistBD[]> {
+    const pool: ConnectionPool = await getConnection();
+    const request: sql.Request = pool.request();
+
+    const queryText: string = "select * from Artist";
+
+    const result: IResult<ArtistBD[]> = await request.query(queryText);
+    console.log("artistes:", result);
+    return result.recordset;
+
 }
 
 export function getArtistById(idArtist: string): ArtistBD | undefined {

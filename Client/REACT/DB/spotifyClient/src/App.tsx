@@ -3,6 +3,7 @@ import './App.css'
 import Header from './components/PageStructure/Header/Header'
 import Play from './Pages/Authenticated/Play'
 import Menu from './components/PageStructure/Menu/Menu'
+import SongManagment from './Pages/Admin/SongManagment'
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <Menu />
       <Routes>
         <Route path="/Play" element={<Play />}></Route>
+        <Route path="/SongManagment" element={<SongManagment />}></Route>
       </Routes>
     </BrowserRouter>
   )

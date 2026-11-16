@@ -20,27 +20,48 @@ const USER_ID = "1C1DA739-8ABA-461B-B38B-701C25A3AB59";
 const Play = () => {
 
     const [tracks, setTracks] = useState<GETTrack[]>([]);
+    const [tracksError, setTracksError] = useState<string | null>(null);
     const [playlists, setPlaylists] = useState<GETPlaylist[]>([]);
     const [playlistsError, setPlaylistsError] = useState<string | null>(null);
     const [randomUser] = useState(() => users[Math.floor(Math.random() * users.length)]);
-    const [track, setTrack] = useState<TrackView>(getRandomTrack);
+    const [track, setTrack] = useState<TrackView>({
+        id: "",
+        title: "",
+        artist: "",
+        duration: 0,
+        reproduccions: 0,
+        likes: { like: false, totalLikes: 0 }
+    });
     const [likesError, setLikesError] = useState<string | null>(null);
     const [likesSaving, setLikesSaving] = useState(false);
     const [volum, setVolum] = useState(10);
     const [playingSongTitle, setPlayingSongTitle] = useState<string | null>(null);
-    const likesApiUrl = `${ENV.API_BASE_URL.replace(/\/+$/, "")}/likes`;
+    const apiBaseUrl = ENV.API_BASE_URL.replace(/\/+$/, "");
+    const likesApiUrl = `${apiBaseUrl}/likes`;
 
 
     async function carregarDadesTrack() {
+        try {
+            const resposta: Response = await fetch(`${apiBaseUrl}/tracks`);
+            if (!resposta.ok) {
+                throw new Error(`Error carregant les cançons (${resposta.status}).`);
+            }
 
-        const resposta: Response = await fetch(`${ENV.API_BASE_URL}/tracks`);
-        const listTrack: GETTrack[] = await resposta.json() as GETTrack[];
-        setTracks(listTrack)
+            const listTrack: GETTrack[] = await resposta.json() as GETTrack[];
+            setTracks(listTrack);
+            if (listTrack.length > 0) {
+                setTrack((currentTrack) => currentTrack.id ? currentTrack : getRandomTrack(listTrack));
+            }
+        } catch (error) {
+            setTracksError(
+                error instanceof Error ? error.message : "No s'han pogut carregar les cançons."
+            );
+        }
     }
 
     async function carregarPlaylists() {
         try {
-            const resposta: Response = await fetch(`${ENV.API_BASE_URL}/playlists`);
+            const resposta: Response = await fetch(`${apiBaseUrl}/playlists`);
             if (!resposta.ok) {
                 throw new Error(`Error carregant les llistes (${resposta.status}).`);
             }
@@ -122,8 +143,8 @@ const Play = () => {
         setTrack(tr);
 
         const newHistory: AddHistory = {
-            user: "1C1DA739-8ABA-461B-B38B-701C25A3AB59",
-            track: tracks[0].id
+            user: USER_ID,
+            track: track.id
         }
 
         const response: Response = await fetch(
@@ -149,6 +170,10 @@ const Play = () => {
 
 
     function togglePlaying() {
+        if (!track.id) {
+            return;
+        }
+
         if (playingSongTitle === track.title) {
             setPlayingSongTitle(null);
             return;
@@ -186,10 +211,19 @@ const Play = () => {
         }));
     }
 
-    function getRandomTrack(): TrackView {
-        const totalTracks: number = tracks.length;
-        const randomIndex: number = Math.floor(Math.random() * totalTracks);
-        const randomTrack = tracks[randomIndex];
+    function getRandomTrack(trackList: GETTrack[] = tracks): TrackView {
+        const randomIndex: number = Math.floor(Math.random() * trackList.length);
+        const randomTrack = trackList[randomIndex];
+        if (!randomTrack) {
+            return {
+                id: "",
+                title: "",
+                artist: "",
+                duration: 0,
+                reproduccions: 0,
+                likes: { like: false, totalLikes: 0 }
+            };
+        }
 
         return {
             ...randomTrack,
@@ -244,6 +278,10 @@ const Play = () => {
     }
 
     function handleClickRandom() {
+        if (tracks.length === 0) {
+            return;
+        }
+
         const randomTrack = getRandomTrack();
         setTrack((previousTrack) => previousTrack.id === randomTrack.id
             ? { ...randomTrack, likes: previousTrack.likes }
@@ -275,7 +313,11 @@ const Play = () => {
                     </div>
                     <PlaylistList playlists={playlists} error={playlistsError} />
                 </div>
-                <SongCard trackInfo={track} play={togglePlaying} reset={() => reset()} like={() => gestionarLikes()} likeDisabled={likesSaving} />
+                {track.id
+                    ? <SongCard trackInfo={track} play={togglePlaying} reset={() => reset()} like={() => gestionarLikes()} likeDisabled={likesSaving} />
+                    : <p role={tracksError ? "alert" : undefined}>
+                        {tracksError ?? "Esperant les cançons del servidor..."}
+                    </p>}
                 {likesError && <p role="alert">{likesError}</p>}
                 <hr></hr>
                 <Reproduint

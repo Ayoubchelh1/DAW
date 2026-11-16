@@ -7,8 +7,8 @@ import { CreateSuccessService } from "../interfaces/error/createSuccessService";
 import { UpdateSuccessService } from "../interfaces/error/updateSuccessService";
 import { DeleteSuccessService } from "../interfaces/error/deleteSuccessService";
 
-export function getAllArtistController(_req: Request, res: Response): Response {
-    return res.status(200).json(getAllArtists());
+export async function getAllArtistController(_req: Request, res: Response): Promise<Response> {
+    return res.status(200).json(await getAllArtists());
 }
 
 export function getArtistsByIdController(req: Request, res: Response): Response {

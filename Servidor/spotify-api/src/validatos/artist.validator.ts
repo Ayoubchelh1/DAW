@@ -25,19 +25,7 @@ export function isValidArtist(artist: Artist): boolean | string | undefined {
         return false;
     }
 
-    const idCountry: string = artist.country;
 
-    const countryOK: CountryBD | undefined = countries.find(
-        (c: CountryBD) => {
-            return c.id === idCountry;
-        }
-    )
-
-    if (!countryOK) {
-        console.log("Country no valid")
-        return false;
-    }
-    console.log("OK")
     return true
 
 }
