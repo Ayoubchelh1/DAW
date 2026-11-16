@@ -16,7 +16,7 @@ export async function getAllTracks(): Promise<TrackBD[]> {
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
 
-    const queryText: string = 'Select t.*, a.name as artist from Track t inner join artist a on t.artist_id=a.id';
+    const queryText: string = 'Select t.*, a.name as artist, COALESCE((Select SUM([likeTrack]) From Likes Where track_id=t.id), 0) as totalLikes from Track t inner join artist a on t.artist_id=a.id';
 
     const result: IResult<TrackBD> = await request.query(queryText);
     return result.recordset;
@@ -27,7 +27,7 @@ export async function getTrackById(idTrack: string): Promise<SelectSuccessServic
     const pool: ConnectionPool = await getConnection();
     const request: sql.Request = pool.request();
 
-    const queryText: string = 'Select t.*, a.name as artist from Track t inner join artist a on t.artist_id=a.id Where Track.id = @id';
+    const queryText: string = 'Select t.*, a.name as artist, COALESCE((Select SUM([likeTrack]) From Likes Where track_id=t.id), 0) as totalLikes from Track t inner join artist a on t.artist_id=a.id Where Track.id = @id';
     request.input("id", sql.UniqueIdentifier, idTrack);
 
     const result: IResult<TrackBD> = await request.query(queryText);

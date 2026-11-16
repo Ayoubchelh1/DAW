@@ -23,7 +23,7 @@ function PlaylistTracks({ playlistId, playlistTitle, tracks, error, loading }: P
             ) : tracks.length > 0 ? (
                 <ul>
                     {tracks.map((track) => (
-                        <li key={track.id}>{track.title} - {track.artist}</li>
+                        <li key={track.id}>{track.title} - {track.artist} - Likes: {track.totalLikes}</li>
                     ))}
                 </ul>
             ) : (

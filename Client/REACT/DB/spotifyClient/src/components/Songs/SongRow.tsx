@@ -14,6 +14,7 @@ const SongCard = (props: SongRowProps) => {
             <td>Titol: {props.title}</td>
             <td>Artista: {props.artist}</td>
             <td>Duració: {formatDuration(props.duration)}</td>
+            <td>Likes: {props.totalLikes}</td>
             <td><button type="button" onClick={handlePlay}>Play</button></td>
         </tr>
     )

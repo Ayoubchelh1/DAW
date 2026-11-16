@@ -6,10 +6,16 @@ import PlaylistList from "../../components/Playlists/PlaylistList";
 import Reproduint from "../../components/Reproduint/Reproduint";
 import ListSongs from "../../components/Songs/ListSongs";
 import SongCard from "../../components/Songs/SongCard";
-import type { Like } from "../../components/Songs/Types/Like";
 import type { TrackView } from "../../components/Songs/Types/TrackView";
 import { ENV } from "../../Config/env";
 import { users } from "../../Data/user";
+
+interface LikeSummary {
+    totalLikes: number;
+    userLike: number | null;
+}
+
+const USER_ID = "1C1DA739-8ABA-461B-B38B-701C25A3AB59";
 
 const Play = () => {
 
@@ -18,9 +24,11 @@ const Play = () => {
     const [playlistsError, setPlaylistsError] = useState<string | null>(null);
     const [randomUser] = useState(() => users[Math.floor(Math.random() * users.length)]);
     const [track, setTrack] = useState<TrackView>(getRandomTrack);
+    const [likesError, setLikesError] = useState<string | null>(null);
+    const [likesSaving, setLikesSaving] = useState(false);
     const [volum, setVolum] = useState(10);
     const [playingSongTitle, setPlayingSongTitle] = useState<string | null>(null);
-
+    const likesApiUrl = `${ENV.API_BASE_URL.replace(/\/+$/, "")}/likes`;
 
 
     async function carregarDadesTrack() {
@@ -53,6 +61,46 @@ const Play = () => {
             carregarDadesTrack();
             carregarPlaylists();
         }, []);
+
+    useEffect(() => {
+        if (!track.id) {
+            return;
+        }
+
+        let active = true;
+        const trackId = track.id;
+        setLikesError(null);
+
+        async function carregarLikes() {
+            try {
+                const resposta = await fetch(
+                    `${likesApiUrl}/track/${trackId}?user_id=${encodeURIComponent(USER_ID)}`
+                );
+                if (!resposta.ok) {
+                    throw new Error(`Error carregant els likes (${resposta.status}).`);
+                }
+
+                const summary: LikeSummary = await resposta.json() as LikeSummary;
+                if (active) {
+                    setTrack((currentTrack) => currentTrack.id === trackId
+                        ? {
+                            ...currentTrack,
+                            likes: { like: summary.userLike === 1, totalLikes: summary.totalLikes }
+                        }
+                        : currentTrack);
+                }
+            } catch (error) {
+                if (active) {
+                    setLikesError(error instanceof Error ? error.message : "No s'han pogut carregar els likes.");
+                }
+            }
+        }
+
+        carregarLikes();
+        return () => {
+            active = false;
+        };
+    }, [track.id]);
 
 
     function pujarVolum() {
@@ -114,11 +162,14 @@ const Play = () => {
         setTrack((previousTrack) => {
             const isSameTrack = previousTrack.title === selectedTrack.title &&
                 previousTrack.artist === selectedTrack.artist;
+            const isSameTrackId = previousTrack.id === selectedTrack.id;
 
             return {
                 ...selectedTrack,
                 reproduccions: isSameTrack ? previousTrack.reproduccions + 1 : 1,
-                likes: isSameTrack ? previousTrack.likes : { like: false, totalLikes: 0 }
+                likes: isSameTrackId
+                    ? previousTrack.likes
+                    : { like: false, totalLikes: selectedTrack.totalLikes }
             };
         });
         setPlayingSongTitle(selectedTrack.title);
@@ -131,11 +182,7 @@ const Play = () => {
     function reset() {
         setTrack((prev) => ({
             ...prev,
-            reproduccions: 0,
-            likes: {
-                like: false,
-                totalLikes: 0
-            }
+            reproduccions: 0
         }));
     }
 
@@ -149,42 +196,58 @@ const Play = () => {
             reproduccions: Math.floor(Math.random() * 10205),
             likes: {
                 like: false,
-                totalLikes: 0
+                totalLikes: randomTrack.totalLikes
             }
         };
     }
 
 
-    function gestionarLikes() {
-        const tr = (prev: TrackView): TrackView => {
-
-            let increment: number = 1;
-            if (prev.likes.like) {
-                increment = -1;
-            }
-
-            const likeObj: Like = {
-                like: !prev.likes.like,
-                totalLikes: prev.likes.totalLikes + increment
-            }
-
-
-
-            return {
-                ...prev,
-                likes: likeObj
-            }
+    async function gestionarLikes() {
+        if (!track.id || likesSaving) {
+            return;
         }
 
-        setTrack(tr);
+        const trackId = track.id;
+        const likeTrack = track.likes.like ? -1 : 1;
+        setLikesSaving(true);
+        setLikesError(null);
 
+        try {
+            const response = await fetch(likesApiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user: USER_ID, track: trackId, likeTrack })
+            });
+            if (!response.ok) {
+                throw new Error(`Error desant el like (${response.status}).`);
+            }
+
+            const summaryResponse = await fetch(
+                `${likesApiUrl}/track/${trackId}?user_id=${encodeURIComponent(USER_ID)}`
+            );
+            if (!summaryResponse.ok) {
+                throw new Error(`Error carregant els likes (${summaryResponse.status}).`);
+            }
+
+            const summary: LikeSummary = await summaryResponse.json() as LikeSummary;
+            setTrack((currentTrack) => currentTrack.id === trackId
+                ? {
+                    ...currentTrack,
+                    likes: { like: summary.userLike === 1, totalLikes: summary.totalLikes }
+                }
+                : currentTrack);
+        } catch (error) {
+            setLikesError(error instanceof Error ? error.message : "No s'ha pogut desar el like.");
+        } finally {
+            setLikesSaving(false);
+        }
     }
 
     function handleClickRandom() {
-        setTrack(() => ({
-            ...getRandomTrack(),
-
-        }));
+        const randomTrack = getRandomTrack();
+        setTrack((previousTrack) => previousTrack.id === randomTrack.id
+            ? { ...randomTrack, likes: previousTrack.likes }
+            : randomTrack);
         setPlayingSongTitle(null);
     }
 
@@ -212,7 +275,8 @@ const Play = () => {
                     </div>
                     <PlaylistList playlists={playlists} error={playlistsError} />
                 </div>
-                <SongCard trackInfo={track} play={togglePlaying} reset={() => reset()} like={() => gestionarLikes()} />
+                <SongCard trackInfo={track} play={togglePlaying} reset={() => reset()} like={() => gestionarLikes()} likeDisabled={likesSaving} />
+                {likesError && <p role="alert">{likesError}</p>}
                 <hr></hr>
                 <Reproduint
                     volum={volum}

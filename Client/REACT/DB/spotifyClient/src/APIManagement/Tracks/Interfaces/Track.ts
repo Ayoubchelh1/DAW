@@ -3,4 +3,5 @@ export interface GETTrack {
     title: string;
     artist: string;
     duration: number;
+    totalLikes: number;
 }

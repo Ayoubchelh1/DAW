@@ -23,7 +23,8 @@ export async function getTracksInPlaylist(playlistId: string): Promise<TrackBD[]
     request.input("playlistId", sql.UniqueIdentifier, playlistId);
 
     const queryText: string =
-        "SELECT t.id, t.title, a.name AS artist, t.duration " +
+        "SELECT t.id, t.title, a.name AS artist, t.duration, " +
+        "(SELECT COALESCE(SUM([likeTrack]), 0) FROM Likes WHERE track_id = t.id) AS totalLikes " +
         "FROM PlaylistTracks pt " +
         "INNER JOIN Track t ON pt.track_id = t.id " +
         "INNER JOIN Artist a ON t.artist_id = a.id " +

@@ -35,7 +35,7 @@ const SongCard = (props: SongCardProps) => {
             <p><button onClick={handleClickReset}>Reiniciar</button></p>
 
             <p>
-                <button onClick={handleLikeClick}>
+                <button onClick={handleLikeClick} disabled={props.likeDisabled}>
                     <img src={props.trackInfo.likes.like ? likeSong : likeSongPending} alt="" width="24" height="24" />
                 </button>
                 <span> {props.trackInfo.likes.totalLikes}</span>

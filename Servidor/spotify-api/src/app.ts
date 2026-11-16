@@ -9,6 +9,7 @@ import { playlistTracksRouter } from "./routes/playlistTracksRoutes";
 import { historyRouter } from "./routes/historyRoutes";
 import { albumsRouter } from "./routes/albumsRoutes";
 import { albumTracksRouter } from "./routes/albumTracksRoutes";
+import { likesRouter } from "./routes/likesRoutes";
 import cors from "cors";
 import { corsOptions } from "./config/cors";
 
@@ -30,3 +31,4 @@ app.use("/playlisttracks", playlistTracksRouter);
 app.use("/history", historyRouter);
 app.use("/albums", albumsRouter);
 app.use("/albumtracks", albumTracksRouter);
+app.use("/likes", likesRouter);

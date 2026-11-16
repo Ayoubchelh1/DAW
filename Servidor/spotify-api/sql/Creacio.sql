@@ -117,6 +117,31 @@ CREATE TABLE History (
         REFERENCES Track(id)
 );
 
+CREATE TABLE Likes (
+    id UNIQUEIDENTIFIER NOT NULL
+        CONSTRAINT PK_Likes PRIMARY KEY
+        CONSTRAINT DF_Likes_Id DEFAULT NEWID(),
+
+    user_id UNIQUEIDENTIFIER NOT NULL,
+
+    track_id UNIQUEIDENTIFIER NOT NULL,
+
+    [date] DATETIME2 NOT NULL
+        CONSTRAINT DF_Likes_Date DEFAULT SYSDATETIME(),
+
+    [likeTrack] NUMERIC(1, 0) NOT NULL,
+
+    CONSTRAINT CK_Likes_LikeTrack CHECK ([likeTrack] IN (-1, 1)),
+
+    CONSTRAINT FK_Likes_User
+        FOREIGN KEY (user_id)
+        REFERENCES [User](id),
+
+    CONSTRAINT FK_Likes_Track
+        FOREIGN KEY (track_id)
+        REFERENCES Track(id)
+);
+
 
 CREATE TABLE PlaylistTracks (
     id UNIQUEIDENTIFIER NOT NULL

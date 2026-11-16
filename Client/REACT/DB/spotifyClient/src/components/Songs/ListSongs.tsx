@@ -16,6 +16,7 @@ const ListSongs = (props: SongListProps) => {
                             title={t.title}
                             artist={t.artist}
                             duration={t.duration}
+                            totalLikes={t.totalLikes}
                             play={() => props.playTrack(t)} />
                     }
                 )
