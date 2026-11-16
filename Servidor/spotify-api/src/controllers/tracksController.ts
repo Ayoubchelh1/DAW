@@ -25,6 +25,18 @@ export async function getTrackByIdController(req: Request, res: Response): Promi
 
 }
 
+export async function getTrackLikesController(req: Request, res: Response): Promise<Response> {
+    const result: SelectSuccessService<TrackBD> | ErrorService = await getTrackById(req.params.id as string);
+
+    if (!result.success) {
+        const errorResult = result as ErrorService;
+        return res.status(errorResult.code).json({ message: errorResult.message });
+    }
+
+    const trackResult = result as SelectSuccessService<TrackBD>;
+    return res.status(trackResult.code).json({ totalLikes: trackResult.data.totalLikes });
+}
+
 export async function postTrackController(req: Request, res: Response): Promise<Response> {
     const result: CreateSuccessService | ErrorService = await createTrack(req.body);
 
